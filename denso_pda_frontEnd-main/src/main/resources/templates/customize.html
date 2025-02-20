@@ -1,0 +1,38 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <div id="customize" th:fragment="customize" >
+        <div class="offcanvas offcanvas-end settings-panel border-0" id="settings-offcanvas" tabindex="-1" aria-labelledby="settings-offcanvas">
+            <div class="offcanvas-header settings-panel-header bg-shape">
+                <div class="z-index-1 py-1 light">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h5 class="text-white mb-0 me-2"><span class="fas fa-tools me-2 fs-0"></span>Settings</h5>
+                    <button class="btn btn-primary btn-sm rounded-pill mt-0 mb-0" style="font-size:12px" id="btn-setting-save"> <span class="fas fa-save me-1" data-fa-transform="shrink-3"></span>저장</button>
+                </div>
+                <!-- <p class="mb-0 fs--1 text-white opacity-75"> [<span th:text="${userInfo.username}"></span>]님 환경설정</p> -->
+                </div>
+                <button class="btn-close btn-close-white z-index-1 mt-0" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body scrollbar-overlay px-x1 h-100 scrollbar-none-xl">
+                <h5 class="fs-0">비밀번호 관리</h5>
+                <p class="fs--1">비밀번호는 타인에게 노출되지 않도록 주의해 주세요.</p>
+                <form>
+                    <div class="">
+                        <label class="form-label" for="oldPassword">기존 비밀번호</label>
+                        <input class="form-control" id="oldPassword" type="password" placeholder="기존 비밀번호" autocomplete="off" />
+                    </div>
+                    <div class="">
+                        <label class="form-label" for="newPassword">변경 비밀번호</label>
+                        <input class="form-control" id="newPassword" type="password" placeholder="새로운 비밀번호" autocomplete="off" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="newPasswordConfirm">비밀번호 확인</label>
+                        <input class="form-control" id="newPasswordConfirm" type="password" placeholder="새로운 비밀번호와 동일" autocomplete="off" />
+                    </div>
+                </form>
+            <hr>
+            <button id="btn-logOut" class="btn btn-falcon-primary me-1 mb-1" type="button">로그아웃</button>
+
+                
+            </div>
+        </div>
+    </div>
+</html>

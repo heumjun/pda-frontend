@@ -1,0 +1,60 @@
+server:
+  port: 8080
+  http2:    #http2 사용하기위해선 ssl 적용이 되야한다.
+    enabled: true
+
+spring:
+  application:
+    name: pda-frontend   
+  profiles:
+    # active: prod 
+    active: dev
+  servlet:
+    multipart:
+      maxFileSize: 100MB
+      maxRequestSize: 100MB
+
+jwt:
+  header: Authorization
+  token:
+  #1시간(60*60*1000)
+    access-expire-time: '87400000'  #24시간
+  secret: densopda!@
+  
+api:
+  url: http://localhost:8081
+  
+--- #개발 환경
+spring:
+  config:
+    activate:
+      on-profile: dev
+  thymeleaf:
+    cache: false
+  web:
+    resources:
+      cache:
+        period: 0
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3600000  #1시간
+            logger-level: full       #none,basic,headers,full
+            read-timeout: 3600000
+
+--- #배포환경
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3600000
+            logger-level: basic
+            read-timeout: 3600000

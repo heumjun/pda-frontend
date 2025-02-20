@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>PDA 프로그램</title>
+    
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+    
+    <!-- ================== BEGIN wijmo grid BASE CSS STYLE ================== -->
+    <link href="vendors/wijmo/Dist/styles/wijmo.min.css" rel="stylesheet"/>
+    <!-- ================== END wijmo grid BASE CSS STYLE ================== -->
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <link href="vendors/simplebar/simplebar.min.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet" id="style-default">
+    <link href="assets/css/user.css" rel="stylesheet" id="user-style-default">
+    
+  
+</head>
+
+<body>
+
+  <!-- 프로그램 코드 -->
+  <div id="data-params" class="visually-hidden" th:attr="data-params=${params}"></div>
+  
+  <!-- ===============================================-->
+  <!--    Main Content-->
+  <!-- ===============================================-->
+  <main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+      
+      <!-- ===============================================-->
+      <!-- 왼쪽 메뉴바 -->
+      <!-- ===============================================-->
+      <div th:replace="navbar :: navbar"></div>
+
+      <div class="content" style="padding-bottom : 0 !important;">
+        <!-- ===============================================-->
+        <!-- HEADER 영역 -->
+        <!-- ===============================================-->
+        <div th:replace="topbar :: topbar"></div>
+        
+        <div class="cont">
+          <!-- ===============================================-->
+          <!-- Main Content-->
+          <!-- ===============================================-->
+          
+          <div class="row g-3">
+            <div class="col-lg-12">
+              <form id="submitForm" onsubmit="return false">
+                <div class="card mb-2">
+                	<div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
+                	<div class="card-body card-search position-relative">
+                		<div class="mb-1 row">
+	                		<div class="wj-labeled-input">
+	                          <input id="chargeDept" name="chargeDept">
+	                          <label for="chargeDept">담당부서</label>
+	                        </div>
+	                        <div class="wj-labeled-input">
+	                            <input id="chargeUser" name="chargeUser">
+								<label for="chargeUser">작업자</label>
+	                        </div>
+						</div>
+                	</div>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-lg-12">
+            	<div class="col-lg-12 d-flex justify-content-between">
+            		<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">반품목록</span>
+            	</div>
+            	
+                <div class="card">
+                  <div class="card-header d-flex flex-between-center py-1 d-none d-lg-block ">
+                      <div id="grid-option" class="d-flex">
+                      <!-- 그리드 옵션박스 영역 -->
+                      </div>
+                      <div>
+                      <!-- 오른쪽에 추가할 내용있을경우 삽입-->
+                      </div>
+                  </div>
+                  <div class="card-body py-1 px-2">
+                      <div id="grid"></div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          
+          <div class="row g-3">
+          	<div class="col-lg-12">
+          		<div class="col-md-auto d-flex justify-content-start mb-2 mb-md-0 ">
+          			<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
+		                <div class="wj-labeled-input">
+                          <input id="qtyInput" name="qtyInput" type="number">
+                          <label for="qtyInput">반품수량입력</label>
+                        </div>
+					</div>
+					<div class="col-md-auto order-md-1 mb-1 mb-sm-0 flex-fill">
+						<div class="col-lg-12 mb-1">
+							<div id="btn-actions">
+								<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-plus-one" type="button">
+		                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+		                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">1</span>
+	                          	</button>
+	                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-plus-ten" type="button">
+		                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+		                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">10</span>
+	                          	</button>
+	                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-plus-hundred" type="button">
+		                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+		                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">100</span>
+	                          	</button>
+	                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-minus-one" type="button">
+		                            <span class="fas fa-minus" data-fa-transform="shrink-3 down-2"></span>
+		                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">1</span>
+	                          	</button>
+	                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-minus-ten" type="button">
+		                            <span class="fas fa-minus" data-fa-transform="shrink-3 down-2"></span>
+		                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">10</span>
+	                          	</button>
+	                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-minus-hundred" type="button">
+		                            <span class="fas fa-minus" data-fa-transform="shrink-3 down-2"></span>
+		                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">100</span>
+	                          	</button>
+							</div>
+						</div>
+					</div>
+				</div>
+          	</div>
+          </div>
+        </div>
+        <footer class="footer" style="position: absolute; bottom: 0; width: 100%;">
+		<div class="col-lg-12">
+			<div class="col-md-auto d-flex justify-content-between mb-2 mb-md-0 ">
+				<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
+					<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-back" type="button">
+						<span class="fas fa-arrow-left" data-fa-transform="shrink-3 down-2"></span>
+						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">뒤로가기</span>
+					</button>
+				</div>
+				<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
+					<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-save" type="button">
+						<span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
+						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">반품등록</span>
+					</button>
+				</div>
+			</div>
+		</div>
+      </footer>
+      </div>
+      
+    </div>
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+  <!-- customize 메뉴-->
+  <div th:replace="customize :: customize"></div>
+  
+  <!-- ===============================================-->
+  <!--    JavaScripts-->
+  <!-- ===============================================-->
+  <script src="assets/js/config.js"></script>
+
+  <!-- 공통 스크립트 모음 -->
+  <script src="js/common/script.js"></script>
+  
+  <script>
+    
+    import('/js/common/common.js');
+    import('/js/codeManage/returns-materials.js');
+    
+    
+  </script>
+  
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+
+
+<form class="form" id="form" onsubmit="return false">
+
+    <!-- wijmo 컴포넌트로 생성시키는 input text,combo-->
+    <div class="wj-labeled-input">
+      <input id="menUpcd" name="menUpcd" readonly>
+      <label for="menUpcd">상위 메뉴코드</label>
+    </div>
+    <div class="wj-labeled-input width-18">
+      <input id="menUpcdName" name="menUpcdName" readonly>
+      <label for="menUpcdName">상위 메뉴명</label>
+    </div>
+    
+    <!-- 한칸띄우기 -->
+    <div class="d-block"></div>
+
+
+    <!-- checkbox, switch, radio 버튼 등은 input class에 wj-control 추가해야함.
+        ajax.js 파일에서 getParams 함수에서 자동으로 값 뽑아갈수있음.
+    -->
+    <div class="wj-labeled-input switch">
+        <input id="switch" name="switch" type="checkbox" class="wj-control" /> 
+        <label for="switch">Switch</label>
+    </div>
+    <!-- radio 버튼 각각 영역에서 사용할경우-->
+    <div class="wj-labeled-input  ">
+        <input class="wj-control" id="ra-gbn1" type="radio" name="ra-gbn" value="1" checked="">
+        <label  for="ra-gbn1">일반비</label>
+    </div>
+    <div class="wj-labeled-input">
+      <input class="wj-control" id="ra-gbn2" type="radio" name="ra-gbn" value="2">
+      <label for="ra-gbn2">노무비</label>
+    </div>
+
+    <!--  radio 버튼 하나의 영역에 묶어서 사용할경우-->
+    <div class="wj-labeled-input width-auto">
+      <h6 class="d-inline">fdsfsd</h6>
+      <div class="form-check form-check-inline">
+        <input class="wj-control" id="ra-gbn1" type="radio" name="ra-gbn" value="1" checked="">
+        <label  for="ra-gbn1">일반비</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="wj-control" id="ra-gbn2" type="radio" name="ra-gbn" value="2">
+        <label for="ra-gbn2">노무비</label>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- 부서코드 모달 -->
+
+    <div class="wj-labeled-input width-7">
+      <input id="searchSok" name="sok">
+      <label for="searchSok">부서코드</label>
+    </div>
+    <div class="btn-reveal-trigger d-inline-block">
+        <button class="btn btn-link btn-reveal btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalDept" data-target="#searchSok" data-bs-toggle2="tooltip" aria-label="부서코드 조회" data-bs-original-title = "부서코드 조회" data-bs-placement = "top">
+            <span class="fas fa-ellipsis-h fs--2"></span>
+        </button>
+    </div>
+    <div class="wj-labeled-input width-12 ms-0">
+        <input id="searchSokName" class="form-control form-control-sm" type="text" placeholder="부서명" readonly>
+    </div>
+    <!-- 부서코드 모달 추가시 html main태그 아래 넣어줘야함. -->
+    <div th:replace="common/modalDept :: modalDept"></div>
+
+    <!-- 사번 모달 -->
+
+    <div class="wj-labeled-input width-7">
+        <input id="searchSab" name="sab">
+        <label for="searchSab">사번</label>
+    </div>
+    
+    <div class="btn-reveal-trigger d-inline-block">
+        <button data-target="#searchSab" class="btn btn-link btn-reveal btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalSabun" data-bs-toggle2="tooltip" aria-label="사번 조회" data-bs-original-title = "사번 조회" data-bs-placement = "top">
+            <span class="fas fa-ellipsis-h fs--2"></span>
+        </button>
+    </div>
+
+    <div class="wj-labeled-input width-7 ms-0">
+        <input id="searchSabName" class="form-control form-control-sm" type="text" placeholder="이름" readonly>
+    </div>
+
+    <!-- 사번 모달 추가시 html main태그 아래 넣어줘야함. -->
+    <div th:replace="common/modalSabun :: modalSabun"></div>
+
+
+</form>
+
+<!-- 툴팁 -->
+<div data-bs-toggle="tooltip" aria-label="새로고침" data-bs-original-title = "새로고침" data-bs-placement = "left"></div> 
+
+<!-- 툴팁과 드롭박스를 같이 사용할경우 -->
+<div class="btn-group">
+  <button class="btn btn-sm btn-success " type="button" 
+      data-bs-toggle="tooltip" aria-label="툴팁내용" data-bs-original-title = "툴팁내용" data-bs-placement = "auto">
+      <span class="fas fa-plus fs--1"></span>
+      <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1"> 신규등록</span>
+  </button>
+  <button class="btn btn-sm btn-success  dropdown-toggle dropdown-caret-none" type="button" id="button-new" 
+      data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+    <span class="visually-hidden">Dropdown</span>
+    <span class="fas fa-chevron-down" data-fa-transform="shrink-3 down-1"></span>
+  </button>
+  <div class="dropdown-menu dropdown-toggle-item dropdown-menu-end border py-2" aria-labelledby="button-new">
+    <button class="dropdown-item">본사</button>
+    <button class="dropdown-item">신평</button>
+  </div>
+
+</div>
+
+
+
+
+<!-- 조회 박스 -->
+<div class="row g-3">
+  <div class="col-lg-12">
+      <form id="searchForm" onsubmit="return false">
+          <div class="card mb-3">
+              <div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
+              <div class="card-body card-search position-relative">
+                  <div class="row flex-between-center">
+                      
+                      <div class="col-6 col-sm-auto align-items-center pe-0">
+                          <div class="wj-labeled-input">
+                              <input id="jan" name="jan" required>
+                              <label for="jan">작업장소</label>
+                          </div>
+                          <div class="wj-labeled-input">
+                              <input id="sdat" name="sdat">
+                              <label for="sdat">발주 시작월</label>
+                          </div>
+                          <div class="wj-labeled-input">
+                              <input id="edat" name="edat">
+                              <label for="edat">발주 종료월</label>
+                          </div>
+
+                      </div>
+                      <div class="col-6 col-sm-auto ms-auto ps-0">
+                          <div id="btn-actions" >
+                              
+                            <button class="btn btn-falcon-default btn-sm me-2" id="btn-refresh" type="button">
+                              <span class="fas fa-sync-alt" data-fa-transform="shrink-3 down-2"></span>
+                              <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">새로고침</span>
+                            </button>  
+                            <button class="btn btn-falcon-default btn-sm me-2" id="btn-search" type="button">
+                              <span class="fas fa-search" data-fa-transform="shrink-3 down-2"></span>
+                              <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">조회</span>
+                            </button>  
+                            <button class="btn btn-falcon-default btn-sm me-2" id="btn-add" type="button">
+                                <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                                <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">추가</span>
+                            </button>  
+                            <button class="btn btn-falcon-primary btn-sm me-2" id="btn-save" type="button">
+                                <span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
+                                <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">저장</span>
+                            </button>  
+                            <button class="btn btn-falcon-danger btn-sm me-2" id="btn-delete" type="button">
+                                <span class="fas fa-trash-alt" data-fa-transform="shrink-3 down-2"></span>
+                                <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">삭제</span>
+                            </button>  
+                            
+                            <button class="btn btn-falcon-default btn-sm me-2" id="btn-print" type="button">
+                              <span class="fas fa-print" data-fa-transform="shrink-3 down-2"></span>
+                              <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">인쇄</span>
+                            </button>
+
+                            <button class="btn btn-falcon-default btn-sm me-2" id="btn-print-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span class="fas fa-print" data-fa-transform="shrink-3 down-2"></span>
+                              <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">인쇄(드롭다운)</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end border py-2">
+                              <a class="dropdown-item" href="#!" id="btn-print1">인쇄1</a>
+                              <a class="dropdown-item" href="#!" id="btn-print2">인쇄2</a>
+                            </div>
+
+
+
+                          </div>
+                      </div>
+                  
+                  </div>
+              </div>
+          </div>
+          
+      </form>
+  </div>
+</div>
+
+<!-- 그리드 박스 -->
+<div class="row g-3">
+  <div class="col-lg-12">
+      <div class="card">
+      <div class="card-header d-flex flex-between-center py-1">
+          <div id="grid-option" class="d-flex">
+          <!-- 그리드 옵션박스 영역 -->
+          </div>
+          <div>
+          <!-- 오른쪽에 추가할 내용있을경우 삽입-->
+          </div>
+      </div>
+
+      <div class="card-body py-1 px-2">
+          <div id="grid"></div>
+      </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- 카드 박스 -->
+<div class="card overflow-hidden">
+  <div class="card-header bg-light py-2">
+    <div class="row flex-between-center">
+      <div class="col-auto btn-reveal-trigger">
+          <h6 class="mb-0 d-inline">헤더이름</h6>
+          <button class="btn-버튼id삽입-refresh btn btn-link btn-reveal btn-sm" type="button" data-bs-toggle="tooltip" aria-label="새로고침" data-bs-original-title = "새로고침" data-bs-placement = "bottom">
+            <span class="fas fa-sync-alt fs--1"></span>
+          </button>
+      </div>
+      <div class="col-auto d-flex">
+        <div class="btn-reveal-trigger">
+          <button id="btn-버튼id삽입-add" class="btn btn-falcon-default btn-sm" type="button">
+            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ms-1">추가</span>
+          </button>
+          <button id="btn-버튼id삽입-save" class="btn btn-falcon-primary btn-sm mx-2" type="button">
+            <span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ms-1">저장</span>
+          </button>
+          <button id="btn-버튼id삽입-delete" class="btn btn-falcon-danger btn-sm " type="button">
+            <span class="fas fa-trash" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ms-1">삭제</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body" >
+    
+  </div>
+</div>
+
+<!-- 드롭다운 -->
+<div class="dropdown">
+  <button class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" type="button" id="ticket-layout" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+    <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1"><span class="fas fa-link fs--1"></span> 드롭다운</span>
+    <span class="fas fa-chevron-down" data-fa-transform="shrink-3 down-1"></span>
+  </button>
+  <div class="dropdown-menu dropdown-toggle-item dropdown-menu-end border py-2" aria-labelledby="ticket-layout">
+    <button class="dropdown-item">내용1</button>
+    <button class="dropdown-item">내용2</button>
+    <button class="dropdown-item">내용3</button>
+  </div>
+</div>
