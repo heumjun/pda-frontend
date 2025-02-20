@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>식단정보</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+    <!-- ================== BEGIN wijmo grid BASE CSS STYLE ================== -->
+    <link href="vendors/wijmo/Dist/styles/wijmo.min.css" rel="stylesheet"/>
+    <!-- ================== END wijmo grid BASE CSS STYLE ================== -->
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <link href="vendors/simplebar/simplebar.min.css" rel="stylesheet">
+    <link href="vendors/glightbox/glightbox.min.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet" id="style-default">
+    <link href="assets/css/user.css" rel="stylesheet" id="user-style-default">
+    
+    
+  </head>
+
+
+  <body>
+    <!-- 로딩바 -->
+    <div id="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <!-- 파라미터 -->
+      <div id="data-params" class="visually-hidden" th:attr="data-params=${params}"></div>
+    </div>
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main ms-2 me-2" id="top">
+      <div class="contents mt-3">
+        <div class="row g-3">
+          <div class="col-lg-5 px-xxl-2">
+            <div class="card overflow-hidden">
+              <div class="card-header bg-light py-2">
+                <div class="row flex-between-center">
+                  <div class="col-auto btn-reveal-trigger">
+                      <h6 class="mb-0 d-inline">고객 리스트</h6>
+                      <button class="btn-customerGrid-refresh btn btn-link btn-reveal btn-sm" type="button" data-bs-toggle="tooltip" aria-label="새로고침" data-bs-original-title = "새로고침" data-bs-placement = "top">
+                        <span class="fas fa-sync-alt fs--1"></span>
+                      </button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body" >
+                <div id="customerSearch" class="me-auto mb-2"></div>
+                <div id="customerGrid"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7">
+            <div class="row g-3 mb-2">
+              <div class="col-lg-12">
+                
+                <div class="card font-sans-serif">
+                  <div class="card-body d-flex gap-3 flex-column flex-sm-row align-items-center"><img class="rounded-3" src="assets/img/team/avatar.png" alt="" width="112" />
+                    <table class="table table-borderless fs--1 fw-medium mb-0">
+                      <tbody>
+                        <tr>
+                          <td class="p-1" style="width: 35%;">고객명:</td>
+                          <td class="p-1 text-primary" id="customerName" data-no=""></td>
+                        </tr>
+                        <tr>
+                          <td class="p-1" style="width: 35%;">가입일자:</td>
+                          <td class="p-1 text-600" id="customerJoinDate" ></td>
+                        </tr>
+                        <tr>
+                          <td class="p-1" style="width: 35%;">식단 프로그램 :</td>
+                          <td class="p-1" id="customerDiet"></td>
+                        </tr>
+                        <tr>
+                          <td class="p-1" style="width: 35%;">담당 트레이너:</td>
+                          <td class="p-1" id="customerTrainer"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header d-flex flex-between-center py-1">
+                      <div id="dietGrid-option" class="d-flex">
+                      <!-- 그리드 옵션박스 영역 -->
+                      
+                        <form id="searchForm" onsubmit="return false">
+                          <div class="wj-labeled-input ">
+                            <input id="startDat" name="startDat">
+                            <label for="startDat">시작일자</label>
+                          </div>
+                          <div class="wj-labeled-input ">
+                            <input id="endDat" name="endDat">
+                            <label for="endDat">종료일자</label>
+                          </div>
+                        </form>
+                      </div>
+                      <div>
+                      <!-- 오른쪽에 추가할 내용있을경우 삽입-->
+                        <button class="btn btn-falcon-default btn-sm me-2" id="btn-search" type="button">
+                          <span class="fas fa-search" data-fa-transform="shrink-3 down-2"></span>
+                          <span class="d-none d-lg-inline-block d-xxl-inline-block ms-1">조회</span>
+                        </button>  
+                      </div>
+                  </div>
+            
+                  <div class="card-body py-1 px-2">
+                      <div id="dietGrid"></div>
+                  </div>
+          
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+    <!-- 공통 스크립트 모음 -->
+    <script src="js/common/script.js"></script>
+    <script src="vendors/glightbox/glightbox.min.js"></script>
+
+    
+    <script>
+      import('/js/common/common.js');
+      import('/js/customerManage/diet.js');
+    
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,35 @@
+
+<!-- aria-controls 와 id랑 연결됨.-->
+<div class="row g-3">
+  <div class="col-lg-12 px-xxl-2">
+    <div class="card overflow-hidden">
+      <div class="card-header p-0 bg-light scrollbar-overlay">
+        <ul class="nav nav-tabs border-0 tab-tickets-status flex-nowrap" role="tablist">
+          <li class="nav-item text-nowrap" role="presentation">
+              <a class="nav-link mb-0 d-flex align-items-center gap-2 py-3 px-x1 active" id="" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">
+                <span class="fas fa-stream "></span><h6 class="mb-0 text-600">탭1</h6>
+              </a>
+          </li>
+          <li class="nav-item text-nowrap" role="presentation">
+              <a class="nav-link mb-0 d-flex align-items-center gap-2 py-3 px-x1" id="" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">
+                <span class="fas fa-unlock-alt"></span><h6 class="mb-0 text-600">탭2</h6>
+              </a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body p-0">
+        <div class="tab-content card-body">
+          <div class="tab-pane active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+            탭1 내용
+            
+          </div>
+  
+          <div class="tab-pane" id="tab2" role="tabpanel" aria-labelledby="tab2">
+            탭2 내용
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
