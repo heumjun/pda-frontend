@@ -19,11 +19,10 @@ const returnReg = function(){
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
-            {binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},
-			// button with regular bound text
-			{binding:'delete'	,header: '삭제'	,width: 150	
+            {binding:'delete'	,header: '삭제'	,width: 80	
 				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
-					click: (e, ctx) => {
+					text: '<b>삭제</b>'
+					,click: (e, ctx) => {
 						console.log(ctx);
 						alert('Clicked Button Delete** ' + ctx.item.qrCode + ' **');
 					}
@@ -31,7 +30,7 @@ const returnReg = function(){
 			},
             {binding:'cm08Name'	,header:'부품명'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
             {binding:'qrCode'	,header:'QR코드'	,width:70	,dataType:'String'	,align:'center'	,maxLength:6 	,isReadOnly: true},
-			{binding:'relQty'	,header:'출고수량'	,width:130	,dataType:'Number'	,editor:numberInput	,isRequired:true},
+			{binding:'mf14Qty'	,header:'출고수량'	,width:130	,dataType:'Number'	,editor:numberInput	,isRequired:true},
             {binding:'st01Qty'	,header:'현재고량'	,width:130	,dataType:'Number' 	,isReadOnly: true},
             {binding:'cm15Name'	,header:'창고'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
 			{binding:'cm16Name'	,header:'구역'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
@@ -58,12 +57,12 @@ const returnReg = function(){
             if(grid._flexCv.isEditingItem) return null;
                 
             switch (prop) {
-                case 'relQty':
-                    if(wijmo.isNullOrWhiteSpace(item.relQty)) return '[출고수량]를 입력하세요.';
+                case 'mf14Qty':
+                    if(wijmo.isNullOrWhiteSpace(item.mf14Qty)) return '[출고수량]를 입력하세요.';
                     break;
-                case 'qrCode':
-                    if(grid.isSameColumnValue(item,['qrCode'])) return 'QR코드가 중복되는 내역이 존재합니다.';
-                    break;
+				case 'cm08Name' :
+					if(grid.isSameColumnValue(item,['cm08Name'])) return '중복되는 [부품명]가 존재합니다.';
+					break;
                 default:
                     return null;
             }
@@ -84,13 +83,16 @@ const returnReg = function(){
         };
 		
 		params = {...params};
-
+		//new row추가시
+		/*let newRow = grid._flexCv.addNew({"cm15Name":"AAA"});*/
         await ajax.postAjax(params,true).then(data=>{
 			let result = data['result'];
 			console.log(result);
 			if(result.result_status == "S") {
 				let resultData = result.result_data;
-				
+				let temp = grid._flexCv.sourceCollection.filter((c) => ( c.cm08Name === resultData.cm08Name ));
+				if(temp.length == 0) grid._flexCv.addNew(resultData);
+				else alertWarning('중복 항목',`중복된 항목입니다.`);
 			} else {
 				pushMsg(`해당 항목은 없습니다.`);
 			}
@@ -153,6 +155,9 @@ const returnReg = function(){
 		$('#btn-back').on('click',qrReadView);
 		$(".btn-calc").on('click',calcBtns);
 		$("#btn-test").on('click',qrTestFnc);
+		$("#btn-sign").on('click',function() {
+			window.open('', '', `width=300,height=100`)
+		});
     }
 
 
