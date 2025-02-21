@@ -18,7 +18,16 @@ const returnReg = function(){
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
-            {binding:'mf15No'		,header:'사급요청서번호'	,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf15No'		,header:'사급요청서번호'	,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf15Dat'		,header:'요청일자'			,width:110	,dataType:'Date'	,align:'center'	,isReadOnly: true},
+			{binding:'mf15SignYn'	,header:'사인여부'			,width:80	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st03No'		,header:'출고번호'			,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st03Dat'		,header:'요청일자'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st03Indte'	,header:'요청시간'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf15Cus'		,header:'제조사'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'cm01Name'		,header:'제조사명'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'lineCode'		,header:'라인코드'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true}
+            /*{binding:'mf15No'		,header:'사급요청서번호'	,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'mf15Dat'		,header:'요청일자'			,width:110	,dataType:'Date'	,align:'center'	,isReadOnly: true},
             {binding:'mf15SignYn'	,header:'사인여부'			,width:80	,dataType:'String'	,align:'center'	,isReadOnly: true},
 			{binding:'mf13No'		,header:'출고요청서번호'	,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
@@ -26,7 +35,7 @@ const returnReg = function(){
 			{binding:'mf13DatTime'	,header:'요청시간'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
 			{binding:'mf15Cus'		,header:'제조사'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
 			{binding:'cm01Name'		,header:'제조사명'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'mf13LineCode'	,header:'라인코드'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true}
+			{binding:'mf13LineCode'	,header:'라인코드'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true}*/
         ];
 
         //그리드 컬럼셋팅
@@ -42,7 +51,7 @@ const returnReg = function(){
         //키가되는 컬럼으로 변경이 되면 안되는 컬럼
         //grid.disableReadOnlyForAutoRows(['itemNm','qrCode','relQty','storage','area']);
         //대문자로 변경하고싶은 컬럼
-        grid.toUpperCase(['mf15_no','mf13_no','mf13_line_code']);
+        grid.toUpperCase(['mf15_no','st03No','lineCode']);
     }
 	
 	grid._flexGrid.addEventListener(grid._flexGrid.hostElement,consts.JQUERYEVENT.DBLCLICK,(e)=>{
@@ -59,7 +68,7 @@ const returnReg = function(){
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/consigned-materials-rel' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급출고' }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf15No', value:grid._flexGrid.getCellData(ht._row,ht.col) }));
-				form.append($('<input/>', {type: 'hidden', name: 'mf13No', value:grid._flexGrid.getCellData(ht._row,3) }));
+				form.append($('<input/>', {type: 'hidden', name: 'st03No', value:grid._flexGrid.getCellData(ht._row,3) }));
 				
 				form.appendTo('body');
 				form.submit();
