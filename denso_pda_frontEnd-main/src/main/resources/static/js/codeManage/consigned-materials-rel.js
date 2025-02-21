@@ -36,7 +36,7 @@ const returnReg = function(){
 			},
             {binding:'cm08Name'	,header:'부품명'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
             {binding:'qrCode'	,header:'QR코드'	,width:70	,dataType:'String'	,align:'center'	,maxLength:6 	,isReadOnly: true},
-			{binding:'mf14Qty'	,header:'출고수량'	,width:130	,dataType:'Number'	,editor:numberInput	,isRequired:true},
+			{binding:'outputQty',header:'출고수량'	,width:130	,dataType:'Number'	,editor:numberInput	,isRequired:true},
             {binding:'st01Qty'	,header:'현재고량'	,width:130	,dataType:'Number' 	,isReadOnly: true},
             {binding:'cm15Name'	,header:'창고'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
 			{binding:'cm16Name'	,header:'구역'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
@@ -63,12 +63,9 @@ const returnReg = function(){
             if(grid._flexCv.isEditingItem) return null;
                 
             switch (prop) {
-                case 'mf14Qty':
-                    if(wijmo.isNullOrWhiteSpace(item.mf14Qty)) return '[출고수량]를 입력하세요.';
+                case 'outputQty':
+                    if(wijmo.isNullOrWhiteSpace(item.outputQty)) return '[출고수량]를 입력하세요.';
                     break;
-				case 'cm08Name' :
-					if(grid.isSameColumnValue(item,['cm08Name'])) return '중복되는 [부품명]가 존재합니다.';
-					break;
                 default:
                     return null;
             }
@@ -84,7 +81,6 @@ const returnReg = function(){
 		let params = {
             uri: `pda/consigned-materials-rel/qrcode`
 			,mf15No : $('#data-params').data('params').mf15No
-			,mf13No : $('#data-params').data('params').mf13No
 			,mf16No : "2025021800006"
         };
 		
@@ -112,16 +108,29 @@ const returnReg = function(){
 	
 	const calcBtns = function(event) {
 		let targetObj = $(event.target);
-		if(event.target.tagName.toUpperCase() == "SPAN" || event.target.tagName.toUpperCase() == "PATH") {
-			targetObj = $(event.target).closest("button");
-		}
 		let type = targetObj.data('value').substr(0,1);
 		let calcVal = targetObj.data('value').substr(1,targetObj.data('value').length-1);
-		let resultVal = 0;
+		
 		if(type == "p") {
-			console.log('더한거~~');
+			grid._flexGrid.rows.forEach((row,index,array)=>{
+				let resultVal = 0;
+				let targetData = commonFunc.isEmpty(row.dataItem['outputQty']) ? 0 : parseInt(row.dataItem['outputQty']);
+				let limitData = commonFunc.isEmpty(row.dataItem['st01Qty']) ? 0 : parseInt(row.dataItem['st01Qty']);
+				resultVal = targetData + parseInt(calcVal);
+				
+				if(resultVal > limitData) grid._flexGrid.setCellData(index,"outputQty",limitData);
+				if(resultVal <= limitData) grid._flexGrid.setCellData(index,"outputQty",resultVal);
+			});
 		} else {
-			console.log('뺀거~~');
+			grid._flexGrid.rows.forEach((row,index,array)=>{
+				let resultVal = 0;
+				let targetData = commonFunc.isEmpty(row.dataItem['outputQty']) ? 0 : parseInt(row.dataItem['outputQty']);
+				let limitData = commonFunc.isEmpty(row.dataItem['st01Qty']) ? 0 : parseInt(row.dataItem['st01Qty']);
+				resultVal = targetData - parseInt(calcVal);
+				
+				if(resultVal < 0) grid._flexGrid.setCellData(index,"outputQty", 0);
+				if(resultVal >= 0) grid._flexGrid.setCellData(index,"outputQty",resultVal);
+			});
 		}
 	}
 	
@@ -135,7 +144,6 @@ const returnReg = function(){
         let params = {
             uri: `pda/consigned-materials-rel`
 			,mf15No : $('#data-params').data('params').mf15No
-			,mf13No : $('#data-params').data('params').mf13No
         }
 
         params = {...params};
@@ -144,7 +152,7 @@ const returnReg = function(){
 			cmrInfo = data['info'];
 			
 			$("#cmrReqNo").val(cmrInfo.mf15No);
-			$("#cmrReqDt").val(cmrInfo.mf13Dat);
+			$("#cmrReqDt").val(cmrInfo.st03Dat);
 			$("#cmrReqClient").val(cmrInfo.cm01Name); //이게 제조사를 말하는지 아니면 거래처를 말하는지는 모름...
 			
             grid._flexCv.sourceCollection =  data['list'].map(item=>({
