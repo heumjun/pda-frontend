@@ -12,46 +12,75 @@ import lombok.Data;
 @Data
 public class UserDto implements UserDetails{
 
-    private String userId;      //id
-    private String password;    //비밀번호
-    private String username;    //이름
-    private String tel;         //전화번호
-    private String entdt;       //입사일자
-    private String jan;        //지점(1001:창원본점,1002:마산점,1003:진해점 등)
-    private String role;        //권한 롤 => 기본적으로 USER_ROLE 다 넣어줘야함.
-    
+	private String userId;
+	private String userName;
+	private String password;
+	private String company;
+	private String factory;
+	private Integer empNo;
+	private String companyName;
+	private String factoryName;
+	private Integer limitFileCnt;
+	private Integer limitStorage;
+	private String empName;
+	//우리 mes에서 사용되는 role과는 다르지만 spring security에서 사용해야함.
+	private String role;  //권한 롤 => 기본적으로 USER_ROLE 다 넣어줘야함.
+	private String companyUseType;
+	private String companyLock;		//사용중지 여부
+	private String ip;
+
+	private int seq;
+
+	// 이하 코드는 security 를 위한 용도
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Collection<? extends GrantedAuthority> authorities;
-    
-    // 이하 코드는 security 를 위한 용도
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
-    }
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return this.authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.password;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.userName;
+	}
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonProperty(access  =JsonProperty.Access.WRITE_ONLY)
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
     
     

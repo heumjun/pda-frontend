@@ -55,7 +55,7 @@ public class AuthorityService {
 
         Map<String,Object> param = new HashMap<String,Object>();
         param.put("menuUrl", url);
-        param.put("jan", userDto.getJan());
+//        param.put("jan", userDto.getJan());
         
         //본인의 해당프로그램의 권한레벨
         String uri = "system/authorities/".concat(userDto.getUserId()); 

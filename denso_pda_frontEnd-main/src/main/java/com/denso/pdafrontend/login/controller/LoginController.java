@@ -42,7 +42,6 @@ public class LoginController {
     public ModelAndView loginView(){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("login");
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return mv;
     }
 
@@ -67,7 +66,7 @@ public class LoginController {
         Map<String,Object> param = new HashMap<String,Object>();
         param.put("userId", params.getUserId());
         param.put("password", params.getPassword());
-        param.put("jan", params.getJan());      //지점
+//        param.put("jan", params.getJan());      //지점
         
         ResponseEntity<?> responseEntity = restApiService.postRestAPI(param, "login");
 

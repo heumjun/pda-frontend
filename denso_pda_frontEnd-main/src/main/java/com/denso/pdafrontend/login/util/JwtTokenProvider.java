@@ -72,56 +72,36 @@ public class JwtTokenProvider {
     public UserDto getUserInfoByToken(String token){
 
         //토큰 유효성 체크
-        if(!validateToken(token)){
-            //로그인 오류발생
-            throw new UnathorizedException();
-        }
+//        if(!validateToken(token)){
+//            //로그인 오류발생
+//            throw new UnathorizedException();
+//        }
 
-        UserDto userInfo = new UserDto();
+    	UserDto userInfo = new UserDto();
+    	
+		String userId = Jwts.parser()
+							.setSigningKey(secretKey)
+							.parseClaimsJws(token)
+							.getBody()
+							.getSubject();
+		
+		String userCompany = Jwts.parser()
+								 .setSigningKey(secretKey)
+								 .parseClaimsJws(token)
+								 .getBody()
+								 .get("company").toString();
 
-        String id = Jwts.parser()
-                            .setSigningKey(secretKey)
-                            .parseClaimsJws(token)
-                            .getBody()
-                            .getSubject();
-        String role = Jwts.parser()
-                            .setSigningKey(secretKey)
-                            .parseClaimsJws(token)
-                            .getBody()
-                            .get("role").toString();
-        String name = Jwts.parser()
-                            .setSigningKey(secretKey)
-                            .parseClaimsJws(token)
-                            .getBody()
-                            .get("name").toString();
-        
-        String tel = Jwts.parser()
-                            .setSigningKey(secretKey)
-                            .parseClaimsJws(token)
-                            .getBody()
-                            .get("tel").toString();
+		String userFactory = Jwts.parser()
+								.setSigningKey(secretKey)
+								.parseClaimsJws(token)
+								.getBody()
+								.get("factory").toString();
 
-        String entdt = Jwts.parser()
-                            .setSigningKey(secretKey)
-                            .parseClaimsJws(token)
-                            .getBody()
-                            .get("entdt").toString();
-        
-        String jan = Jwts.parser()
-                        .setSigningKey(secretKey)
-                        .parseClaimsJws(token)
-                        .getBody()
-                        .get("jan").toString();
-        
-        
-        userInfo.setUserId(id);
-        userInfo.setRole(role);
-        userInfo.setTel(tel);
-        userInfo.setUsername(name);
-        userInfo.setEntdt(entdt);
-        userInfo.setJan(jan);
-        
-        return userInfo;
+		userInfo.setUserId(userId);
+		userInfo.setCompany(userCompany);
+		userInfo.setFactory(userFactory);
+		
+		return userInfo;
     }
 
 
