@@ -94,7 +94,7 @@ public class LoginController {
         
         return ResponseEntityUtil.ok(null);
         
-    } 
+    }   
 
     /**
      * 로그아웃
