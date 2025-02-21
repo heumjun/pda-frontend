@@ -65,23 +65,24 @@
                 		<div class="mb-1 row">
 						    <label for="cmrReqNo" class="col-5 col-form-label">사급요청서번호</label>
 						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="cmrReqNo" value="20241105001">
+						      <input type="text" readonly class="form-control-plaintext" name="cmrReqNo" id="cmrReqNo" value="">
 						    </div>
 						</div>
 						<div class="mb-1 row">
 						    <label for="cmrReqDt" class="col-5 col-form-label">출고요청일자</label>
 						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="cmrReqDt" value="2024-11-05">
+						      <input type="text" readonly class="form-control-plaintext" name="cmrReqClient" id="cmrReqDt" value="">
 						    </div>
 						</div>
 						<div class="mb-1 row">
 						    <label for="cmrReqClient" class="col-5 col-form-label">거래처</label>
 						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="cmrReqClient" value="거래처명">
+						      <input type="text" readonly class="form-control-plaintext" name="cmrReqClient" id="cmrReqClient" value="">
 						    </div>
 						</div>
                 	</div>
                 </div>
+                <input type="hidden" name="cmrReqSign" id="cmrReqSign" value="">
               </form>
             </div>
           </div>
@@ -94,7 +95,6 @@
             			<span class="badge text-bg-danger" style="cursor:pointer;" id="btn-sign">서명 미완료</span><!-- 상태값 표기 부분 -->
             			<span class="badge text-bg-danger">출고 미완료</span><!-- 상태값 표기 부분 -->
             		</div>
-            		
             	</div>
             	
                 <div class="card">
@@ -181,6 +181,27 @@
       </div>
       
     </div>
+    
+    <!-- Modal -->
+	<div class="modal fade" id="signPopup" tabindex="-1" role="dialog" aria-labelledby="signPopupTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="signPopupTitle">서명</h5>
+	      </div>
+	      <div class="modal-body">
+			<div class="sign-wrapper">
+				<canvas id="signature-pad" class="signature-pad" width=400 height=200 style="background: gray;"></canvas>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="signPopupClose">닫기</button>
+	        <button type="button" class="btn btn-primary"   id="signPopupClear">초기화</button>
+	        <button type="button" class="btn btn-primary"   id="signPopupSave">서명 등록</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
   </main>
   <!-- ===============================================-->
   <!--    End of Main Content-->

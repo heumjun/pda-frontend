@@ -7,11 +7,17 @@ import * as consts from "../common/constants.js";
 import * as commonRestApi from "../common/commonRestApi.js";
 import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
 import * as commonFunc from "../common/common.js";
+import * as signature from "../common/signature_pad.umd.min.js";
 
 const returnReg = function(){
     
     let grid  = new GridFactory('#grid');
 	let qtyInput = input.number('#qtyInput',1,0,999999,'G10');
+	let cmrInfo = undefined;
+	let signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+	  backgroundColor: 'rgba(255, 255, 255, 0)',
+	  penColor: 'rgb(0, 0, 0)'
+	});
     /**
      * 그리드 초기화
      */
@@ -87,7 +93,6 @@ const returnReg = function(){
 		/*let newRow = grid._flexCv.addNew({"cm15Name":"AAA"});*/
         await ajax.postAjax(params,true).then(data=>{
 			let result = data['result'];
-			console.log(result);
 			if(result.result_status == "S") {
 				let resultData = result.result_data;
 				let temp = grid._flexCv.sourceCollection.filter((c) => ( c.cm08Name === resultData.cm08Name ));
@@ -98,6 +103,11 @@ const returnReg = function(){
 			}
             /*pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);*/
         }).catch((e)=>{});
+	}
+	
+	const signPopupShow = function() {
+		$('#signPopup').modal({backdrop:'static', keyboard:false});
+		$('#signPopup').modal('show');
 	}
 	
 	const calcBtns = function(event) {
@@ -131,11 +141,11 @@ const returnReg = function(){
         params = {...params};
 
         await ajax.postAjax(params,true).then(data=>{
-			let masterInfo = data['info'];
+			cmrInfo = data['info'];
 			
-			$("#cmrReqNo").val(masterInfo.mf15No);
-			$("#cmrReqDt").val(masterInfo.mf13Dat);
-			$("#cmrReqClient").val(masterInfo.cm01Name); //이게 제조사를 말하는지 아니면 거래처를 말하는지는 모름...
+			$("#cmrReqNo").val(cmrInfo.mf15No);
+			$("#cmrReqDt").val(cmrInfo.mf13Dat);
+			$("#cmrReqClient").val(cmrInfo.cm01Name); //이게 제조사를 말하는지 아니면 거래처를 말하는지는 모름...
 			
             grid._flexCv.sourceCollection =  data['list'].map(item=>({
                 ...item,
@@ -155,9 +165,44 @@ const returnReg = function(){
 		$('#btn-back').on('click',qrReadView);
 		$(".btn-calc").on('click',calcBtns);
 		$("#btn-test").on('click',qrTestFnc);
-		$("#btn-sign").on('click',function() {
-			window.open('', '', `width=300,height=100`)
+		$("#btn-sign").on('click',signPopupShow);
+		
+		$("#signPopupClose").on('click',function(){$('#signPopup').modal('hide')});
+		$("#signPopupSave").on('click',function(event){
+			var data = signaturePad.toDataURL('image/png');
+			$("#cmrReqSign").val(data);
+			if(!signaturePad.isEmpty())$("#btn-sign").text("서명완료");
+			else $("#btn-sign").text("서명 미완료");
+			$('#signPopup').modal('hide');
 		});
+		$("#signPopupClear").on('click',function(event){
+			signaturePad.clear();
+		});
+		$('#signPopup').on('hide.bs.modal', function () {
+          //모달이 꺼질때 모든 버튼 인풋 셀렉트 텍스트 에어리어의 포커스를 날린다.
+            $('button, input, select, textarea').each(function () {
+                $(this).blur();
+            });
+        });
+		$('#signPopup').on('shown.bs.modal', async function () {
+		    let canvas = $('#signature-pad')[0];
+		    let signaturePad = new SignaturePad(canvas);
+
+		    // 모달 크기에 맞게 canvas 크기 조정
+		    canvas.width = $('.modal-body').width();
+		    canvas.height = $('.modal-body').height();
+
+		    // 기존 서명 불러오기 (값이 존재할 경우)
+		    let savedSignature = $("#cmrReqSign").val();
+		    if (!commonFunc.isEmpty(savedSignature)) {
+		        try {
+		            await signaturePad.fromDataURL(savedSignature, { ratio: 1, width: canvas.width, height: canvas.height });
+		        } catch (error) {
+		            console.error("서명 로드 중 오류 발생:", error);
+		        }
+		    }
+		});
+		
     }
 
 
