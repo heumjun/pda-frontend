@@ -40,6 +40,12 @@ const returnReg = function(){
             {binding:'st01Qty'	,header:'현재고량'	,width:130	,dataType:'Number' 	,isReadOnly: true},
             {binding:'cm15Name'	,header:'창고'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
 			{binding:'cm16Name'	,header:'구역'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50 	,isReadOnly: true},
+			{binding:'st01Lot'	,header:'LOT번호'	,visible: false},
+			{binding:'st01Unt'	,header:'재고단위'	,visible: false},
+			{binding:'mf16Code'	,header:'품목코드'	,visible: false},
+			{binding:'mf15No'	,header:'사급지시서번호',visible: false},
+			{binding:'st01District'	,header:'구역',visible: false},
+			{binding:'mf15Cus'	,header:'구역',visible: false},
         ];
 
         //그리드 컬럼셋팅
@@ -154,6 +160,17 @@ const returnReg = function(){
 			$("#cmrReqNo").val(cmrInfo.mf15No);
 			$("#cmrReqDt").val(cmrInfo.st03Dat);
 			$("#cmrReqClient").val(cmrInfo.cm01Name); //이게 제조사를 말하는지 아니면 거래처를 말하는지는 모름...
+			$("#cmrReqSign").val(cmrInfo.mf15sign);
+			
+			if(!commonFunc.isEmpty(cmrInfo.mf15sign))$("#btn-sign").text("서명완료");
+			if(!commonFunc.isEmpty(cmrInfo.st03No)){
+				$("#btn-save").css("display","none");
+				$("#btn-delete").css("display","");
+			}
+			else {
+				$("#btn-save").css("display","");
+				$("#btn-delete").css("display","none");
+			}
 			
             grid._flexCv.sourceCollection =  data['list'].map(item=>({
                 ...item,
@@ -162,6 +179,69 @@ const returnReg = function(){
             pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
         }).catch((e)=>{});
     }
+	
+	const cmrSave = async ()=>{
+	        
+	        grid.disableAutoRows();
+			
+			if(!grid.gridValidation()){
+	            alertWarning('저장불가','그리드 오류내역을 확인하세요.');
+	            return;
+	        }
+			
+			if(signaturePad.isEmpty()) {
+				alertWarning('저장불가','서명을 진행해야 출고등록이 가능합니다.');
+				return;
+			}
+			
+			let insertList = grid.gridItemListToArray(grid._flexCv.items);
+			cmrInfo["cmrReqSign"] = $("#cmrReqSign").val();
+	        let params = {
+	            uri: `pda/consigned-materials-rel/save`
+				,headerInfo : cmrInfo
+				,insertList : insertList
+	        }
+
+	        params = {...params};
+			
+			console.log(params);
+			
+			confirm('저장 하시겠습니까?','출고 등록됩니다.',consts.MSGBOX.QUESTION,()=>{
+	            ajax.postAjax(params,true).then(async (data)=>{
+	                
+	                /*await searchOfMaterial();*/
+	                pushMsg('저장 되었습니다.');
+					
+					location.reload();
+	            }).catch((e)=>{
+	                console.debug(e);
+	            });
+	        });
+	    }
+		
+		const cmrDelete = async ()=>{
+			        
+	        grid.disableAutoRows();
+			
+	        let params = {
+	            uri: `pda/consigned-materials-rel/delete`
+				,headerInfo : cmrInfo
+	        }
+
+	        params = {...params};
+			
+			confirm('삭제 하시겠습니까?','출고 등록 삭제됩니다.',consts.MSGBOX.QUESTION,()=>{
+	            ajax.postAjax(params,true).then(async (data)=>{
+	                
+	                /*await searchOfMaterial();*/
+	                pushMsg('삭제 되었습니다.');
+					
+					location.reload();
+	            }).catch((e)=>{
+	                console.debug(e);
+	            });
+	        });
+	    }
 	
     /**
      * 버튼,input박스 등 모든 이벤트관리
@@ -174,6 +254,8 @@ const returnReg = function(){
 		$(".btn-calc").on('click',calcBtns);
 		$("#btn-test").on('click',qrTestFnc);
 		$("#btn-sign").on('click',signPopupShow);
+		$("#btn-save").on('click',cmrSave);
+		$("#btn-delete").on('click',cmrDelete);
 		
 		$("#signPopupClose").on('click',function(){$('#signPopup').modal('hide')});
 		$("#signPopupSave").on('click',function(event){
@@ -216,8 +298,7 @@ const returnReg = function(){
 
     return{
         init:()=>{
-			if(!commonFunc.isEmpty($('#data-params').data('params').mf13No))$("#btn-save:last-child").text("출고삭제");
-			else $("#btn-save:last-child").text("출고등록");
+			
             handleEvent();
 			findCmrInfo();
         }

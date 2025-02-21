@@ -68,7 +68,7 @@ const returnReg = function(){
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/consigned-materials-rel' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급출고' }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf15No', value:grid._flexGrid.getCellData(ht._row,ht.col) }));
-				
+				form.append($('<input/>', {type: 'hidden', name: 'st03No', value:grid._flexGrid.getCellData(ht._row,3) }));
 				form.appendTo('body');
 				form.submit();
 	        }
