@@ -42,7 +42,7 @@ public class LoginController {
     public ModelAndView loginView(){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("login");
-
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return mv;
     }
 
