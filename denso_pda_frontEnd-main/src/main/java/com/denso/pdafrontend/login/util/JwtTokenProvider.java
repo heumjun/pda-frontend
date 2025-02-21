@@ -73,7 +73,7 @@ public class JwtTokenProvider {
 
         //토큰 유효성 체크
 //        if(!validateToken(token)){
-//            //로그인 오류발생
+//            //로그인 오류발생 
 //            throw new UnathorizedException();
 //        }
 

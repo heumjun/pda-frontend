@@ -78,7 +78,7 @@ public class LoginController {
                 throw new BusinessException(body.get("message").toString());
             else
                 throw new RuntimeException();
-        }
+        } 
         
         Map<String,Object> data = JsonUtils.deserialize(body.get("data"), new TypeReference<Map<String,Object>>() {});
         
