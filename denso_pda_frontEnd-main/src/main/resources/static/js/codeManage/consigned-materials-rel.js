@@ -78,11 +78,11 @@ const returnReg = function(){
         }
         
     }
-	
+	//추후 qr read view가 완성되었을 경우 연결처리
 	const qrReadView = function() {
 		console.log("qr read view move");
 	}
-	
+	//qr code reader가 현재 완성되지 않았으므로 임의 생성
 	const qrTestFnc = async ()=> {
 		let params = {
             uri: `pda/consigned-materials-rel/qrcode`
@@ -107,11 +107,14 @@ const returnReg = function(){
         }).catch((e)=>{});
 	}
 	
+	//사인 팝업 호출
 	const signPopupShow = function() {
+		//사인 팝업 호출 및 백그라운드 클릭시 팝업 닫힘 방지 처리
 		$('#signPopup').modal({backdrop:'static', keyboard:false});
 		$('#signPopup').modal('show');
 	}
-	
+	//+1~+100까지 버튼 입력 액션 처리
+	//max : 재고의 최대값 min : 재고의 최소값
 	const calcBtns = function(event) {
 		let targetObj = $(event.target);
 		let type = targetObj.data('value').substr(0,1);
@@ -161,17 +164,26 @@ const returnReg = function(){
 			$("#cmrReqDt").val(cmrInfo.st03Dat);
 			$("#cmrReqClient").val(cmrInfo.cm01Name); //이게 제조사를 말하는지 아니면 거래처를 말하는지는 모름...
 			$("#cmrReqSign").val(cmrInfo.mf15sign);
-			
+			//사인 존재시 상태값 변경
 			if(!commonFunc.isEmpty(cmrInfo.mf15sign))$("#btn-sign").text("서명완료");
-			if(!commonFunc.isEmpty(cmrInfo.st03No)){
+			//출고시간이 등록되었을 경우 출고가 되었다고 가정하고 버튼 액션 처리를 막음
+			if(!commonFunc.isEmpty(cmrInfo.st03Indte)) {
+				$("#btn-save").css("display","none");
+				$("#btn-delete").css("display","none");
+				$("#cmrStatus").text("출고완료");
+			}
+			//출고 번호가 있을 경우 출고삭제만 버튼 활성화 
+			else if(!commonFunc.isEmpty(cmrInfo.st03No)){
 				$("#btn-save").css("display","none");
 				$("#btn-delete").css("display","");
 			}
+			//출고 번호가 없을 경우 출고등록만 버튼 활성화
 			else {
 				$("#btn-save").css("display","");
 				$("#btn-delete").css("display","none");
 			}
 			
+			//그리드 로우 바인딩
             grid._flexCv.sourceCollection =  data['list'].map(item=>({
                 ...item,
                 select:false
@@ -179,7 +191,7 @@ const returnReg = function(){
             pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
         }).catch((e)=>{});
     }
-	
+	//출고 등록
 	const cmrSave = async ()=>{
 	        
 	        grid.disableAutoRows();
@@ -204,8 +216,6 @@ const returnReg = function(){
 
 	        params = {...params};
 			
-			console.log(params);
-			
 			confirm('저장 하시겠습니까?','출고 등록됩니다.',consts.MSGBOX.QUESTION,()=>{
 	            ajax.postAjax(params,true).then(async (data)=>{
 	                
@@ -218,7 +228,7 @@ const returnReg = function(){
 	            });
 	        });
 	    }
-		
+		//출고 삭제
 		const cmrDelete = async ()=>{
 			        
 	        grid.disableAutoRows();
@@ -257,7 +267,9 @@ const returnReg = function(){
 		$("#btn-save").on('click',cmrSave);
 		$("#btn-delete").on('click',cmrDelete);
 		
+		//사인 팝업 닫기 버튼
 		$("#signPopupClose").on('click',function(){$('#signPopup').modal('hide')});
+		//사인 팝업 사인 저장 처리 base64 인코딩 문자열
 		$("#signPopupSave").on('click',function(event){
 			var data = signaturePad.toDataURL('image/png');
 			$("#cmrReqSign").val(data);
@@ -265,18 +277,21 @@ const returnReg = function(){
 			else $("#btn-sign").text("서명 미완료");
 			$('#signPopup').modal('hide');
 		});
+		//사인 초기화 처리
 		$("#signPopupClear").on('click',function(event){
 			signaturePad.clear();
 		});
+		//팝업 닫기 시 focus로 인한 오류로 focus off 처리
 		$('#signPopup').on('hide.bs.modal', function () {
           //모달이 꺼질때 모든 버튼 인풋 셀렉트 텍스트 에어리어의 포커스를 날린다.
             $('button, input, select, textarea').each(function () {
                 $(this).blur();
             });
         });
+		//사인 팝업 오픈 시 canvas조절 및 기존 사인 존재시 호출 처리
 		$('#signPopup').on('shown.bs.modal', async function () {
 		    let canvas = $('#signature-pad')[0];
-		    let signaturePad = new SignaturePad(canvas);
+		    /*let signaturePad = new SignaturePad(canvas);*/
 
 		    // 모달 크기에 맞게 canvas 크기 조정
 		    canvas.width = $('.modal-body').width();
@@ -291,6 +306,27 @@ const returnReg = function(){
 		            console.error("서명 로드 중 오류 발생:", error);
 		        }
 		    }
+			//출고 등록 했을 시 display none처리
+			if(!commonFunc.isEmpty(cmrInfo.st03No)){
+				signaturePad.off();
+				$("#signPopupClear").css("display","none");
+				$("#signPopupSave").css("display","none");
+			}
+		});
+		//출고수량 수동입력
+		$("#qtyInput").on('focusout', async function(event) {
+			if(!commonFunc.isEmpty($(event.target).val())) {
+				let manualValue = parseInt($(event.target).val());
+				
+				grid._flexGrid.rows.forEach((row,index,array)=>{
+					let targetData = parseInt(manualValue);
+					let limitData = commonFunc.isEmpty(row.dataItem['st01Qty']) ? 0 : parseInt(row.dataItem['st01Qty']);
+					
+					if(targetData > limitData) grid._flexGrid.setCellData(index,"outputQty",limitData);
+					if(targetData <= limitData) grid._flexGrid.setCellData(index,"outputQty",targetData);
+				});
+			}
+			
 		});
 		
     }
