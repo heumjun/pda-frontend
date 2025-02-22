@@ -31,6 +31,13 @@ const returnReg = function(){
 					,click: (e, ctx) => {
 						console.log(ctx);
 						alert('Clicked Button Delete** ' + ctx.item.qrCode + ' **');
+						
+						let view = grid._flexCv;
+						let rowIndex = ctx.row.index; // rowIndex 가져오기
+						console.log("삭제할 행 인덱스:", rowIndex);
+					    if (rowIndex >= 0 && rowIndex < view.items.length) {
+					      	  view.removeAt(rowIndex);
+					    }
 					}
 				})
 			},
@@ -207,6 +214,12 @@ const returnReg = function(){
 			}
 			
 			let insertList = grid.gridItemListToArray(grid._flexCv.items);
+			
+			if(commonFunc.isEmpty(insertList)) {
+				alertWarning('저장불가','출고 상세 정보가 없습니다.');
+				return;
+			}
+			
 			cmrInfo["cmrReqSign"] = $("#cmrReqSign").val();
 	        let params = {
 	            uri: `pda/consigned-materials-rel/save`
