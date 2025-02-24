@@ -29,12 +29,10 @@ const returnReg = function(){
 				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
 					text: '<b>삭제</b>'
 					,click: (e, ctx) => {
-						console.log(ctx);
 						alert('Clicked Button Delete** ' + ctx.item.qrCode + ' **');
 						
 						let view = grid._flexCv;
 						let rowIndex = ctx.row.index; // rowIndex 가져오기
-						console.log("삭제할 행 인덱스:", rowIndex);
 					    if (rowIndex >= 0 && rowIndex < view.items.length) {
 					      	  view.removeAt(rowIndex);
 					    }
@@ -173,16 +171,12 @@ const returnReg = function(){
 			$("#cmrReqSign").val(cmrInfo.mf15sign);
 			//사인 존재시 상태값 변경
 			if(!commonFunc.isEmpty(cmrInfo.mf15sign))$("#btn-sign").text("서명완료");
-			//출고시간이 등록되었을 경우 출고가 되었다고 가정하고 버튼 액션 처리를 막음
-			if(!commonFunc.isEmpty(cmrInfo.st03Indte)) {
-				$("#btn-save").css("display","none");
-				$("#btn-delete").css("display","none");
-				$("#cmrStatus").text("출고완료");
-			}
+			
 			//출고 번호가 있을 경우 출고삭제만 버튼 활성화 
-			else if(!commonFunc.isEmpty(cmrInfo.st03No)){
+			if(!commonFunc.isEmpty(cmrInfo.st03No)){
 				$("#btn-save").css("display","none");
 				$("#btn-delete").css("display","");
+				$("#cmrStatus").text("출고완료");
 			}
 			//출고 번호가 없을 경우 출고등록만 버튼 활성화
 			else {
