@@ -18,22 +18,13 @@ const returnReg = function(){
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
-            {binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},
-            {binding:'itemNm'	,header:'부품명'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50},
-            {binding:'qrCode'	,header:'QR코드'	,width:70	,dataType:'String'	,align:'center'	,maxLength:6,},
-			{binding:'relQty'	,header:'출고수량'	,width:130	,dataType:'Number'},
-            {binding:'sotreQty'	,header:'재고수량'	,width:130	,dataType:'Number'},
-            {binding:'storage'	,header:'창고'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50},
-			{binding:'area'		,header:'구역'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50},
-			// button with regular bound text
-			{binding:'delete'	,header: '삭제'	,width: 150	
-				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
-					click: (e, ctx) => {
-						console.log(ctx);
-						alert('Clicked Button Delete** ' + ctx.item.qrCode + ' **');
-					}
-				})
-			},
+			{binding:'mf13No'		,header:'출고요청번호'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf13Dat'		,header:'요청일자'			,width:110	,dataType:'Date'	,align:'center'	,isReadOnly: true},
+			{binding:'mf13Indte'	,header:'요청시간'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf13Cus'		,header:'제조사'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'cm01Name'		,header:'제조사명'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf13LineCode'	,header:'라인코드'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st03No'		,header:'재고단위'			,visible: false},
         ];
 
         //그리드 컬럼셋팅
@@ -47,34 +38,55 @@ const returnReg = function(){
         //셀고정
         grid.enableFrozenCol('select');
         //키가되는 컬럼으로 변경이 되면 안되는 컬럼
-        grid.disableReadOnlyForAutoRows(['itemNm','qrCode','relQty','storage','area']);
+        /*grid.disableReadOnlyForAutoRows(['itemNm','qrCode','relQty','storage','area']);*/
         //대문자로 변경하고싶은 컬럼
-        grid.toUpperCase(['itemNm','qrCode','relQty','storage','area']);
+        grid.toUpperCase(['mf13No','mf13Dat','mf13Indte','mf13LineCode']);
+    }
+	grid._flexGrid.addEventListener(grid._flexGrid.hostElement,consts.JQUERYEVENT.DBLCLICK,(e)=>{
+	    let ht = grid._flexGrid.hitTest(e);     //더블클릭한 셀의 정보
+	    if(ht.panel==grid._flexGrid.cells){    //그리드 셀에 더블클릭했을때
+	        if(grid._flexGrid.getColumn(ht.col).binding=='mf13No'){  // aaaa 컬럼 더블클릭했을경우
+	            console.log(ht);
+				let form = $('<form></form>');
+				form.attr("method","get");
+				form.attr("action","view");
+				form.attr("target","_self");
 
-        //unit데이터를 DB에서 받아와서 처리해야할경우 데이터를 받아와서 dataMap을 만들고 넣고자 하는 컬럼의 dataMap에 넣는다.
-        let storage = [{key:'storage1',name:'창고1'},{key:'storage2',name:'창고2'},{key:'storage3',name:'창고3'}];
-        grid._flexGrid.getColumn('storage').dataMap = new wijmo.grid.DataMap(storage,'key','name');
-		let area = [{key:'area1',name:'아산'},{key:'area2',name:'창원'},{key:'area3',name:'마산'}];
-		grid._flexGrid.getColumn('area').dataMap = new wijmo.grid.DataMap(area,'key','name');
-
-
-        //그리드 오류체크
-        grid._flexCv.getError = (item,prop)=>{
-            //셀수정모드 일경우 오류검증 안함 (포커스 이동이 안됨으로)
-            if(grid._flexCv.isEditingItem) return null;
-                
-            switch (prop) {
-                case 'relQty':
-                    if(wijmo.isNullOrWhiteSpace(item.relQty)) return '[출고수량]를 입력하세요.';
-                    break;
-                case 'qrCode':
-                    if(grid.isSameColumnValue(item,['qrCode'])) return 'QR코드가 중복되는 내역이 존재합니다.';
-                    break;
-                default:
-                    return null;
-            }
-        }
+				form.append($('<input/>', {type: 'hidden', name: 'view', value:'system/rel-materials' }));
+				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/rel-materials' }));
+				form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고처리' }));
+				form.append($('<input/>', {type: 'hidden', name: 'mf13No', value:grid._flexGrid.getCellData(ht._row,ht.col) }));
+				form.append($('<input/>', {type: 'hidden', name: 'st03No', value:grid._flexGrid.getCellData(ht._row,6) }));
+				form.appendTo('body');
+				form.submit();
+	        }
+	    }
+	});
+	
+	const qrReadView = function() {
+		console.log("qr read view move");
+	}
+	
+	/**
+     * 조회 함수
+     */
+    const search = async ()=>{
         
+        grid.disableAutoRows();
+        
+        let params = {
+            uri: `pda/rel-search`
+        }
+
+        params = {...params};
+
+        await ajax.getAjax(params,true).then(data=>{
+            grid._flexCv.sourceCollection =  data['list'].map(item=>({
+                ...item,
+                select:false
+            }));
+            pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
+        }).catch((e)=>{});
     }
 
     /**
@@ -83,12 +95,15 @@ const returnReg = function(){
     const handleEvent = ()=>{
 
         gridInit();
+		
+		$('#btn-back').on('click',qrReadView);
     }
 
 
     return{
         init:()=>{
             handleEvent();
+			search();
         }
     }
 }();
