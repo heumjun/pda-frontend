@@ -25,7 +25,6 @@
     <link href="vendors/simplebar/simplebar.min.css" rel="stylesheet">
     <link href="assets/css/theme.css" rel="stylesheet" id="style-default">
     <link href="assets/css/user.css" rel="stylesheet" id="user-style-default">
-    
   
 </head>
 
@@ -63,21 +62,21 @@
                 	<div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
                 	<div class="card-body card-search position-relative">
                 		<div class="mb-1 row">
-						    <label for="whmReqNo" class="col-5 col-form-label">납품확인서번호</label>
+						    <label for="whmReqNo" class="col-5 col-form-label">납품확인서</label>
 						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="whmReqNo" value="20241105001">
+						      <input type="text" readonly class="form-control-plaintext" id="st02Purno" value="20241105001">
 						    </div>
 						</div>
 						<div class="mb-1 row">
-						    <label for="whmReqDt" class="col-5 col-form-label">납품지시일자</label>
+						    <label for="st02Dat" class="col-5 col-form-label">입고일자</label>
 						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="whmReqDt" value="2024-11-05">
+						      <input type="text" readonly class="form-control-plaintext" id="st02Dat" value="">
 						    </div>
 						</div>
 						<div class="mb-1 row">
-						    <label for="whmReqClient" class="col-5 col-form-label">거래처</label>
+						    <label for="st02Cus" class="col-5 col-form-label">제조사</label>
 						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="whmReqClient" value="거래처명">
+						      <input type="text" readonly class="form-control-plaintext" id="st02Cus" value="">
 						    </div>
 						</div>
                 	</div>
@@ -153,22 +152,22 @@
           </div>
         </div>
         <footer class="footer" style="position: absolute; bottom: 0; width: 100%;">
-		<div class="col-lg-12">
-			<div class="col-md-auto d-flex justify-content-between mb-2 mb-md-0 ">
-				<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
-					<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-back" type="button">
-						<span class="fas fa-arrow-left" data-fa-transform="shrink-3 down-2"></span>
-						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">뒤로가기</span>
-					</button>
-				</div>
-				<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
-					<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-save" type="button">
-						<span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
-						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">입고등록or입고삭제</span>
-					</button>
+			<div class="col-lg-12">
+				<div class="col-md-auto d-flex justify-content-between mb-md-0 ">
+					<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
+						<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-back" type="button">
+							<span class="fas fa-arrow-left" data-fa-transform="shrink-3 down-2"></span>
+							<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">뒤로가기</span>
+						</button>
+					</div>
+					<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
+						<button class="btn btn-falcon-default btn-sm mt-1" id="btn-save" type="button">
+							<span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
+							<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2" id="btnStatus"></span>
+						</button>
+					</div>
 				</div>
 			</div>
-		</div>
       </footer>
       </div>
       
@@ -188,11 +187,12 @@
 
   <!-- 공통 스크립트 모음 -->
   <script src="js/common/script.js"></script>
+  <script src="js/qrScanner/scan.js"></script>
   
   <script>
     
     import('/js/common/common.js');
-    import('/js/codeManage/warehosing-materials.js');
+    import('/js/warehousing/warehousing.js');
     
     
   </script>

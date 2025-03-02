@@ -1951,7 +1951,7 @@ progress {
 .container-lg,
 .container-md,
 .container-sm {
-  --falcon-gutter-x: 2rem;
+  --falcon-gutter-x: 0.5rem;
   --falcon-gutter-y: 0;
   width: 100%;
   padding-right: calc(var(--falcon-gutter-x) * 0.5);

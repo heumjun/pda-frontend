@@ -58,7 +58,6 @@ const returnReg = function(){
 		let area = [{key:'area1',name:'아산'},{key:'area2',name:'창원'},{key:'area3',name:'마산'}];
 		grid._flexGrid.getColumn('area').dataMap = new wijmo.grid.DataMap(area,'key','name');
 
-
         //그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
             //셀수정모드 일경우 오류검증 안함 (포커스 이동이 안됨으로)

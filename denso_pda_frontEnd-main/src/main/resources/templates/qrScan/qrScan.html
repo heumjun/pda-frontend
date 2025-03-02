@@ -111,8 +111,10 @@ h1 {
 	          drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
 	          outputMessage.hidden = true;
 	          outputData.parentElement.hidden = false;
+	          alert(code.data);
+	          
 	          //location.href = code.data;
-	          location.href = "system/consigned-materials-rel";
+	          /* location.href = "system/consigned-materials-rel";
 	          
 	          let form = $('<form></form>');
 				form.attr("method","get");
@@ -122,7 +124,7 @@ h1 {
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/consigned-materials-rel' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급출고' }));
 				form.appendTo('body');
-				form.submit();
+				form.submit(); */
 	          //outputData.innerText = code.data;
 	          
 	        } else {
