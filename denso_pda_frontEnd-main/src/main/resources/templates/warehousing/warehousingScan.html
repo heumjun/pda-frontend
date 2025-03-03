@@ -31,7 +31,21 @@
 	        if (decodedText !== lastResult) {
 	            ++countResults;
 	            lastResult = decodedText;
-	            alert(decodedText);
+	            // Handle on success condition with the decoded message.
+	            //console.log(`Scan result ${decodedText}`, decodedResult);
+	            
+	            let form = $('<form></form>');
+				form.attr("method","get");
+				form.attr("action","view");
+				form.attr("target","_self");
+				form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousing' }));
+				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousing' }));
+				form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고처리' }));
+				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: '20250303003' }));
+				//form.append($('<input/>', {type: 'hidden', name: 'qrCode', value: decodedText }));
+				form.appendTo('body');
+				form.submit();
+	            
 	        }
 	    }
 

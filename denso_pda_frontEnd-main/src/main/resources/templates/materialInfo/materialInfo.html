@@ -59,35 +59,36 @@
           <div class="row g-3">
             <div class="col-lg-12">
               <form id="submitForm" onsubmit="return false">
-              	<div class="col-lg-12">
+              	<div class="col-lg-12 mb-1">
             		<span class="col-2">QR 코드:</span>
-            		<span class="col-10">QR20250302</span>
+            		<span class="col-10" id="qrCode"></span>
             	</div>
-                <div class="card mb-2">
+
+				<div class="card mb-2">
                 	<div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
                 	<div class="card-body card-search position-relative">
                 		<div class="mb-1 row">
-						    <label for="returnReqNo" class="col-3 col-form-label">자재명</label>
-						    <div class="col-9">
-						      <input type="text" readonly class="form-control-plaintext" id="returnReqNo" value="자재1">
+						    <label for="returnReqNo" class="col-5 col-form-label">자재명</label>
+						    <div class="col-7">
+						      <input type="text" readonly class="form-control-plaintext" id="cm08Name" value="">
 						    </div>
 						</div>
 						<div class="mb-1 row">
-						    <label for="returnReqDt" class="col-3 col-form-label">자재코드</label>
-						    <div class="col-9">
-						      <input type="text" readonly class="form-control-plaintext" id="returnReqDt" value="MT0001">
+						    <label for="returnReqDt" class="col-5 col-form-label">자재코드</label>
+						    <div class="col-7">
+						      <input type="text" readonly class="form-control-plaintext" id="st02Code" value="">
 						    </div>
 						</div>
 						<div class="mb-1 row">
-						    <label for="returnReqDp" class="col-3 col-form-label">재고수량</label>
-						    <div class="col-9">
-						      <input type="text" readonly class="form-control-plaintext" id="returnReqDp" value="50">
+						    <label for="returnReqDp" class="col-5 col-form-label">재고수량</label>
+						    <div class="col-7">
+						      <input type="text" readonly class="form-control-plaintext" id="st01Qty" value="">
 						    </div>
 						</div>
 						<div class="mb-1 row">
-						    <label for="returnReqDp" class="col-3 col-form-label">상태</label>
-						    <div class="col-9">
-						      <input type="text" readonly class="form-control-plaintext" id="returnReqDp" value="재고">
+						    <label for="returnReqDp" class="col-5 col-form-label">상태</label>
+						    <div class="col-7">
+						      <input type="text" readonly class="form-control-plaintext" id="cm05Name" value="">
 						    </div>
 						</div>
                 	</div>
@@ -98,11 +99,11 @@
         </div>
         <footer class="footer" style="position: absolute; bottom: 0; width: 100%;">
 		<div class="col-lg-12">
-			<div class="col-md-auto d-flex justify-content-between mb-2 mb-md-0 ">
+			<div class="col-md-auto d-flex justify-content-between mb-md-0 ">
 				<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
 					<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-back" type="button">
 						<span class="fas fa-arrow-left" data-fa-transform="shrink-3 down-2"></span>
-						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">뒤로가기</span>
+						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2" id="goBack">뒤로가기</span>
 					</button>
 				</div>
 			</div>
@@ -130,7 +131,7 @@
   <script>
     
     import('/js/common/common.js');
-    import('/js/codeManage/material-info.js');
+    import('/js/material/materialInfo.js');
     
     
   </script>

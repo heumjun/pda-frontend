@@ -19,19 +19,21 @@ const returnReg = function(){
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
-            {binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},
-			{binding:'delete'	,header: ' '	,width:60	
+            /*{binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},*/
+			/*{binding:'delete'	,header: ' '	,width:60	
 				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
 					text: '삭제',
 					click: (e, ctx) => {
+						
+						grid._flexCv.remove(ctx.item);
 						//console.log(ctx);
 						alert('Clicked Button Delete** ' + ctx.item.st02No + ' **');
 					}
 				})
-			},
+			},*/
             {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center'	,maxLength:50},
-            {binding:'st02Qrcode'	,header:'QR 코드'	,width:70	,dataType:'String'	,align:'center'	,maxLength:6,},
-			{binding:'st02Ipqty'	,header:'입고수량'	,width:130	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
+            {binding:'st02Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'	,maxLength:6,},
+			{binding:'st02Ipqty'	,header:'수량'	,width:60	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
             {binding:'st02Status'	,header:'상태'	,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},
             {binding:'st02Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	,maxLength:50},
 			{binding:'st02Dist'		,header:'구역'	,width:150	,dataType:'String'	,align:'center'	,maxLength:50},
@@ -53,40 +55,52 @@ const returnReg = function(){
         //대문자로 변경하고싶은 컬럼
         //grid.toUpperCase(['itemNm','qrCode','relQty','storage','area']);
 
-        //unit데이터를 DB에서 받아와서 처리해야할경우 데이터를 받아와서 dataMap을 만들고 넣고자 하는 컬럼의 dataMap에 넣는다.
-        //let storage = [{key:'storage1',name:'창고1'},{key:'storage2',name:'창고2'},{key:'storage3',name:'창고3'}];
-		
+        //데이터를 DB에서 받아와서 처리해야할경우 데이터를 받아와서 dataMap을 만들고 넣고자 하는 컬럼의 dataMap에 넣는다.
 		let st02Status =  getCommonCodeList('W005');
 		grid._flexGrid.getColumn('st02Status').dataMap = new wijmo.grid.DataMap(st02Status, 'cm05Value', 'cm05Name');
         let st02Stok = getWarehouseCodeList();
         grid._flexGrid.getColumn('st02Stok').dataMap = new wijmo.grid.DataMap(st02Stok, 'cm15Code', 'cm15Name');
-		//let area = [{key:'area1',name:'아산'},{key:'area2',name:'창원'},{key:'area3',name:'마산'}];
 		let st02Dist = getDistrictCodeList();
 		grid._flexGrid.getColumn('st02Dist').dataMap = new wijmo.grid.DataMap(st02Dist, 'cm16Code', 'cm16Name');
-
-        //그리드 오류체크
+		
+		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
             //셀수정모드 일경우 오류검증 안함 (포커스 이동이 안됨으로)
             if(grid._flexCv.isEditingItem) return null;
                 
             switch (prop) {
-                case 'relQty':
-                    if(wijmo.isNullOrWhiteSpace(item.relQty)) return '[출고수량]를 입력하세요.';
+                /*case 'st02No':
+                    if(wijmo.isNullOrWhiteSpace(item.st02No)) return '[입고번호]는 필수 입력 항목입니다.';
+                    break;*/
+                case 'cm08Code':
+                    if(wijmo.isNullOrWhiteSpace(item.cm08Code)) return '[품목코드]는 필수 입력 항목입니다.';
                     break;
-                case 'qrCode':
-                    if(grid.isSameColumnValue(item,['qrCode'])) return 'QR코드가 중복되는 내역이 존재합니다.';
+                case 'st02Qrcode':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
+                    break;
+                case 'st02Ipqty':
+                    if(item.st02Ipqty <= 0) return '[박스수량]은 0보다 커야합니다.';
+                    break;
+                case 'st02Status':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Status)) return '[상태]는 필수 입력 항목입니다.';
+                    break;
+                case 'st02Stok':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Stok)) return '[창고]는 필수 입력 항목입니다.';
+                    break;
+                case 'st02Dist':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Dist)) return '[구역]은 필수 입력 항목입니다.';
                     break;
                 default:
                     return null;
             }
         }
-        
+		
     }
 	
 	/**
 	 * 공통코드
 	 */
-	const getCommonCodeList = (commonCode)=>{
+	const getCommonCodeList = (commonCode) => {
 	    let params = {
 	        uri :"criteria/commonCode/"+commonCode+"/detail"
 	    };
@@ -131,37 +145,112 @@ const returnReg = function(){
 	/**
      * 조회 함수
      */
-    const searchOfwarehousing = async () => {
+    const searchOfwarehousing = async() => {
 		
         grid.disableAutoRows();
-        
+		
         let params = {
             uri: `warehousing/warehousing`,
+			pu01No : $('#data-params').data('params').pu01No
         }
         params = {...params,...ajax.getParams('searchForm')}
         
         try {
             let {warehousingList} = await ajax.getAjax(params,true);  
-            
-            grid._flexCv.sourceCollection = warehousingList.map(item => ({...item, select:false}));
+            //grid._flexCv.sourceCollection = warehousingList.map(item => ({...item, select:false}));
 			
-			if ( grid.getRowCnt() > 0 ) {	// 입고완료
+			grid._flexCv.sourceCollection = [];
+			warehousingList.forEach( (item, index) => {
+				
+	            var newRowLength = item.rowCnt;
+
+				for( var i = 0; i < newRowLength; i++ ) {
+					 let addRow = grid._flexCv.addNew();
+					 addRow.st02Pno = $('#data-params').data('params').pu01No;
+					 addRow.cm08Code = item.cm08Code;
+					 addRow.cm08Name = item.cm08Name;
+					 addRow.st02Cus = item.pu01Cus;
+					 addRow.cm08Gbn = item.cm08Gbn;
+					 addRow.cm08Dgbn = item.cm08Dgbn;
+					 addRow.st02Dat = item.pu01Dat;
+					 addRow.st02Ipqty = 1;
+					 addRow.st02Ipunt = '1';
+					 addRow.st02Stok = '01';
+					 addRow.st02Dist = '001';
+					 addRow.st02Status = item.st02Status;
+					 addRow.qa05Available = item.qa05Available;
+
+					grid._flexCv.commitNew();
+				}
+
+	        });
+			
+			$("#st02Pno").val($('#data-params').data('params').pu01No);
+			$("#st02Dat").val(dateUtils.today('YYYY-MM-DD'));
+			
+			/*if ( grid.getRowCnt() > 0 ) {	// 입고완료
 				 $(".text-bg-danger").text("입고완료");
 				 $("#btnStatus").text("입고삭제");
 			} else {	// 입고 미처리
 				$(".text-bg-danger").text("입고 미처리");
 				$("#btnStatus").text("입고등록");
-			}
+			}*/
 			
             pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
 
-        } catch (error) {
+        } catch(error) {
             console.debug(error);
-            alertError('오류',error);
+            alertError('오류', error);
             return;
         }
 
     }
+	
+	const saveWareHousing = () => {
+		
+		grid.disableAutoRows();
+		if(!grid.gridValidation()){
+            alertWarning('저장불가', '그리드 오류내역을 확인하세요.');
+            return;
+        }
+		
+		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
+		let updateList = grid.gridItemListToArray(grid._flexCv.itemsEdited);
+		if(insertList.length < 1 && updateList.length < 1) {
+			alertWarning('저장불가','저장할 내역이 없습니다.');
+            return;
+        }
+
+		confirm('입고이력을 등록하시겠습니까?', '입고이력이 등록됩니다.', consts.MSGBOX.QUESTION, () => {
+			
+			let params = {
+                uri: `warehousing/warehousing`,
+                insertList: insertList,
+                updateList: updateList,
+            };
+			
+			params = {...params,...ajax.getParams('#submitForm')};
+			
+        	ajax.postAjax(params, true).then(async (data)=>{
+	            $(".text-bg-danger").text("입고완료");
+				$("#btnSave").hide();
+	            pushMsg('입고 등록 되었습니다.');
+            }).catch((e)=>{
+                console.debug(e);
+            });
+		});
+	}
+	
+	const goBack = () => {
+		let form = $('<form></form>');
+		form.attr("method","get");
+		form.attr("action","view");
+		form.attr("target","_self");
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousingScan' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousingScan' }));
+		form.appendTo('body');
+		form.submit();
+	}
 
     /**
      * 버튼,input박스 등 모든 이벤트관리
@@ -171,7 +260,8 @@ const returnReg = function(){
         gridInit();
 		searchOfwarehousing();
 		
-		$('#btn-search').on('click', searchOfwarehousing);
+		$('#btnBack').on('click', goBack);
+		$('#btnSave').on('click', saveWareHousing);
     }
 
 
@@ -187,25 +277,3 @@ $(()=>{
     returnReg.init();
     
 });
-
-// 스캐너 값 얻기
-/*$(document).scannerDetection({
-    //$('#returnForRegGrid').scannerDetection({
-    //ignoreIfFocusOn: 'input[type="text"]',
-    //timeBeforeScanTest: 100, // wait for the next character for upto 200ms
-    timeBeforeScanTest: 50, // wait for the next character for upto 200ms
-    startChar: [16], // Prefix character for the cabled scanner (OPL6845R)
-    endChar: [9, 13], // be sure the scan is complete if key 13 (enter) is detected
-    avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
-    onComplete: function(barcode, qty){
-		alert(2);
-		$("#st02Cus").val(barcode);
-        console.log(">>["+barcode+"]("+barcode.length+")");
-        //getBarcodeInfo(barcode);
-    },
-	onerror : function (barcode, qty) {
-		alert(1); 
-		alert(barcode);
-	}
-});*/
-

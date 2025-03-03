@@ -46,7 +46,7 @@
         <!-- HEADER 영역 -->
         <!-- ===============================================-->
         <div th:replace="topbar :: topbar"></div>
-        
+        <input type="text" id="textInput" value="aa">
         <!-- ===============================================-->
         <!-- 내용 -->
         <!-- ===============================================-->
@@ -57,26 +57,32 @@
               <h6 class="mb-0">Quick Menu</h6>
             </div>
             <div class="card-body">
-              <h5 class="fs-0 mb-2">시스템</h5>
+              <!-- <h5 class="fs-0 mb-2">시스템</h5> -->
               <div class="row g-3">
                 <div class="col-xxl-4 col-lg-6">
                   <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/1.png" alt="" width="39" />
                     <div class="ms-3 my-x1">
-                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="시스템>메뉴관리" href="system/menu">메뉴관리</a></h5>
-                      <h6 class="mb-0 text-600">메뉴를 생성하고 관리합니다.</h6>
+                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="작업 - QR 스캔" href="warehousing/warehousingScan">입고처리</a></h5>
                     </div>
                   </div>
                 </div>
                 <div class="col-xxl-4 col-lg-6">
                   <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/2.png" alt="" width="39" />
                     <div class="ms-3 my-x1">
-                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" href="#!">Trends in Ticket Volume</a></h5>
-                      <h6 class="mb-0 text-600">an overview of the number of tickets</h6>
+                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="자재조회" href="materialInfo/materialScan">자재조회</a></h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xxl-4 col-lg-6">
+                  <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/2.png" alt="" width="39" />
+                    <div class="ms-3 my-x1">
+                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="출고처리" href="materialInfo/materialScan">출고처리</a></h5>
                     </div>
                   </div>
                 </div>
               </div>
-              <h5 class="fs-0 mb-2 mt-5">Customer Satisfaction</h5>
+              
+              <!-- <h5 class="fs-0 mb-2 mt-5">Customer Satisfaction</h5>
               <div class="row g-3">
                 <div class="col-xxl-4 col-lg-6">
                   <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/3.png" alt="" width="39" />
@@ -94,7 +100,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               
             </div>
           </div>
@@ -119,11 +125,46 @@
 
   <!-- 공통 스크립트 모음 -->
   <script src="js/common/script.js"></script>
-  
+  <script src="js/qrScanner/scan.js"></script>
   
   <script>
     
     import('/js/common/common.js');
+    
+    $("#textInput").focus();
+    
+ // 스캐너 값 얻기
+ $(document).scannerDetection({
+     //$('#returnForRegGrid').scannerDetection({
+     //ignoreIfFocusOn: 'input[type="text"]',
+     //timeBeforeScanTest: 100, // wait for the next character for upto 200ms
+     timeBeforeScanTest: 50, // wait for the next character for upto 200ms
+     startChar: [16], // Prefix character for the cabled scanner (OPL6845R)
+     endChar: [9, 13], // be sure the scan is complete if key 13 (enter) is detected
+     avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
+     onComplete: function(barcode, qty){
+		alert(barcode);    	 
+ 		console.log(barcode);
+ 		
+ 		let form = $('<form></form>');
+		form.attr("method","get");
+		form.attr("action","view");
+		form.attr("target","_self");
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousing' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousing' }));
+		form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고처리' }));
+		form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: '20250303003' }));
+		//form.append($('<input/>', {type: 'hidden', name: 'qrCode', value: decodedText }));
+		form.appendTo('body');
+		form.submit();
+ 		
+ 		
+     },
+ 	onerror : function (barcode, qty) {
+ 		alert(1); 
+ 		alert(barcode);
+ 	}
+ });
     
     
   </script>
