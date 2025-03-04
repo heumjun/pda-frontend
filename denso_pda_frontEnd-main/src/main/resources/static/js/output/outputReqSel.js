@@ -2,13 +2,10 @@
 import GridFactory from "../common/wijmo/gridFactory.js";
 import * as input from "../common/wijmo/inputFactory.js";
 import * as ajax from "../common/ajax.js";
-import * as dateUtils from "../common/dateUtils.js";
 import * as consts from "../common/constants.js";
-import * as commonRestApi from "../common/commonRestApi.js";
-import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
-import * as commonFunc from "../common/common.js";
+import { pushMsg } from "../common/msgBox.js";
 
-const returnReg = function(){
+const outputReqSel = function(){
     
     let grid  = new GridFactory('#grid');
     /**
@@ -19,12 +16,10 @@ const returnReg = function(){
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
 			{binding:'mf13No'		,header:'출고요청번호'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'mf13Dat'		,header:'요청일자'			,width:110	,dataType:'Date'	,align:'center'	,isReadOnly: true},
-			{binding:'mf13Indte'	,header:'요청시간'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'mf13Cus'		,header:'제조사'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'cm01Name'		,header:'제조사명'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
 			{binding:'mf13LineCode'	,header:'라인코드'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'st03No'		,header:'재고단위'			,visible: false},
+			{binding:'mf13LineNm'	,header:'라인명'			,width:110	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'mf13Dat'		,header:'요청일자'			,width:110	,dataType:'Date'	,align:'center'	,isReadOnly: true},
+			{binding:'mf13DatTime'	,header:'요청시간'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true}
         ];
 
         //그리드 컬럼셋팅
@@ -42,30 +37,28 @@ const returnReg = function(){
         //대문자로 변경하고싶은 컬럼
         grid.toUpperCase(['mf13No','mf13Dat','mf13Indte','mf13LineCode']);
     }
-	grid._flexGrid.addEventListener(grid._flexGrid.hostElement,consts.JQUERYEVENT.DBLCLICK,(e)=>{
+	grid._flexGrid.addEventListener(grid._flexGrid.hostElement,consts.JQUERYEVENT.CLICK,(e)=>{
 	    let ht = grid._flexGrid.hitTest(e);     //더블클릭한 셀의 정보
 	    if(ht.panel==grid._flexGrid.cells){    //그리드 셀에 더블클릭했을때
 	        if(grid._flexGrid.getColumn(ht.col).binding=='mf13No'){  // aaaa 컬럼 더블클릭했을경우
-	            console.log(ht);
 				let form = $('<form></form>');
 				form.attr("method","get");
 				form.attr("action","view");
 				form.attr("target","_self");
 
-				form.append($('<input/>', {type: 'hidden', name: 'view', value:'system/rel-materials' }));
-				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/rel-materials' }));
-				form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고처리' }));
+				form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
+				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
+				form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf13No', value:grid._flexGrid.getCellData(ht._row,ht.col) }));
-				form.append($('<input/>', {type: 'hidden', name: 'st03No', value:grid._flexGrid.getCellData(ht._row,6) }));
+				form.append($('<input/>', {type: 'hidden', name: 'mf13Dat', value:grid._flexGrid.getCellData(ht._row, 3) }));
+				form.append($('<input/>', {type: 'hidden', name: 'mf13DatTime', value:grid._flexGrid.getCellData(ht._row, 4) }));
+				form.append($('<input/>', {type: 'hidden', name: 'mf13LineCode', value:grid._flexGrid.getCellData(ht._row, 1) }));
+				form.append($('<input/>', {type: 'hidden', name: 'mf13LineNm', value:grid._flexGrid.getCellData(ht._row, 2) }));
 				form.appendTo('body');
 				form.submit();
 	        }
 	    }
 	});
-	
-	const qrReadView = function() {
-		console.log("qr read view move");
-	}
 	
 	/**
      * 조회 함수
@@ -75,19 +68,31 @@ const returnReg = function(){
         grid.disableAutoRows();
         
         let params = {
-            uri: `pda/rel-search`
+            uri: `output/outputReqSel`
         }
 
         params = {...params};
 
         await ajax.getAjax(params,true).then(data=>{
-            grid._flexCv.sourceCollection =  data['list'].map(item=>({
+            grid._flexCv.sourceCollection =  data['detailInfo'].map(item=>({
                 ...item,
                 select:false
             }));
             pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
         }).catch((e)=>{});
     }
+	
+	const goBack = () => {
+		let form = $('<form></form>');
+		form.attr("method","get");
+		form.attr("action","view");
+		form.attr("target","_self");
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputReqSel' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'output/outputReqSel' }));
+		form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 조회' }));
+		form.appendTo('body');
+		form.submit();
+	}
 
     /**
      * 버튼,input박스 등 모든 이벤트관리
@@ -96,7 +101,7 @@ const returnReg = function(){
 
         gridInit();
 		
-		$('#btn-back').on('click',qrReadView);
+		$('#btnBack').on('click', goBack);
     }
 
 
@@ -110,6 +115,5 @@ const returnReg = function(){
 
 
 $(()=>{
-    returnReg.init();
-    
+    outputReqSel.init();
 });
