@@ -11,7 +11,7 @@ import * as commonFunc from "../common/common.js";
 const returnReg = function(){
     
     let grid  = new GridFactory('#grid');
-	let qtyInput = input.number('#qtyInput',1,0,999999,'G10');
+	//let qtyInput = input.number('#qtyInput',1,0,999999,'G10');
     /**
      * 그리드 초기화
      */
@@ -246,8 +246,9 @@ const returnReg = function(){
 		form.attr("method","get");
 		form.attr("action","view");
 		form.attr("target","_self");
-		form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousingScan' }));
-		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousingScan' }));
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'index' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'index' }));
+		form.append($('<input/>', {type: 'hidden', name: 'title', value:'작업 - QR 스캔' }));
 		form.appendTo('body');
 		form.submit();
 	}

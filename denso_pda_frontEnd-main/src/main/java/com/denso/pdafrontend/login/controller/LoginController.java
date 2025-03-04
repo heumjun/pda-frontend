@@ -141,7 +141,7 @@ public class LoginController {
             Map<String,Object> params = new HashMap<String,Object>();
             params.put("userInfo", userInfo);
             params.put("authUrl", "index");
-            params.put("title", "DENSO PDA");
+            params.put("title", "작업 - QR 스캔");
             mv.addObject("params", JsonUtils.serialize(params));
 
 		}

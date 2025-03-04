@@ -405,5 +405,45 @@
 }
 
 
+.navbar-brand {
+	margin-left: 40px;
+	margin-top: 0.5rem;
+}
+
+.container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+	--falcon-gutter-x : 0rem !important;
+}
+
+.navbar-top { 
+	margin-left : 0rem;
+	margin-right: 0rem;
+	min-height : 0rem;
+	background-color: #010a14c4;
+}
+
+.card {
+	border-radius : 0 !important;
+}
+
+.btn, .falcon-data-table .paging_full_numbers .page-link, .falcon-data-table .paging_first_last_numbers .page-link, .falcon-data-table .paging_full .page-link, .falcon-data-table .paging_numbers .page-link, .falcon-data-table .paging_simple_numbers .page-link, [data-list] .page, .tox .tox-menu__footer .tox-button:last-child, .tox .tox-dialog__footer .tox-button:last-child, .tox .tox-menu__footer .tox-button--secondary, .tox .tox-dialog__footer .tox-button--secondary {
+	border-radius : 0 !important;
+	height : 100%;	
+}
+
+.navbar-vertical.navbar-vibrant .navbar-collapse {
+	background-image : linear-gradient(-45deg, rgb(93 97 99 / 86%), #010a14c4), url(../img/generic/bg-navbar.png);
+}
+
+.navbar-vertical.navbar-card .navbar-collapse, .navbar-vertical.navbar-vibrant .navbar-collapse, .navbar-vertical.navbar-inverted .navbar-collapse {
+	border-radius: 0;
+}
+
+.navbar-vertical {
+	top : 3.5rem
+}
+
+.navbar-toggler-humburger-icon:hover, .navbar-toggler-humburger-icon:focus {
+	background-color : unset !important;
+}
 
 
