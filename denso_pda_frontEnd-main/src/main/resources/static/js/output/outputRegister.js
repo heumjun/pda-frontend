@@ -25,8 +25,8 @@ const outputRegister = function(){
             {binding:'st03Stok'	,header:'창고'	,width:130	,dataType:'String'	,align:'left'},
 			{binding:'st03Dist'	,header:'구역'	,width:130	,dataType:'String'	,align:'left'},
 			
-			{binding:'st03Lot', header: 'LOT번호', width: 180, align:'center', dataType:'String'	,visible:true},
-			{binding:'st03LotSeq', header: 'LOT SEQ', width: 90, align:'center', dataType:'String'	,visible:true},
+			{binding:'st03Lot', header: 'LOT번호', width: 180, align:'center', dataType:'String'	,visible:false},
+			{binding:'st03LotSeq', header: 'LOT SEQ', width: 90, align:'center', dataType:'String'	,visible:false},
 			
         ];
 
