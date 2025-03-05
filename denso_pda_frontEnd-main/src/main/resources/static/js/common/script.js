@@ -69,8 +69,8 @@ document.write(`<script src="vendors/wijmo/Dist/controls/cultures/wijmo.culture.
 //라이선스
 document.write(`<script src="vendors/wijmo/license.js"></script>`);
 
-document.write(`<script src="js/qrScanner/jsQR.js"></script>`);
-document.write(`<script src="js/common/signature_pad.umd.min.js"></script>`);
+document.write(`<script src="js/qrScanner/scan.js"></script>`);
+/*document.write(`<script src="js/common/signature_pad.umd.min.js"></script>`);*/
 
 
 

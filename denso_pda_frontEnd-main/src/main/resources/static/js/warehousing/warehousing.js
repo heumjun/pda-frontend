@@ -31,19 +31,19 @@ const returnReg = function(){
 					}
 				})
 			},*/
-            {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center'	,maxLength:50},
-            {binding:'st02Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'	,maxLength:6,},
+            {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center'},
+            {binding:'st02Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'},
 			{binding:'st02Ipqty'	,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
             {binding:'st02Status'	,header:'상태'	,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},
-            {binding:'st02Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	,maxLength:50},
-			{binding:'st02Dist'		,header:'구역'	,width:150	,dataType:'String'	,align:'center'	,maxLength:50},
+            {binding:'st02Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	},
+			{binding:'st02Dist'		,header:'구역'	,width:150	,dataType:'String'	,align:'center'	},
 			// button with regular bound text
         ];
 
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(350);
+        grid.setDynamicHeight(500);
         //체크박스 컬럼 생성
         grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
@@ -93,6 +93,7 @@ const returnReg = function(){
                 default:
                     return null;
             }
+			
         }
 		
     }
@@ -179,6 +180,7 @@ const returnReg = function(){
 					 addRow.st02Dist = '001';
 					 addRow.st02Status = item.st02Status;
 					 addRow.qa05Available = item.qa05Available;
+					 addRow.st02Moq = item.pu02Sboxsu;
 
 					grid._flexCv.commitNew();
 				}
@@ -199,8 +201,7 @@ const returnReg = function(){
             pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
 
         } catch(error) {
-            console.debug(error);
-            alertError('오류', error);
+            //alertError('오류', error);
             return;
         }
 
@@ -264,6 +265,68 @@ const returnReg = function(){
 		$('#btnBack').on('click', goBack);
 		$('#btnSave').on('click', saveWareHousing);
     }
+	
+	// 스캐너 값 얻기
+	$(document).scannerDetection({
+		timeBeforeScanTest: 50, // wait for the next character for upto 200ms
+		startChar: [16, 45, 189], // Prefix character for the cabled scanner (OPL6845R)
+		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)
+		onComplete: function(barcode, qty){
+
+			let matchBar = false;
+			barcode = barcode.toUpperCase();
+			// 길이는 추후 변경될 수도 있음
+			if(barcode.length == 17){
+
+				grid._flexGrid.rows.some((row,index,array)=>{
+					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
+
+						// 납품확인서의 LOT번호와 다른 LOT번호를 찍은 경우에 경고메시지 및 입력이 안되도록 막아줘야함
+						if(row.dataItem.st02Lot == barcode.substring(0,13)){
+							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
+								// 리딩 시 여기 if문 안들어오면 일치하는 품번이 존재하지 않음.
+								// match가 되었을 경우 true
+								matchBar = true;
+								// 바코드 값들어가는 경우 select값 true로 변경
+								grid._flexGrid.setCellData(row.index,'select',true);
+
+								// 중복체크가 되어야한다.
+								for(var i=0; i<grid._flexGrid.rows.length; i++){
+									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st02Qrcode'))){
+										if(barcode == grid._flexGrid.getCellData(i,'st02Qrcode')){
+											grid._flexGrid.setCellData(index, 'st02Qrcode', '');
+											alertWarning('작업 불가','QR코드는 중복될 수 없습니다.');
+											return ;
+										}
+									}
+								}
+
+								// 값 넣어주기
+								grid._flexGrid.setCellData(index, 'st02Qrcode', barcode);
+								return true;
+							}
+						}
+
+					} else {
+						alertWarning("작업불가", "납품확인서를 선택해주세요");
+						return ;
+					}
+				});
+
+				// 바코드의 lot와 row의 lot가 매치가 되지 않았을 경우
+				if(matchBar == false){
+					alertWarning("작업불가", "리딩한 바코드와 일치하는 LOT번호가 존재하지 않습니다.")
+					return ;
+				}
+
+			} else {
+				alertWarning('작업 불가', 'QR코드의 길이가 맞지않습니다.', 'warning');
+				return;
+			}
+
+			
+		}
+	});
 
 
     return{
@@ -276,5 +339,4 @@ const returnReg = function(){
 
 $(()=>{
     returnReg.init();
-    
 });
