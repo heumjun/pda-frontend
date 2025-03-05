@@ -71,7 +71,7 @@ const outputReqSel = function(){
             uri: `output/outputReqSel`
         }
 
-        params = {...params};
+        //params = {...params};
 
         await ajax.getAjax(params,true).then(data=>{
             grid._flexCv.sourceCollection =  data['detailInfo'].map(item=>({

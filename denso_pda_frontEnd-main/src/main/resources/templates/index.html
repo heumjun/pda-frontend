@@ -5,155 +5,122 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+<!--    Document Title-->
+<!-- ===============================================-->
+<title>PDA 프로그램</title>
 
-    <!-- ===============================================-->
-    <!--    Document Title-->
-    <!-- ===============================================-->
-    <title>PDA 프로그램</title>
-    
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
-    
-    <!-- ===============================================-->
-    <!--    Stylesheets-->
-    <!-- ===============================================-->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- ===============================================-->
+<!--    Stylesheets-->
+<!-- ===============================================-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
     <link href="vendors/simplebar/simplebar.min.css" rel="stylesheet">
     <link href="assets/css/theme.min.css" rel="stylesheet" id="style-default">
     <link href="assets/css/user.css" rel="stylesheet" id="user-style-default">
-    
-  
 </head>
 
 <body>
 
   <!-- 프로그램 코드 -->
-  <div id="data-params" class="visually-hidden" th:attr="data-params=${params}"></div>
-  
-  <!-- ===============================================-->
-  <!--    Main Content-->
-  <!-- ===============================================-->
-  <main class="main" id="top">
-    <div class="container-fluid" data-layout="container">
-      
-      <!-- ===============================================-->
-      <!-- 왼쪽 메뉴바 -->
-      <!-- ===============================================-->
-      <div th:replace="navbar :: navbar"></div>
+<div id="data-params" class="visually-hidden" th:attr="data-params=${params}"></div>
 
-      <div class="content">
-        <!-- ===============================================-->
-        <!-- HEADER 영역 -->
-        <!-- ===============================================-->
-        <div th:replace="topbar :: topbar"></div>
-        <!-- ===============================================-->
-        <!-- 내용 -->
-        <!-- ===============================================-->
-        
-        <div class="cont">
-        	<img src="../../assets/img/qrCodeImg.png" alt="" width="100%"/>
-          <!-- <div class="card">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">Quick Menu</h6>
-            </div>
-            <div class="card-body">
-              <h5 class="fs-0 mb-2">시스템</h5>
-              <div class="row g-3">
-                <div class="col-xxl-4 col-lg-6">
-                  <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/1.png" alt="" width="39" />
-                    <div class="ms-3 my-x1">
-                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="작업 - QR 스캔" href="warehousing/warehousingScan">입고처리</a></h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xxl-4 col-lg-6">
-                  <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/2.png" alt="" width="39" />
-                    <div class="ms-3 my-x1">
-                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="출고처리" href="materialInfo/materialScan">출고처리</a></h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <h5 class="fs-0 mb-2 mt-5">Customer Satisfaction</h5>
-              <div class="row g-3">
-                <div class="col-xxl-4 col-lg-6">
-                  <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/3.png" alt="" width="39" />
-                    <div class="ms-3 my-x1">
-                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" href="#!">Analysis of the Top Customers</a></h5>
-                      <h6 class="mb-0 text-600">Check out our customer stories</h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xxl-4 col-lg-6">
-                  <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/4.png" alt="" width="39" />
-                    <div class="ms-3 my-x1">
-                      <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" href="#!">Customer Satisfaction Survey</a></h5>
-                      <h6 class="mb-0 text-600">Check out the report details</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-          </div> -->
-        </div>
-               
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+  <div class="container-fluid" data-layout="container">
+    
+    <!-- ===============================================-->
+ <!-- 왼쪽 메뉴바 -->
+ <!-- ===============================================-->
+ <div th:replace="navbar :: navbar"></div>
+
+ <div class="content">
+   <!-- ===============================================-->
+   <!-- HEADER 영역 -->
+   <!-- ===============================================-->
+   <div th:replace="topbar :: topbar"></div>
+   <!-- ===============================================-->
+   <!-- 내용 -->
+   <!-- ===============================================-->
+   
+   <div class="cont">
+   	<img src="../../assets/img/qrCodeImg.png" alt="" width="100%"/>
+     <!-- <div class="card">
+       <div class="card-header bg-light">
+         <h6 class="mb-0">Quick Menu</h6>
+       </div>
+       <div class="card-body">
+         <h5 class="fs-0 mb-2">시스템</h5>
+         <div class="row g-3">
+           <div class="col-xxl-4 col-lg-6">
+             <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/1.png" alt="" width="39" />
+               <div class="ms-3 my-x1">
+                 <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="작업 - QR 스캔" href="warehousing/warehousingScan">입고처리</a></h5>
+               </div>
+             </div>
+           </div>
+           <div class="col-xxl-4 col-lg-6">
+             <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/2.png" alt="" width="39" />
+               <div class="ms-3 my-x1">
+                 <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" data-path="출고처리" href="materialInfo/materialScan">출고처리</a></h5>
+               </div>
+             </div>
+           </div>
+         </div>
+         
+         <h5 class="fs-0 mb-2 mt-5">Customer Satisfaction</h5>
+         <div class="row g-3">
+           <div class="col-xxl-4 col-lg-6">
+             <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/3.png" alt="" width="39" />
+               <div class="ms-3 my-x1">
+                 <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" href="#!">Analysis of the Top Customers</a></h5>
+                 <h6 class="mb-0 text-600">Check out our customer stories</h6>
+               </div>
+             </div>
+           </div>
+           <div class="col-xxl-4 col-lg-6">
+             <div class="d-flex align-items-center px-4 py-x1 bg-light rounded-3 border position-relative"><img src="../../assets/img/tickets/reports/4.png" alt="" width="39" />
+               <div class="ms-3 my-x1">
+                 <h5 class="fs-0 fw-semi-bold mb-2"><a class="text-900 hover-primary stretched-link" href="#!">Customer Satisfaction Survey</a></h5>
+                 <h6 class="mb-0 text-600">Check out the report details</h6>
+               </div>
+             </div>
+           </div>
+         </div>
+         
+       </div>
+     </div> -->
       </div>
-      
+             
     </div>
-  </main>
-  <!-- ===============================================-->
-  <!--    End of Main Content-->
-  <!-- ===============================================-->
+    
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
 
-  <!-- customize 메뉴-->
-  <div th:replace="customize :: customize"></div>
-  
-  <!-- ===============================================-->
-  <!--    JavaScripts-->
-  <!-- ===============================================-->
-  <!-- <script src="vendors/dhtmlx/codebase/dhtmlx.js"></script> -->
-  <script src="assets/js/config.js"></script>
+<!-- customize 메뉴-->
+<div th:replace="customize :: customize"></div>
 
-  <!-- 공통 스크립트 모음 -->
-  <script src="js/common/script.js"></script>
-  <script src="js/qrScanner/scan.js"></script>
-  
-  <script>
-    
-    import('/js/common/common.js');
-    
-    $("#textInput").focus();
-    
- // 스캐너 값 얻기
- $(document).scannerDetection({
-     timeBeforeScanTest: 50, // wait for the next character for upto 200ms
-     startChar: [16], // Prefix character for the cabled scanner (OPL6845R)
-     endChar: [9, 13], // be sure the scan is complete if key 13 (enter) is detected
-     avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
-     onComplete: function(barcode, qty){
- 		
- 		let form = $('<form></form>');
-		form.attr("method","get");
-		form.attr("action","view");
-		form.attr("target","_self");
-		form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousing' }));
-		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousing' }));
-		form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고처리' }));
-		form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: '20250305001' }));
-		form.appendTo('body');
-		form.submit();
- 		
- 		
-     },
- 	onerror : function (barcode, qty) {
- 		alert("바코드를 인식할 수 없습니다.\n관리자에게 문의 해주세요."); 
- 	}
- });
-    
-    
-  </script>
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<!-- <script src="vendors/dhtmlx/codebase/dhtmlx.js"></script> -->
+<script src="assets/js/config.js"></script>
+
+<!-- 공통 스크립트 모음 -->
+<script src="js/common/script.js"></script>
+<script src="js/qrScanner/scan.js"></script>
+
+<script>
+	import('/js/common/common.js');
+	import('/js/index.js');
+ </script>
   
 </body>
 

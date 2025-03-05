@@ -33,7 +33,7 @@ const outputRegister = function(){
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(500);
+        grid.setDynamicHeight(350);
         //체크박스 컬럼 생성
         grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
@@ -231,26 +231,24 @@ const outputRegister = function(){
 
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
-		timeBeforeScanTest: 50, // wait for the next character for upto 200ms
+		/*timeBeforeScanTest: 50, // wait for the next character for upto 200ms
 		startChar: [16, 45, 189], // Prefix character for the cabled scanner (OPL6845R)
-		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)
+		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
 		onComplete: function(barcode, qty) {
 			let matchBar = false;
 			barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
-			if(barcode.length == 79) {
-				let code = barcode.substring(3,17).trim();
-				let codeGbn = barcode.substring(34,36).trim();
-				
+			if(barcode.substring(0,3) == '3N1'){
+				let code = barcode.substring(3,18).trim();
 				grid._flexGrid.rows.some((row,index,array) => {
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
 						// 로우에 있는 품목코드와 바코드의 품목코드, 로우에 있는 품목구분과 바코드의 품목구분 비교
 						// QR코드가 비어있느 항목에 값이 들어가도록 설정
-						if(row.dataItem.cm08Code == code && row.dataItem.cm08Gbn == codeGbn) {
+						if(row.dataItem.cm08Code == code) {
 							if(wijmo.isNullOrWhiteSpace(row.dataItem.st03Qr) || wijmo.isUndefined(row.dataItem.st03Qr)){
 								matchBar = true;
-								grid._flexGrid.setCellData(row.index, 'select', true);
+								//grid._flexGrid.setCellData(row.index, 'select', true);
 
 								// 중복체크 기능 필요
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
@@ -264,8 +262,8 @@ const outputRegister = function(){
 								}
 
 								// 값 넣어주기
-								var lot = barcode.substring(34,48).trim();
-								var lotSeq = barcode.substring(22,34).trim();
+								var lot = barcode.substring(35,82).trim();
+								var lotSeq = barcode.substring(23,35).trim();
 								grid._flexGrid.setCellData(index, 'st03Lot', lot);
 								grid._flexGrid.setCellData(index, 'st03LotSeq', lotSeq);
 								grid._flexGrid.setCellData(index, 'st03Qr', barcode);
@@ -283,7 +281,7 @@ const outputRegister = function(){
 					return ;
 				}
 			// SCM 라벨을 조회 시 17자리
-			} else if(barcode.length == 17) {
+			} else {
 				// SCM QR코드 값으로 입고테이블을 검색해서 입고 데이터를 가져와서 뿌려줘야함.
 				let params ={
 					uri :"warehousing/warehousing/stock/getInputInfo",
@@ -294,14 +292,12 @@ const outputRegister = function(){
 					
 					let inputInfo = data["inputInfo"];
 
-					if(inputInfo != null){
+					if(inputInfo != null) {
 						grid._flexGrid.rows.some((row,index,array)=>{
 							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
-								if(row.dataItem.cm08Code == inputInfo.st02Code
-									&& barcode == inputInfo.st02Qrcode){
+								if(row.dataItem.cm08Code == inputInfo.st02Code && barcode == inputInfo.st02Qrcode){
 									if(wijmo.isNullOrWhiteSpace(row.dataItem.st03Qr) || wijmo.isUndefined(row.dataItem.st03Qr)){
 
-										// 중복체크가 되어야한다.
 										for(var i=0; i<grid._flexGrid.rows.length; i++){
 											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st03Qr'))){
 												if(barcode == grid._flexGrid.getCellData(i,'st03Qr')){
@@ -323,19 +319,22 @@ const outputRegister = function(){
 								}
 							}
 						})
+						
+						// 바코드의 lot와 row의 lot가 매치가 되지 않았을 경우
+					  	if(matchBar == false){
+							 alertWarning("작업불가", "리딩한 바코드와 일치하는 LOT번호가 존재하지 않습니다.");
+						 	return ;
+					  	}
+						
 					// 품번과 일치하지 않는 경우
 					} else {
-						alertWarning('작업 불가', '리딩한 바코드와 일치하는 LOT번호가 존재하지 않습니다.');
+						alertWarning('작업 불가', '리딩한 QR코드의 LOT가 존재하지않거나\n 재고가 존재하지 않습니다.');
 						return ;
 					}
 
 
 				});
-			} else {
-				alert('작업 불가', 'QR코드의 길이가 맞지 않습니다.');
-				return ;
 			}
-
 		}
 	});
 	
@@ -352,8 +351,7 @@ const outputRegister = function(){
 		await ajax.getAjax(params, true).then(async (data) => {
 			let stokDistInfo = data["stokDistInfo"];
 
-			if(stokDistInfo != null){
-				alert(stokDistInfo.st01Stok);
+			if(stokDistInfo != null) {
 				grid._flexGrid.setCellData(index, 'st03Stok', stokDistInfo.st01Stok);
 				grid._flexGrid.setCellData(index, 'st03Dist', stokDistInfo.st01District);
 			}

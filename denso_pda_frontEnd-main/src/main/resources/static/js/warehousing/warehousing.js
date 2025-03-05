@@ -31,12 +31,13 @@ const returnReg = function(){
 					}
 				})
 			},*/
-            {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center'},
+            {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
             {binding:'st02Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'},
 			{binding:'st02Ipqty'	,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
             {binding:'st02Status'	,header:'상태'	,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},
             {binding:'st02Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	},
 			{binding:'st02Dist'		,header:'구역'	,width:150	,dataType:'String'	,align:'center'	},
+			{binding:'st02Lot'		,header:'lot'	,width:150	,dataType:'String'	,align:'center',visible:false	},
 			// button with regular bound text
         ];
 
@@ -160,45 +161,47 @@ const returnReg = function(){
             let {warehousingList} = await ajax.getAjax(params,true);  
             //grid._flexCv.sourceCollection = warehousingList.map(item => ({...item, select:false}));
 			
-			grid._flexCv.sourceCollection = [];
-			warehousingList.forEach( (item, index) => {
+			if(warehousingList.length > 0 ) {
+				$("#st02Cus").val(warehousingList[0].pu01Cus);
 				
-	            var newRowLength = item.rowCnt;
-
-				for( var i = 0; i < newRowLength; i++ ) {
-					 let addRow = grid._flexCv.addNew();
-					 addRow.st02Pno = $('#data-params').data('params').pu01No;
-					 addRow.cm08Code = item.cm08Code;
-					 addRow.cm08Name = item.cm08Name;
-					 addRow.st02Cus = item.pu01Cus;
-					 addRow.cm08Gbn = item.cm08Gbn;
-					 addRow.cm08Dgbn = item.cm08Dgbn;
-					 addRow.st02Dat = item.pu01Dat;
-					 addRow.st02Ipqty = 1;
-					 addRow.st02Ipunt = '1';
-					 addRow.st02Stok = '01';
-					 addRow.st02Dist = '001';
-					 addRow.st02Status = item.st02Status;
-					 addRow.qa05Available = item.qa05Available;
-					 addRow.st02Moq = item.pu02Sboxsu;
-
-					grid._flexCv.commitNew();
-				}
-
-	        });
-			
-			$("#st02Pno").val($('#data-params').data('params').pu01No);
-			$("#st02Dat").val(dateUtils.today('YYYY-MM-DD'));
-			
-			/*if ( grid.getRowCnt() > 0 ) {	// 입고완료
-				 $(".text-bg-danger").text("입고완료");
-				 $("#btnStatus").text("입고삭제");
-			} else {	// 입고 미처리
-				$(".text-bg-danger").text("입고 미처리");
-				$("#btnStatus").text("입고등록");
-			}*/
-			
-            pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
+				grid._flexCv.sourceCollection = [];
+				warehousingList.forEach( (item, index) => {
+					
+					var sboxsu = item.pu02Sboxsu; // 박스수량
+					var qty = item.pu02Qty;		  // 개수
+					var newRowLength = Math.ceil(qty/sboxsu);
+	
+					for( var i = 0; i < newRowLength; i++ ) {
+						 let addRow = grid._flexCv.addNew();
+						 addRow.st02Pno = $('#data-params').data('params').pu01No;
+						 addRow.cm08Code = item.cm08Code;
+						 addRow.cm08Name = item.cm08Name;
+						 addRow.st02Cus = item.pu01Cus;
+						 addRow.cm08Gbn = item.cm08Gbn;
+						 addRow.cm08Dgbn = item.cm08Dgbn;
+						 addRow.st02Dat = item.pu01Dat;
+						 addRow.st02Lot = item.pu02Lot;
+						 addRow.st02Ipqty = 1;
+						 addRow.st02Ipunt = '1';
+						 addRow.st02Stok = '01';
+						 addRow.st02Dist = '001';
+						 addRow.st02Status = item.st02Status;
+						 addRow.qa05Available = item.qa05Available;
+						 addRow.st02Moq = item.pu02Sboxsu;
+	
+						grid._flexCv.commitNew();
+					}
+	
+		        });
+				
+				$("#st02Pno").val($('#data-params').data('params').pu01No);
+				$("#st02Dat").val(dateUtils.today('YYYY-MM-DD'));
+	            pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
+			} else {
+				$("#st02Pno").val($('#data-params').data('params').pu01No);
+				$("#st02Dat").val(dateUtils.today('YYYY-MM-DD'));
+				pushMsg(`입고처리 내역이 존재하지\n않습니다.`);	
+			}	
 
         } catch(error) {
             //alertError('오류', error);
@@ -268,30 +271,31 @@ const returnReg = function(){
 	
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
-		timeBeforeScanTest: 50, // wait for the next character for upto 200ms
+		/*timeBeforeScanTest: 40, // wait for the next character for upto 200ms
 		startChar: [16, 45, 189], // Prefix character for the cabled scanner (OPL6845R)
-		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)
+		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
+		timeBeforeScanTest: 200, // 다음스캔까지 딜레이
 		onComplete: function(barcode, qty){
 
 			let matchBar = false;
-			barcode = barcode.toUpperCase();
+			//barcode = barcode.toUpperCase();
 			// 길이는 추후 변경될 수도 있음
-			if(barcode.length == 17){
+			if(barcode.length == 17) {
 
-				grid._flexGrid.rows.some((row,index,array)=>{
+				grid._flexGrid.rows.some((row, index, array)=>{
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
 
 						// 납품확인서의 LOT번호와 다른 LOT번호를 찍은 경우에 경고메시지 및 입력이 안되도록 막아줘야함
-						if(row.dataItem.st02Lot == barcode.substring(0,13)){
+						if(row.dataItem.st02Lot == barcode.substring(0, 13)){
 							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
 								// 리딩 시 여기 if문 안들어오면 일치하는 품번이 존재하지 않음.
 								// match가 되었을 경우 true
 								matchBar = true;
 								// 바코드 값들어가는 경우 select값 true로 변경
-								grid._flexGrid.setCellData(row.index,'select',true);
-
+								//grid._flexGrid.setCellData(index,'select',true);
+								
 								// 중복체크가 되어야한다.
-								for(var i=0; i<grid._flexGrid.rows.length; i++){
+								for(var i=0; i < grid._flexGrid.rows.length; i++){
 									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st02Qrcode'))){
 										if(barcode == grid._flexGrid.getCellData(i,'st02Qrcode')){
 											grid._flexGrid.setCellData(index, 'st02Qrcode', '');
