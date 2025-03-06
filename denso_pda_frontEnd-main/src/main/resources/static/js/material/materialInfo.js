@@ -8,8 +8,9 @@ const material = function(){
 		form.attr("method","get");
 		form.attr("action","view");
 		form.attr("target","_self");
-		form.append($('<input/>', {type: 'hidden', name: 'view', value:'materialInfo/materialScan' }));
-		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'materialInfo/materialScan' }));
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'index' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'index' }));
+		form.append($('<input/>', {type: 'hidden', name: 'title', value:'작업 - QR 스캔' }));
 		form.appendTo('body');
 		form.submit();
 	}
@@ -18,38 +19,43 @@ const material = function(){
 		
 		var st02LotSeq = "";
 		var qrCode = "";
-		if(barcode.substring(0,3) == '3N1') {
-			qrCode = "";
-			st02LotSeq = barcode.substring(23,35).trim();
-		} else {
-			qrCode = barcode;
-			st02LotSeq = "";
+		
+		if ( barcode != undefined ) {
+		
+			if(barcode.substring(0,3) == '3N1') {
+				qrCode = "";
+				st02LotSeq = barcode.substring(23,35).trim();
+			} else {
+				qrCode = barcode;
+				st02LotSeq = "";
+			}
+			
+			let params = {
+	            uri: `materialInfo/materialInfo`
+				,qrCode : qrCode
+				,st02LotSeq : st02LotSeq
+	        }
+
+	        params = {...params};
+
+	        ajax.postAjax(params, true).then(async (data) => {
+				
+				$("#qrCode").text(barcode);
+				$("#cm08Name").val(data.cm08Name);
+				$("#st02Code").val(data.st02Code);
+				$("#st01Qty").val(data.st01Qty); 
+				$("#cm05Name").val(data.cm05Name);
+				
+	        }).catch((e)=>{});
+			
 		}
 		
-		let params = {
-            uri: `materialInfo/materialInfo`
-			,qrCode : qrCode
-			,st02LotSeq : st02LotSeq
-        }
-
-        params = {...params};
-
-        ajax.postAjax(params, true).then(async (data) => {
-			
-			$("#qrCode").text(barcode);
-			$("#cm08Name").val(data.cm08Name);
-			$("#st02Code").val(data.st02Code);
-			$("#st01Qty").val(data.st01Qty); 
-			$("#cm05Name").val(data.cm05Name);
-			
-        }).catch((e)=>{});
-        
     }
 	
 	const handleEvent = ()=> {
 		var qrCode = $('#data-params').data('params').qrCode;
 		getMaterial(qrCode);
-		$('#goBack').on('click', goBack);
+		$('#btnBack').on('click', goBack);
     }
 	
 	// 스캐너 값 얻기
