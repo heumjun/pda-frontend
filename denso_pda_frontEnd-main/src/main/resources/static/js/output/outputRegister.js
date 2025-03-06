@@ -297,7 +297,7 @@ const outputRegister = function(){
 							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
 								if(row.dataItem.cm08Code == inputInfo.st02Code && barcode == inputInfo.st02Qrcode){
 									if(wijmo.isNullOrWhiteSpace(row.dataItem.st03Qr) || wijmo.isUndefined(row.dataItem.st03Qr)){
-
+										matchBar = true;
 										for(var i=0; i<grid._flexGrid.rows.length; i++){
 											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st03Qr'))){
 												if(barcode == grid._flexGrid.getCellData(i,'st03Qr')){
