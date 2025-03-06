@@ -55,21 +55,30 @@ public class LoginController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody UserDto params,HttpServletResponse response) throws Exception{
         
-        if(ObjectUtils.isEmpty(params.getUserId())){
+        if(ObjectUtils.isEmpty(params.getCompany())){
             throw new BusinessException("사번을 입력하세요.");
         }
 
-        if(ObjectUtils.isEmpty(params.getPassword())){
+        if(ObjectUtils.isEmpty(params.getFactory())){
             throw new BusinessException("비밀번호를 입력하세요.");
+        }
+        
+        if(ObjectUtils.isEmpty(params.getUserId())){
+        	throw new BusinessException("사번을 입력하세요.");
+        }
+        
+        if(ObjectUtils.isEmpty(params.getPassword())){
+        	throw new BusinessException("비밀번호를 입력하세요.");
         }
 
         Map<String,Object> param = new HashMap<String,Object>();
+        param.put("company", params.getCompany());
+        param.put("factory", params.getFactory());
         param.put("userId", params.getUserId());
         param.put("password", params.getPassword());
 //        param.put("jan", params.getJan());      //지점
-        
         ResponseEntity<?> responseEntity = restApiService.postRestAPI(param, "login");
-
+        
         Map<String,Object> body = JsonUtils.deserialize(responseEntity.getBody(), new TypeReference<Map<String,Object>>() {});
         boolean status = (boolean) body.get("status");
 
@@ -87,7 +96,7 @@ public class LoginController {
 
         
         //받아온 토큰을 쿠키에 저장함.
-        Cookie cookie = new Cookie("denso-pda",token);  
+        Cookie cookie = new Cookie("denso-pda", token);  
         cookie.setPath("/");
         cookie.setHttpOnly(true);   //js에서 쿠키 접근 불가능(http 요청시 자동으로 첨부됨.)
         response.addCookie(cookie);
@@ -143,7 +152,6 @@ public class LoginController {
             params.put("authUrl", "index");
             params.put("title", "작업 - QR 스캔");
             mv.addObject("params", JsonUtils.serialize(params));
-
 		}
         
         mv.setViewName("index");

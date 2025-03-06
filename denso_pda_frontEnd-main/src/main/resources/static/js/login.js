@@ -60,10 +60,10 @@ const login = function(){
         
         let params = {
             url: 'login',       //front단 controller, url 로 호출할경우 front 단 controller이기 때문에 backend주소인 uri는 필요없음.
-            userId: $("#id").val(),
-            password: $("#pw").val(),
-            jan:$('#jan').val()
-            
+            company: $("#company").val(),
+            factory: $("#factory").val(),
+            userId: $("#userId").val(),
+            password: $("#password").val()
         }
         
         ajax.postAjax(params,true).then((data) => {

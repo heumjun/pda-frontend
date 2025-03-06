@@ -67,37 +67,43 @@
             <div class="row justify-content-center g-0">
               <div class="col-lg-9 col-xl-8 col-xxl-6">
                 <div class="card">
-                  <div class="card-header bg-circle-shape bg-shape text-center p-2">
+                  <div class="card-header text-center p-2" style="background-color: red;">
                     <a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light">DENSO PDA</a>
                   </div>
                   <div class="card-body p-4">
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col text-center">
                         <h3>로그인</h3>
                       </div>
                       
-                    </div>
+                    </div> -->
                     
                     <form class="form" id="login-form">
                       
                       <div class="mb-3">
-                        <select class="form-select" id="jan" aria-label="지점 선택">
+                        <!-- <select class="form-select" id="jan" aria-label="지점 선택">
                           <option >지점선택</option>
                           <option selected value="1001">마산</option>
                           <option value="1001">창원</option>
-                        </select>
+                        </select> -->
+                        <label class="form-label" for="company">회사</label>
+                        <input class="form-control" id="company" name="company" type="text" placeholder="회사" value="DNKR"/>
                       </div>
                       <div class="mb-3 ">
-                        <label class="form-label" for="id">아이디</label>
-                        <input class="form-control" id="id" name="id" type="text" placeholder="아이디" value="1"/>
+                        <label class="form-label" for="factory">공장</label>
+                        <input class="form-control" id="factory" name="factory" type="text" placeholder="공장" value="0001"/>
+                      </div>
+                      <div class="mb-3 ">
+                        <label class="form-label" for="userId">아이디</label>
+                        <input class="form-control" id="userId" name="userId" type="text" placeholder="아이디" value="admin"/>
                       </div>
                       <div class="mb-5">
-                        <label class="form-label" for="pw">비밀번호</label>
-                        <input class="form-control" id="pw" name="pw" type="password" placeholder="비밀번호" value="1"/>
+                        <label class="form-label" for="password">비밀번호</label>
+                        <input class="form-control" id="password" name="password" type="password" placeholder="비밀번호" value="1"/>
                       </div>
                       
                       <div class="mb-3">
-                        <button class="btn btn-primary d-block w-100 mt-3" type="submit" id="button-login">Log in</button>
+                        <button class="btn d-block w-100 mt-3" type="submit" id="button-login" style="background-color: red; color: white;">Log in</button>
                       </div>
                     </form> 
                     

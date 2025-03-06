@@ -449,3 +449,7 @@
 .justify-content-between {}
 
 
+.card-header:first-child {
+	border-radius : 0 !important;
+}
+

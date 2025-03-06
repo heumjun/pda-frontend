@@ -13,7 +13,7 @@ import lombok.Data;
 public class UserDto implements UserDetails{
 
 	private String userId;
-	private String userName;
+	private String username;
 	private String password;
 	private String company;
 	private String factory;
@@ -48,12 +48,6 @@ public class UserDto implements UserDetails{
 		return this.password;
 	}
 
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return this.userName;
-	}
-
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isAccountNonExpired() {
@@ -82,6 +76,5 @@ public class UserDto implements UserDetails{
 		return true;
 	}
 
-    
     
 }

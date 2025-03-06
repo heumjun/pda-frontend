@@ -76,30 +76,66 @@ public class JwtTokenProvider {
 //            //로그인 오류발생 
 //            throw new UnathorizedException();
 //        }
-
+    	
     	UserDto userInfo = new UserDto();
     	
-		String userId = Jwts.parser()
-							.setSigningKey(secretKey)
-							.parseClaimsJws(token)
-							.getBody()
-							.getSubject();
+    	String userId = Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.getSubject();
+    	
+		String company = Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.get("company").toString();
 		
-		String userCompany = Jwts.parser()
-								 .setSigningKey(secretKey)
-								 .parseClaimsJws(token)
-								 .getBody()
-								 .get("company").toString();
-
-		String userFactory = Jwts.parser()
-								.setSigningKey(secretKey)
-								.parseClaimsJws(token)
-								.getBody()
-								.get("factory").toString();
+		String companyName = Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.get("companyName").toString();
+		
+		String factory = Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.get("factory").toString();
+		
+		String factoryName = Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.get("factoryName").toString();
+		
+		int empNo = Integer.parseInt( Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.get("empNo").toString() );
+		
+		String empName = Jwts.parser()
+						.setSigningKey(secretKey)
+						.parseClaimsJws(token)
+						.getBody()
+						.get("empName").toString();
+		
+		System.out.println(" #>>>>>>>>>> " + userId);
+		System.out.println(" #>>>>>>>>>> " + company);
+		System.out.println(" #>>>>>>>>>> " + companyName);
+		System.out.println(" >>>>>>>>>>> " + factory);
+		System.out.println(" >>>>>>>>>>> " + factoryName);
+		System.out.println(" >>>>>>>>>>> " + empNo);
+		System.out.println(" >>>>>>>>>>> " + empName);
 
 		userInfo.setUserId(userId);
-		userInfo.setCompany(userCompany);
-		userInfo.setFactory(userFactory);
+		userInfo.setCompany(company);
+		userInfo.setCompanyName(companyName);
+		userInfo.setFactory(factory);
+		userInfo.setFactoryName(factoryName);
+		userInfo.setEmpNo(empNo);
+		userInfo.setEmpName(empName);
 		
 		return userInfo;
     }
