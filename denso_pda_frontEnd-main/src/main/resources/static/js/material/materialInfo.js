@@ -24,7 +24,8 @@ const material = function(){
 		
 			if(barcode.substring(0,3) == '3N1') {
 				qrCode = "";
-				st02LotSeq = barcode.substring(23,35).trim();
+				st02LotSeq = barcode.split(" ")[2];
+				//st02LotSeq = barcode.substring(23,35).trim();
 			} else {
 				qrCode = barcode;
 				st02LotSeq = "";

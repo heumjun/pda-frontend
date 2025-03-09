@@ -46,11 +46,11 @@ const returnReg = function(){
         //그리드 높이 자동조절
         grid.setDynamicHeight(500);
         //체크박스 컬럼 생성
-        grid.checkBoxColumns(["select"]);
+        //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
         grid.optionPanel('#grid-option');
         //셀고정
-        grid.enableFrozenCol('select');
+        //grid.enableFrozenCol('select');
         //키가되는 컬럼으로 변경이 되면 안되는 컬럼
         //grid.disableReadOnlyForAutoRows(['itemNm','qrCode','relQty','storage','area']);
         //대문자로 변경하고싶은 컬럼

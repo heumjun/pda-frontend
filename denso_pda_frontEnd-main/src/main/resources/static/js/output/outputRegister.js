@@ -33,9 +33,9 @@ const outputRegister = function(){
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(350);
+        grid.setDynamicHeight(460);
         //체크박스 컬럼 생성
-        grid.checkBoxColumns(["select"]);
+        //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
         grid.optionPanel('#grid-option');
 		
@@ -239,7 +239,7 @@ const outputRegister = function(){
 			barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
-			if(barcode.substring(0,3) == '3N1'){
+			if(barcode.substring(0, 3) == '3N1'){
 				let code = barcode.substring(3,18).trim();
 				grid._flexGrid.rows.some((row,index,array) => {
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
@@ -262,8 +262,12 @@ const outputRegister = function(){
 								}
 
 								// 값 넣어주기
-								var lot = barcode.substring(35,82).trim();
-								var lotSeq = barcode.substring(23,35).trim();
+								//var lot = barcode.substring(35,82).trim();
+								//var lotSeq = barcode.substring(23,35).trim();
+								
+								var lot = barcode.split(" ")[3].trim();
+								var lotSeq = barcode.split(" ")[2].trim();
+								
 								grid._flexGrid.setCellData(index, 'st03Lot', lot);
 								grid._flexGrid.setCellData(index, 'st03LotSeq', lotSeq);
 								grid._flexGrid.setCellData(index, 'st03Qr', barcode);
