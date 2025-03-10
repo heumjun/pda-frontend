@@ -239,11 +239,11 @@ const outputRegister = function(){
 			//barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
-			if(barcode.substring(0, 3) == '3N1'){
+			if(barcode.substring(0, 3) == "3N1"){
 				
 				var beforeBar = barcode;
 	            // 트레스 라벨 앞부분 짜르기
-	            barcode = barcode.replaceAll('3N1', '');
+	            barcode = barcode.replaceAll("3N1", "");
 	            // 트레스 라벨을 공백으로 자름
 	            barcode = barcode.split(" ");
 	            // 품번 가져오기
@@ -262,7 +262,7 @@ const outputRegister = function(){
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
 									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'st03Qr'))){
 										if(beforeBar == grid._flexGrid.getCellData(i, 'st03Qr')){
-											grid._flexGrid.setCellData(index, 'st03Qr', '');
+											grid._flexGrid.setCellData(index, 'st03Qr', "");
 											alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 											return ;
 										}
