@@ -278,7 +278,7 @@ const outputRegister = function(){
 								
 								grid._flexGrid.setCellData(index, 'st03Lot', lot);
 								grid._flexGrid.setCellData(index, 'st03LotSeq', lotSeq);
-								grid._flexGrid.setCellData(index, 'st03Qr', barcode);
+								grid._flexGrid.setCellData(index, 'st03Qr', beforeBar);
 								// 창고, 구역 가져와서 넣어주고 return true 해야한다.
 								getStokDistInfo(index, code, lot, lotSeq);
 								return true;
