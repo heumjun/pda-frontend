@@ -236,11 +236,19 @@ const outputRegister = function(){
 		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
 		onComplete: function(barcode, qty) {
 			let matchBar = false;
-			barcode = barcode.toUpperCase();
+			//barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
 			if(barcode.substring(0, 3) == '3N1'){
-				let code = barcode.substring(3,18).trim();
+				
+				var beforeBar = barcode;
+	            // 트레스 라벨 앞부분 짜르기
+	            barcode = barcode.replaceAll('3N1', '');
+	            // 트레스 라벨을 공백으로 자름
+	            barcode = barcode.split(" ");
+	            // 품번 가져오기
+	            var code = barcode[0];
+				
 				grid._flexGrid.rows.some((row,index,array) => {
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
 						// 로우에 있는 품목코드와 바코드의 품목코드, 로우에 있는 품목구분과 바코드의 품목구분 비교
@@ -253,7 +261,7 @@ const outputRegister = function(){
 								// 중복체크 기능 필요
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
 									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'st03Qr'))){
-										if(barcode == grid._flexGrid.getCellData(i, 'st03Qr')){
+										if(beforeBar == grid._flexGrid.getCellData(i, 'st03Qr')){
 											grid._flexGrid.setCellData(index, 'st03Qr', '');
 											alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 											return ;
@@ -265,8 +273,8 @@ const outputRegister = function(){
 								//var lot = barcode.substring(35,82).trim();
 								//var lotSeq = barcode.substring(23,35).trim();
 								
-								var lot = barcode.split(" ")[3].trim();
-								var lotSeq = barcode.split(" ")[2].trim();
+								var lot = barcode[3];
+								var lotSeq = barcode[2];
 								
 								grid._flexGrid.setCellData(index, 'st03Lot', lot);
 								grid._flexGrid.setCellData(index, 'st03LotSeq', lotSeq);
