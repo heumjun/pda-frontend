@@ -97,15 +97,21 @@ const index = function(){
 			form.attr("action","view");
 			form.attr("target","_self");
 			
-			if (linkType == 'PU') {
+			form.append($('<input/>', {type: 'hidden', name: 'view', value:'restore/restore' }));
+			form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'restore/restore' }));
+			form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
+			form.append($('<input/>', {type: 'hidden', name: 'st10No', value: "2025021900001" }));
+			form.appendTo('body');
+			form.submit();
+			
+			
+			/*if (linkType == 'PU') {
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousing' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousing' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고 처리' }));
 				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: codeData }));
 			} else if (linkType == 'OT') {
-				
 				let otInfo = getOuputReqSel(codeData);
-				
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));
@@ -114,6 +120,15 @@ const index = function(){
 				form.append($('<input/>', {type: 'hidden', name: 'mf13DatTime', value: otInfo.mf13DatTime }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf13LineCode', value: otInfo.mf13LineCode }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf13LineNm', value: otInfo.mf13LineNm }));
+			} else if (linkType == 'OC') { // 부품투입
+										
+			} else if (linkType == 'RE') { //RESTORE 반납
+				form.append($('<input/>', {type: 'hidden', name: 'view', value:'restore/restore' }));
+				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'restore/restore' }));
+				form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
+				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: "2025021900001" }));
+			} else if (linkType == 'RT') { //RETURN 반품
+													
 			} else  {
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'materialInfo/materialInfo' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'materialInfo/materialInfo' }));
@@ -122,7 +137,7 @@ const index = function(){
 			}
 			
 			form.appendTo('body');
-			form.submit();
+			form.submit();*/
 			
 	    },
 		onerror : function (barcode, qty) {
@@ -146,4 +161,3 @@ const index = function(){
 $(()=>{
     index.init();
 });
-

@@ -26,8 +26,8 @@ const returnReg = function(){
             {binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},
             {binding:'itemNm'	,header:'부품명'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50},
             {binding:'qrCode'	,header:'QR코드'	,width:70	,dataType:'String'	,align:'center'	,maxLength:6,},
-			{binding:'relQty'	,header:'출고수량'	,width:130	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-            {binding:'sotreQty'	,header:'재고수량'	,width:130	,dataType:'Number'},
+			{binding:'relQty'	,header:'반품수량'	,width:130	,dataType:'Number'	,editor:numberInput	,isRequired:true},
+            {binding:'sotreQty'	,header:'상태'	,width:130	,dataType:'Number'},
             {binding:'storage'	,header:'창고'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50},
 			{binding:'area'		,header:'구역'	,width:150	,dataType:'String'	,align:'left'	,maxLength:50},
 			// button with regular bound text

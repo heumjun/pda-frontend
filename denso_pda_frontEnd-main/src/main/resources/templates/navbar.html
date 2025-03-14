@@ -1,149 +1,119 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <nav id="navbar" th:fragment="navbar" class="navbar navbar-light navbar-vertical navbar-expand-xl navbar-vibrant">
-    <!--로고 및 토글-->          
-    <div class="d-flex align-items-center">
-      <div class="toggle-icon-wrapper">
+	<!--로고 및 토글-->
+	<div class="d-flex align-items-center">
+		<div class="toggle-icon-wrapper">
+			<button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation">
+				<span class="navbar-toggle-icon">
+					<span class="toggle-line"></span>
+				</span>
+			</button>
+		</div>
+		<a class="navbar-brand" href="index"> <!-- <div class="d-flex align-items-center py-3"><img class="me-2" src="img/logo.png" alt="" height="39px;" /></div> -->
+			<div class="d-flex align-items-center py-3">
+				<img class="me-2" src="assets/img/icons/spot-illustrations/falcon.png" alt="" width="40"> 
+				<span class="font-sans-serif">PDA</span>
+			</div>
+		</a>
+	</div>
 
-        <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation">
-          <span class="navbar-toggle-icon"><span class="toggle-line"></span></span>
-        </button>
+	<!--메뉴 -->
+	<div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+		<div class="navbar-vertical-content scrollbar">
+			<ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
+				<li class="nav-item">
+					<a class="nav-link addTabBar" href="index">
+						<div class="d-flex align-items-center">
+							<!-- <span class="nav-link-icon"><span class="fas fa-chart-pie"></span></span> -->
+							<i class="fas fa-barcode" style="font-size: 16px"></i> <span class="nav-link-text ps-1">QR 스캔</span>
+						</div>
+					</a>
+				</li>
 
-      </div>
-      <a class="navbar-brand" href="index">
-        <!-- <div class="d-flex align-items-center py-3"><img class="me-2" src="img/logo.png" alt="" height="39px;" /></div> -->
-        <div class="d-flex align-items-center py-3">
-          <img class="me-2" src="assets/img/icons/spot-illustrations/falcon.png" alt="" width="40">
-          <span class="font-sans-serif">PDA</span>
-        </div>
-      </a>
+				<li class="nav-item" id="nav-menu">
+					<div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+						<div class="col-auto navbar-vertical-label">DENSO PDA</div>
+						<div class="col ps-0">
+							<hr class="mb-0 navbar-vertical-divider">
+						</div>
+					</div> 
+					<ul class="nav collapse show" id="MENU001">
+						<li class="nav-item">
+							<a class="nav-link" href="warehousing/warehousing" data-path="입고 처리">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-warehouse"></i><span class="nav-link-text ps-1">입고 처리</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="materialInfo/materialInfo" data-path="자재 조회">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-box-open"></i><span class="nav-link-text ps-1">자재 조회</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="output/outputReqSel" data-path="출고 조회">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-search"></i><span class="nav-link-text ps-1">출고 조회</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="output/outputRegister" data-path="출고 처리">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-truck-moving"></i><span class="nav-link-text ps-1">출고 처리</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="partsInput/partsInput" data-path="부품 투입">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">부품 투입</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="system/stock-materials-move" data-path="재고 이동">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-sync"></i><span class="nav-link-text ps-1">재고 이동</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item"> <!-- 현장에서 재고관리로 반납처리 -->
+							<a class="nav-link" href="restore/restore" data-path="반납 등록">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-restore"></i><span class="nav-link-text ps-1">반납 등록</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item"> 
+							<a class="nav-link" href="returns/returnsMaterials" data-path="반품 처리">
+								<div class="d-flex align-items-center">
+									</i><span class="nav-link-text ps-1">반품 처리</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="system/consigned-materials-rel" data-path="사급 출고">
+								<div class="d-flex align-items-center">
+									<span class="nav-link-text ps-1">사급 출고</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="system/consigned-materials-rel-search" data-path="사급 출고 조회">
+								<div class="d-flex align-items-center">
+									<span class="nav-link-text ps-1">사급 출고 조회</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
 
-      
-    </div>
-
-    <!--메뉴 -->
-    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
-      <div class="navbar-vertical-content scrollbar">
-        <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav" >
-          <li class="nav-item">
-            <a class="nav-link addTabBar" href="index">
-              <div class="d-flex align-items-center">
-                <!-- <span class="nav-link-icon"><span class="fas fa-chart-pie"></span></span> -->
-                <i class="fas fa-barcode" style="font-size:16px"></i>
-                <span class="nav-link-text ps-1">QR 스캔</span>
-              </div>
-            </a>
-          </li>
-          
-          <li class="nav-item" id="nav-menu"  >
-            
-            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-              <div class="col-auto navbar-vertical-label">DENSO PDA</div>
-              <div class="col ps-0">
-                <hr class="mb-0 navbar-vertical-divider">
-              </div>
-            </div>
-
-            <!-- <li class="nav-item">
-              <a class="nav-link dropdown-indicator" href="#MENU001" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="MENU001">
-                <div class="d-flex align-items-center">
-                  <span class="nav-link-icon"><span class="fas fa-list"></span></span>
-                  <span class="nav-link-text ps-1">시스템</span>
-                </div>
-              </a>
-            </li> -->
-            <ul class="nav collapse show" id="MENU001" >
-              <!-- data-path 엘리먼트를 common.js 에서 이벤트 발생함. -->
-              <!-- <li class="nav-item">
-                <a class="nav-link" href="system/menu" data-path="시스템 > 메뉴관리"> 
-                  <div class="d-flex align-items-center">
-                    <span class="nav-link-text ps-1">메뉴 관리</span>
-                  </div>
-                </a>
-              </li> -->
-              <!-- <li class="nav-item">
-                <a class="nav-link" href="qrScan/qrScan" data-path="작업 - QR 스캔"> 
-                  <div class="d-flex align-items-center">
-                  	<span class="nav-link-icon"><span class="fas fa-list"></span></span>
-                    <span class="nav-link-text ps-1">입고스캔</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="qrScan/qrScan2" data-path="작업 - QR 스캔"> 
-                  <div class="d-flex align-items-center">
-                    <span class="nav-link-text ps-1">자재스캔</span>
-                  </div>
-                </a>
-              </li> -->
-              <li class="nav-item">
-                <a class="nav-link" href="warehousing/warehousing" data-path="입고 처리"> 
-                  <div class="d-flex align-items-center">
-                    <i class="fas fa-warehouse"></i><span class="nav-link-text ps-1">입고 처리</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="materialInfo/materialInfo" data-path="자재 조회"> 
-                  <div class="d-flex align-items-center">
-                    <i class="fas fa-box-open"></i><span class="nav-link-text ps-1">자재 조회</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="output/outputReqSel" data-path="출고 조회"> 
-                  <div class="d-flex align-items-center">
-                    <i class="fas fa-search"></i><span class="nav-link-text ps-1">출고 조회</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="output/outputRegister" data-path="출고 처리"> 
-                  <div class="d-flex align-items-center">
-                    <i class="fas fa-truck-moving"></i><span class="nav-link-text ps-1">출고 처리</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="system/stock-materials-move" data-path="재고 이동"> 
-                  <div class="d-flex align-items-center">
-                    <i class="fas fa-sync"></i><span class="nav-link-text ps-1">재고 이동</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="system/returns-materials" data-path="반품 처리"> 
-                  <div class="d-flex align-items-center">
-                    <span class="nav-link-text ps-1">반품 처리</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="system/consigned-materials-rel" data-path="사급 출고"> 
-                  <div class="d-flex align-items-center">
-                    <span class="nav-link-text ps-1">사급 출고</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="system/return-reg" data-path="반납 등록"> 
-                  <div class="d-flex align-items-center">
-                    <span class="nav-link-text ps-1">반납 등록</span>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="system/consigned-materials-rel-search" data-path="사급 출고 조회"> 
-                  <div class="d-flex align-items-center">
-                    <span class="nav-link-text ps-1">사급 출고 조회</span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        
-      </div>
-    </div>
-  </nav>
+		</div>
+	</div>
+</nav>
 </html>
