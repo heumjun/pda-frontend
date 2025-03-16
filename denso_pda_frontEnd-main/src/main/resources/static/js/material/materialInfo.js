@@ -67,6 +67,8 @@ const material = function(){
 	     //avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
 	     onComplete: function(barcode, qty) {
 	 		
+			barcode = barcode.toUpperCase();
+			
 			if (barcode.length > 0) {
 				//getMaterial('barcode');	
 				getMaterial(barcode);	
