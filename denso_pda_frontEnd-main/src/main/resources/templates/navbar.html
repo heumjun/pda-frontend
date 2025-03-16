@@ -10,7 +10,8 @@
 				</span>
 			</button>
 		</div>
-		<a class="navbar-brand" href="index"> <!-- <div class="d-flex align-items-center py-3"><img class="me-2" src="img/logo.png" alt="" height="39px;" /></div> -->
+		<a class="navbar-brand" href="index"> 
+		<!-- <div class="d-flex align-items-center py-3"><img class="me-2" src="img/logo.png" alt="" height="39px;" /></div> -->
 			<div class="d-flex align-items-center py-3">
 				<img class="me-2" src="assets/img/icons/spot-illustrations/falcon.png" alt="" width="40"> 
 				<span class="font-sans-serif">PDA</span>
@@ -37,7 +38,16 @@
 						<div class="col ps-0">
 							<hr class="mb-0 navbar-vertical-divider">
 						</div>
-					</div> 
+					</div>
+					
+					<li class="nav-item">
+		              <a class="nav-link dropdown-indicator" href="#MENU001" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="MENU001">
+		                <div class="d-flex align-items-center">
+		                  <span class="nav-link-icon"><span class="fas fa-cog"></span></span>
+		                  <span class="nav-link-text ps-1">부품/자재</span>
+		                </div>
+		              </a>
+		            </li> 
 					<ul class="nav collapse show" id="MENU001">
 						<li class="nav-item">
 							<a class="nav-link" href="warehousing/warehousing" data-path="입고 처리">
@@ -54,13 +64,6 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="output/outputReqSel" data-path="출고 조회">
-								<div class="d-flex align-items-center">
-									<i class="fas fa-search"></i><span class="nav-link-text ps-1">출고 조회</span>
-								</div>
-							</a>
-						</li>
-						<li class="nav-item">
 							<a class="nav-link" href="output/outputRegister" data-path="출고 처리">
 								<div class="d-flex align-items-center">
 									<i class="fas fa-truck-moving"></i><span class="nav-link-text ps-1">출고 처리</span>
@@ -68,23 +71,9 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="partsInput/partsInput" data-path="부품 투입">
-								<div class="d-flex align-items-center">
-									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">부품 투입</span>
-								</div>
-							</a>
-						</li>
-						<li class="nav-item">
 							<a class="nav-link" href="system/stock-materials-move" data-path="재고 이동">
 								<div class="d-flex align-items-center">
 									<i class="fas fa-sync"></i><span class="nav-link-text ps-1">재고 이동</span>
-								</div>
-							</a>
-						</li>
-						<li class="nav-item"> <!-- 현장에서 재고관리로 반납처리 -->
-							<a class="nav-link" href="restore/restore" data-path="반납 등록">
-								<div class="d-flex align-items-center">
-									<i class="fas fa-restore"></i><span class="nav-link-text ps-1">반납 등록</span>
 								</div>
 							</a>
 						</li>
@@ -96,20 +85,156 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="system/consigned-materials-rel" data-path="사급 출고">
+							<a class="nav-link" href="system/consigned-materials-rel" data-path="사급 등록">
 								<div class="d-flex align-items-center">
-									<span class="nav-link-text ps-1">사급 출고</span>
+									<span class="nav-link-text ps-1">사급 등록</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item"> <!-- 현장에서 재고관리로 반납처리 -->
+							<a class="nav-link" href="restore/restore" data-path="반납 등록">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-restore"></i><span class="nav-link-text ps-1">반납 등록</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="output/outputReqSel" data-path="출고 조회">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-list"></i><span class="nav-link-text ps-1">출고 조회</span>
 								</div>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="system/consigned-materials-rel-search" data-path="사급 출고 조회">
 								<div class="d-flex align-items-center">
-									<span class="nav-link-text ps-1">사급 출고 조회</span>
+									<i class="fas fa-list"></i><span class="nav-link-text ps-1">사급 출고 조회</span>
 								</div>
 							</a>
 						</li>
 					</ul>
+					
+					<li class="nav-item">
+		              <a class="nav-link dropdown-indicator" href="#MENU002" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="MENU002">
+		                <div class="d-flex align-items-center">
+		                  <span class="nav-link-icon"><span class="fas fa-cog"></span></span>
+		                  <span class="nav-link-text ps-1">SMD</span>
+		                </div>
+		              </a>
+		            </li> 
+		            <ul class="nav collapse show" id="MENU002">
+						<li class="nav-item">
+							<a class="nav-link" href="smd/smdInput" data-path="SMD 입고처리">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-warehouse"></i><span class="nav-link-text ps-1">SMD 입고처리</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="smd/partsInput" data-path="부품 투입">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-truck-moving"></i><span class="nav-link-text ps-1">PCB 부품투입</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="pcb/fault" data-path="PCB 불량처리">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">PCB 불량처리</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+					
+					<li class="nav-item">
+		              <a class="nav-link dropdown-indicator" href="#MENU003" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="MENU002">
+		                <div class="d-flex align-items-center">
+		                  <span class="nav-link-icon"><span class="fas fa-cog"></span></span>
+		                  <span class="nav-link-text ps-1">PCB(제조2)</span>
+		                </div>
+		              </a>
+		            </li> 
+		            <ul class="nav collapse show" id="MENU003">
+		            	<li class="nav-item">
+							<a class="nav-link" href="index" data-path="부품/제품/릴 생산실적 조회">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-list"></i><span class="nav-link-text ps-1">부품/제품/릴 생산실적 조회</span>
+								</div>
+							</a>
+						</li>
+		            	<li class="nav-item">
+							<a class="nav-link" href="index" data-path="부품/제품/릴 생산 LOT 입력">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">부품/제품/릴 생산 LOT 입력</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+					
+					<li class="nav-item">
+		              <a class="nav-link dropdown-indicator" href="#MENU004" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="MENU002">
+		                <div class="d-flex align-items-center">
+		                  <span class="nav-link-icon"><span class="fas fa-cog"></span></span>
+		                  <span class="nav-link-text ps-1">제조1, 생기(제조1)</span>
+		                </div>
+		              </a>
+		            </li> 
+		            <ul class="nav collapse show" id="MENU004">
+						<li class="nav-item">
+							<a class="nav-link" href="index" data-path="부품 투입">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-truck-moving"></i><span class="nav-link-text ps-1">제조1 부품투입</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="index" data-path="생산단계별 등록">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">생산단계별 등록</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="product/lotFault" data-path="LOT 불량처리">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">LOT 불량처리</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="index" data-path="조립 작업 LOT 체결 등록">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">조립 작업 LOT 체결 등록</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+					
+					<li class="nav-item">
+		              <a class="nav-link dropdown-indicator" href="#MENU005" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="MENU002">
+		                <div class="d-flex align-items-center">
+		                  <span class="nav-link-icon"><span class="fas fa-list"></span></span>
+		                  <span class="nav-link-text ps-1">생산관리, 포장</span>
+		                </div>
+		              </a>
+		            </li> 
+		            <ul class="nav collapse show" id="MENU005">
+						<li class="nav-item">
+							<a class="nav-link" href="packaging/anomaly" data-path="이상 처리">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">이상 처리</span>
+								</div>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="index" data-path="재투입">
+								<div class="d-flex align-items-center">
+									<i class="fas fa-cog"></i><span class="nav-link-text ps-1">재투입</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+					
 				</li>
 			</ul>
 

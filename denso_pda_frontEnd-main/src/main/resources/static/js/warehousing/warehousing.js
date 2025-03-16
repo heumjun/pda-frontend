@@ -57,7 +57,7 @@ const returnReg = function(){
         //grid.toUpperCase(['itemNm','qrCode','relQty','storage','area']);
 
         //데이터를 DB에서 받아와서 처리해야할경우 데이터를 받아와서 dataMap을 만들고 넣고자 하는 컬럼의 dataMap에 넣는다.
-		let st02Status =  getCommonCodeList('W005');
+		let st02Status = getCommonCodeList('W005');
 		grid._flexGrid.getColumn('st02Status').dataMap = new wijmo.grid.DataMap(st02Status, 'cm05Value', 'cm05Name');
         let st02Stok = getWarehouseCodeList();
         grid._flexGrid.getColumn('st02Stok').dataMap = new wijmo.grid.DataMap(st02Stok, 'cm15Code', 'cm15Name');

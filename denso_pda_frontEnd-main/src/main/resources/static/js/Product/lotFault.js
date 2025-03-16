@@ -2,13 +2,10 @@
 import GridFactory from "../common/wijmo/gridFactory.js";
 import * as input from "../common/wijmo/inputFactory.js";
 import * as ajax from "../common/ajax.js";
-import * as dateUtils from "../common/dateUtils.js";
 import * as consts from "../common/constants.js";
-import * as commonRestApi from "../common/commonRestApi.js";
-import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
-import * as commonFunc from "../common/common.js";
+import { pushMsg, alertWarning, confirm } from "../common/msgBox.js";
 
-const outputRegister = function(){
+const lotFault = function(){
 
     let grid  = new GridFactory('#grid');
     /**
@@ -30,18 +27,18 @@ const outputRegister = function(){
 					}
 				})
 			},
-            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
-            {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center'},
-			{binding:'st02Ipqty'	,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-			{binding:'st02Status'	,header:'상태'		,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},
-            {binding:'st02Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'},
-			{binding:'st02Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'},
-
-			{binding:'st02Lot'		,header: 'LOT번호'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02LotSeq'	,header: 'LOT SEQ'	,width: 90	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Code'		,header: '품목코드'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+            {binding:'st08Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
+            {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center'},
+			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
+            {binding:'st08Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'},
+			{binding:'st08Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'},
+			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:true},
+			{binding:'st08LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:true},
+			{binding:'st08Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,visible:true},
+			{binding:'st08Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:true},
+			{binding:'st08Seq'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:true},
         ];
-
+		
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
@@ -51,10 +48,12 @@ const outputRegister = function(){
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
         grid.optionPanel('#grid-option');
 
-		let st02Stok = getWarehouseCodeList();
-        grid._flexGrid.getColumn('st02Stok').dataMap = new wijmo.grid.DataMap(st02Stok, 'cm15Code', 'cm15Name');
-		let st02Dist = getDistrictCodeList();
-		grid._flexGrid.getColumn('st02Dist').dataMap = new wijmo.grid.DataMap(st02Dist, 'cm16Code', 'cm16Name');
+		let st08Gbn = getCommonCodeList('E001');
+		grid._flexGrid.getColumn('st08Gbn').dataMap = new wijmo.grid.DataMap(st08Gbn, 'cm05Value', 'cm05Name');
+		let st08Stok = getWarehouseCodeList();
+        grid._flexGrid.getColumn('st08Stok').dataMap = new wijmo.grid.DataMap(st08Stok, 'cm15Code', 'cm15Name');
+		let st08Dist = getDistrictCodeList();
+		grid._flexGrid.getColumn('st08Dist').dataMap = new wijmo.grid.DataMap(st08Dist, 'cm16Code', 'cm16Name');
 
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
@@ -78,6 +77,20 @@ const outputRegister = function(){
         }
 
     }
+	
+	/**
+	 * 공통코드
+	 */
+	const getCommonCodeList = (commonCode) => {
+	    let params = {
+	        uri :"criteria/commonCode/"+commonCode+"/detail"
+	    };
+	   
+	   let list = ajax.getAjaxSync(params);
+	   
+	   return list["commonCodeDetailList"];
+
+	}
 
 	/**
 	 * 창고조회
@@ -115,47 +128,55 @@ const outputRegister = function(){
 
         grid.disableAutoRows();
 
-		/*let addRow = grid._flexCv.addNew();
-		addRow.cm08Name = "fdsfa";
-		addRow.st02Qr = "QQ25031000001-001";
-		addRow.st02Qty = 3;
-		addRow.st02Status = item.mf14Code;
-		addRow.st02Stok = item.cm08Name;
-		addRow.st02Dist = item.cm08Gbn;
-
-		addRow.st03Stok = "01";
-		addRow.st03Dist = "001";
-
-		grid._flexCv.commitNew();*/
-
-        let params = {
-            uri: `partsInput/partsInput/getPartsInputRequestInfo`,
+		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
+       /* let params = {
+            uri: `deadOnArrival/deadOnArrival/getDeadOnArrivalInfo`,
 			st02Qrcode : bacode
         }
-        params = {...params,...ajax.getParams('searchForm')}
+        params = {...params,...ajax.getParams('searchForm')}*/
 
         try {
-            let {partsInputRequestInfo} = await ajax.getAjax(params, true);
-			console.log(partsInputRequestInfo);
+            //let {deadOnArrival} = await ajax.getAjax(params, true);
 
-			let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === partsInputRequestInfo.st02Qrcode ));
+			/*let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === deadOnArrival.st08Qrcode ));
 			if(temp.length != 0){
-				alertWarning('중복 항목',`중복된 항목입니다.`);
+				alertWarning('중복 항목', `중복된 항목입니다.`);
 				return;
-			}
+			}*/
 
+			var barcode = "4111205162023030616130201680000000041580007";
+						
+			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
+			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
+			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
+			//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
+			//⑤ 기판폭 : 3자리
+			//⑥ SEQ No : 4자리
 			let addRow = grid._flexCv.addNew();
-			addRow.cm08Name = partsInputRequestInfo.cm08Name;
-			addRow.st02Qrcode = partsInputRequestInfo.st02Qrcode;
-			addRow.st02Ipqty = partsInputRequestInfo.st02Ipqty;
-			addRow.st02Status = partsInputRequestInfo.st02Status;
-			addRow.st02Stok = partsInputRequestInfo.st02Stok;
-			addRow.st02Dist = partsInputRequestInfo.st02Dist;
-
-			addRow.st02Lot = partsInputRequestInfo.st02Lot;
-			addRow.st02LotSeq = partsInputRequestInfo.st02LotSeq;
-			addRow.st02Code = partsInputRequestInfo.st02Code;
-
+						
+			addRow.st08Company = barcode.substring(0, 11);
+			addRow.st08Factory = barcode.substring(11, 10);
+			addRow.st08Dat = barcode.substring(11, 21);
+			addRow.st08Code = barcode.substring(0, 11);
+			addRow.st08LotSeq = barcode.substring(39, 43);
+			addRow.st08Lot = barcode.substring(21, 27);
+			addRow.st08Gbn = 'ER';
+			addRow.st08Qty = 1;
+			addRow.st08Stok = '03';
+			addRow.st08Dist = '0301';
+			
+			//addRow.st08Pgbn = deadOnArrival.cm08Name; //상세품목
+			
+			/*addRow.st08Unt = deadOnArrival.cm08Name;
+			addRow.st08Rmk = deadOnArrival.cm08Name;
+			addRow.st08Stok = deadOnArrival.cm08Name;
+			addRow.st08Indte = deadOnArrival.cm08Name;
+			addRow.st08Empno = deadOnArrival.cm08Name;
+			addRow.st08Dist = deadOnArrival.cm08Name;*/
+			addRow.st08Qrcode = barcode;
+			
+			console.log(addRow);
+			
 			grid._flexCv.commitNew();
 
         } catch(error) {
@@ -170,44 +191,42 @@ const outputRegister = function(){
 		form.attr("method","get");
 		form.attr("action","view");
 		form.attr("target","_self");
-		form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputReqSel' }));
-		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'output/outputReqSel' }));
-		form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 조회' }));
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'index' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'index' }));
+		form.append($('<input/>', {type: 'hidden', name: 'title', value:'작업 - QR 스캔' }));
 		form.appendTo('body');
 		form.submit();
 	}
 
-	const saveOutput = () => {
+	const saveFault = () => {
 
 		grid.disableAutoRows();
 
-		if(!grid.gridValidation()){
+		/*if(!grid.gridValidation()){
             alertWarning('저장불가', '그리드 오류내역을 확인하세요.');
             return;
-        }
+        }*/
 
 		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
-		let updateList = grid.gridItemListToArray(grid._flexCv.itemsEdited);
-		if(insertList.length < 1 && updateList.length < 1) {
+		if(insertList.length < 1) {
 			alertWarning('저장불가','저장할 내역이 없습니다.');
             return;
         }
 
-		confirm("부품투입을 등록하시겠습니까?", "부품투입 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("이상처리을 등록하시겠습니까?", "이상처리 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
 			let params = {
-                uri: `partsInput/partsInput`,
+                uri: `fault/fault`,
                 insertList: insertList
             };
 
 			params = {...params,...ajax.getParams('#submitForm')};
 
         	ajax.postAjax(params, true).then(async (data)=>{
-	            $(".text-bg-danger").text("출고완료");
 				$("#btnSave").hide();
-	            pushMsg('출고이력이 등록되었습니다.');
+	            pushMsg('이상처리가 등록되었습니다.');
             }).catch((e)=>{
-                console.debug(e);
+                //console.debug(e);
             });
 		});
 	}
@@ -218,19 +237,10 @@ const outputRegister = function(){
     const handleEvent = () => {
 
         gridInit();
+		bacodeSearch();
 
-		$('#btnSave').on('click', saveOutput);
+		$('#btnSave').on('click', saveFault);
 		$('#btnBack').on('click', goBack);
-
-		$("#btnTest1").on('click',function(){
-			bacodeSearch("CO25031400001-001")
-		});
-		$("#btnTest2").on('click',function(){
-			bacodeSearch("CO25031400001-005")
-		});
-		$("#btnTest3").on('click',function(){
-			bacodeSearch("QQ25031000001-004")
-		});
     }
 
 	// 스캐너 값 얻기
@@ -240,12 +250,44 @@ const outputRegister = function(){
 		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
 		onComplete: function(barcode, qty) {
 			let matchBar = false;
-			//barcode = barcode.toUpperCase();
+			barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
+			
+			barcode = "4111205162023030616130201680000000041580007";
+			
+			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
+			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
+			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
+			//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
+			//⑤ 기판폭 : 3자리
+			//⑥ SEQ No : 4자리
+			let addRow = grid._flexCv.addNew();
 
-
-
+			addRow.st08Company = barcode.substring(0, 11);
+			addRow.st08Factory = barcode.substring(11, 10);
+			addRow.st08Dat = barcode.substring(11, 21);
+			addRow.st08Code = barcode.substring(0, 11);
+			addRow.st08LotSeq = barcode.substring(39, 43);
+			addRow.st08Lot = barcode.substring(21, 27);
+			addRow.st08Gbn = 'ER';
+			addRow.st08Qty = 1;
+			addRow.st08Stok = '03';
+			addRow.st08Dist = '0301';
+			
+			//addRow.st08Pgbn = deadOnArrival.cm08Name; //상세품목
+			
+			/*addRow.st08Unt = deadOnArrival.cm08Name;
+			addRow.st08Rmk = deadOnArrival.cm08Name;
+			addRow.st08Stok = deadOnArrival.cm08Name;
+			addRow.st08Indte = deadOnArrival.cm08Name;
+			addRow.st08Empno = deadOnArrival.cm08Name;
+			addRow.st08Dist = deadOnArrival.cm08Name;*/
+			addRow.st08Qrcode = barcode;
+			
+			console.log(addRow);
+			
+			grid._flexCv.commitNew();
 
 			/*if(barcode.substring(0, 3) == "3N1"){
 
@@ -383,6 +425,6 @@ const outputRegister = function(){
 
 
 $(()=>{
-    outputRegister.init();
+    lotFault.init();
 
 });

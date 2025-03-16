@@ -121,14 +121,6 @@ public class JwtTokenProvider {
 						.getBody()
 						.get("empName").toString();
 		
-		System.out.println(" #>>>>>>>>>> " + userId);
-		System.out.println(" #>>>>>>>>>> " + company);
-		System.out.println(" #>>>>>>>>>> " + companyName);
-		System.out.println(" >>>>>>>>>>> " + factory);
-		System.out.println(" >>>>>>>>>>> " + factoryName);
-		System.out.println(" >>>>>>>>>>> " + empNo);
-		System.out.println(" >>>>>>>>>>> " + empName);
-
 		userInfo.setUserId(userId);
 		userInfo.setCompany(company);
 		userInfo.setCompanyName(companyName);
