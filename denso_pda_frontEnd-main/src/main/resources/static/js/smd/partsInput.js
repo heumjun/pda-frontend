@@ -30,12 +30,12 @@ const partsInput = function(){
 					}
 				})
 			},
-            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
-            {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center'},
+            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'		,isReadOnly: true},
+            {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center' 	,isReadOnly: true},
 			{binding:'st02Ipqty'	,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-			{binding:'st02Status'	,header:'상태'		,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},
-            {binding:'st02Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'},
-			{binding:'st02Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'},
+			{binding:'st02Status'	,header:'상태'		,width:130	,dataType:'Number'	,align:'center'		,isReadOnly:true},
+            {binding:'st02Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
+			{binding:'st02Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
 
 			{binding:'st02Lot'		,header: 'LOT번호'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02LotSeq'	,header: 'LOT SEQ'	,width: 90	,align:'center'		,dataType:'String'	,visible:false},
