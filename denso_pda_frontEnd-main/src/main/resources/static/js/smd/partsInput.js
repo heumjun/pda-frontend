@@ -9,8 +9,22 @@ import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msg
 import * as commonFunc from "../common/common.js";
 
 const partsInput = function(){
+	const getCompMfList = () => {
+		let params = {
+	        uri : "partsInput/partsInput/getCompMfList",
+	        cm08Smd : 'Y',
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["compMfList"];
+	};
 
     let grid  = new GridFactory('#grid');
+	let compMf = input.comboBox('#compMf', getCompMfList(), 'cm08Code','cm08Name');
+	let compMfQty = input.number('#compMfQty',1,0,999999,'G10');
+
     /**
      * 그리드 초기화
      */
@@ -50,7 +64,7 @@ const partsInput = function(){
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(550);
+        grid.setDynamicHeight(450);
         //체크박스 컬럼 생성
         //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
@@ -207,6 +221,8 @@ const partsInput = function(){
 
 			let params = {
                 uri: `partsInput/partsInput`,
+				compMfCode: compMf.selectedValue,
+				compMfQty: compMfQty.value,
                 insertList: insertList
             };
 
@@ -226,7 +242,7 @@ const partsInput = function(){
      * 버튼,input박스 등 모든 이벤트관리
      */
     const handleEvent = () => {
-
+		compMfQty.value = 24;
         gridInit();
 
 		$('#btnSave').on('click', saveOutput);
