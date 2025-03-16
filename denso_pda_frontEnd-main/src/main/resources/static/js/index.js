@@ -79,8 +79,8 @@ const index = function(){
 	
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
-		/*timeBeforeScanTest: 50, // 다음스캔까지 딜레이
-	    startChar: [16], // 접두사 문자(OPL6845R)
+		timeBeforeScanTest: 50, // 다음스캔까지 딜레이
+	    /*startChar: [16], // 접두사 문자(OPL6845R)
 	    endChar: [9, 13], // 키이벤트 감지 유니코드 13(엔터키)
 	    avgTimeByChar: 40, // 스캔시 40ms 이내로 읽지 못하면 감지 안함*/
 	    onComplete: function(barcode, qty) {
@@ -97,15 +97,15 @@ const index = function(){
 			form.attr("action","view");
 			form.attr("target","_self");
 			
-			form.append($('<input/>', {type: 'hidden', name: 'view', value:'restore/restore' }));
+			/*form.append($('<input/>', {type: 'hidden', name: 'view', value:'restore/restore' }));
 			form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'restore/restore' }));
 			form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
 			form.append($('<input/>', {type: 'hidden', name: 'st10No', value: "2025021900001" }));
 			form.appendTo('body');
-			form.submit();
+			form.submit();*/
 			
 			
-			/*if (linkType == 'PU') {
+			if (linkType == 'PU') {
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousing' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousing' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고 처리' }));
@@ -126,7 +126,7 @@ const index = function(){
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'restore/restore' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'restore/restore' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
-				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: "2025021900001" }));
+				form.append($('<input/>', {type: 'hidden', name: 'st10No', value: codeData }));
 			} else if (linkType == 'RT') { //RETURN 반품
 													
 			} else  {
@@ -137,7 +137,7 @@ const index = function(){
 			}
 			
 			form.appendTo('body');
-			form.submit();*/
+			form.submit();
 			
 	    },
 		onerror : function (barcode, qty) {

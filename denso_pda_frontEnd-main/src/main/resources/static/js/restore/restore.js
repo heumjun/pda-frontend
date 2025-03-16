@@ -31,18 +31,18 @@ const restore = function(){
 					}
 				})
 			},*/
+            {binding:'st11Code'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
             {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
             {binding:'st11Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'},
-			{binding:'st11Qty'		,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,visible:false},
+			{binding:'st11Qty'		,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput},
 			
-			{binding:'st02Qty'		,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
-			
+			{binding:'st02Qty'		,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true,visible:true},
             {binding:'st11Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	},
 			{binding:'st11Dist'		,header:'구역'	,width:150	,dataType:'String'	,align:'center'	},
 			
 			{binding:'st11Lot'		,header:'lot'	,width:150	,dataType:'String'	,align:'center',visible:false	},
 			{binding:'st11No'		,header:'반납요청서상세번호', width:150,align:'center', dataType:'String', maxLength:18, visible:false},
-            {binding:'st11LotSeq'	,header:'LOT시퀀스', width:150,align:'center', dataType:'String', maxLength:12, visible:false},
+            {binding:'st11LotSeq'	,header:'LOT시퀀스', width:150,align:'center', dataType:'String', maxLength:12, visible:true},
             {binding:'st02Dat'		,header:'입고일자', width:100, align:'center', dataType:'String', visible:false},
             {binding:'st02Seq'		,header:'입고순번', width:100, align:'center', dataType:'String', visible:false},
             {binding:'st11Seq'		,header:'상세순번', width:100, align:'center', dataType:'Number', visible:false},
@@ -87,10 +87,10 @@ const restore = function(){
 			let dit_pattern = RegExp(/^[0-9|\*]/); // 숫자
                 
             switch (prop) {
-                case 'st02Qty':
-                    if(wijmo.isNullOrWhiteSpace(item.st02Qty)) return '[수량]은 필수 입력 항목입니다.';
-					if(item.st02Qty <= 0) return '[수량]은 0보다 작을 수 없습니다.';
-					if(!dit_pattern.test(item.st02Qty)) return "[수량]은 숫자 만 입력이 가능합니다.";
+                case 'st11Qty':
+                    if(wijmo.isNullOrWhiteSpace(item.st11Qty)) return '[수량]은 필수 입력 항목입니다.';
+					if(item.st11Qty <= 0) return '[수량]은 0보다 작을 수 없습니다.';
+					if(!dit_pattern.test(item.st11Qty)) return "[수량]은 숫자 만 입력이 가능합니다.";
                     break;
                 case 'st11Stok':
                     if(wijmo.isNullOrWhiteSpace(item.st11Stok)) return '[창고]는 필수 입력 항목입니다.';
@@ -182,7 +182,7 @@ const restore = function(){
 			}
 
         } catch(error) {
-            //alertError('오류', error);
+            alertError('오류', error);
             return;
         }
 
@@ -248,64 +248,126 @@ const restore = function(){
 	
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
-		/*timeBeforeScanTest: 40, // wait for the next character for upto 200ms
+		timeBeforeScanTest: 40, // wait for the next character for upto 200ms
 		startChar: [16, 45, 189], // Prefix character for the cabled scanner (OPL6845R)
-		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
+		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)
 		timeBeforeScanTest: 200, // 다음스캔까지 딜레이
-		onComplete: function(barcode, qty){
+		onComplete: function(barcode, qty) {
 
 			let matchBar = false;
-			//barcode = barcode.toUpperCase();
-			// 길이는 추후 변경될 수도 있음
-			if(barcode.length == 17) {
-
-				grid._flexGrid.rows.some((row, index, array)=>{
+			barcode = barcode.toUpperCase();
+			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
+			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
+			if(barcode.substring(0, 3) == "3N1") {
+				
+				var beforeBar = barcode;
+	            // 트레스 라벨 앞부분 짜르기
+	            barcode = barcode.replaceAll("3N1", "");
+	            // 트레스 라벨을 공백으로 자름
+	            barcode = barcode.split(" ");
+	            // 품번 가져오기
+	            var code = barcode[0];
+				
+				grid._flexGrid.rows.some( (row, index, array) => {
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
-
-						// 납품확인서의 LOT번호와 다른 LOT번호를 찍은 경우에 경고메시지 및 입력이 안되도록 막아줘야함
-						if(row.dataItem.st02Lot == barcode.substring(0, 13)){
-							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
-								// 리딩 시 여기 if문 안들어오면 일치하는 품번이 존재하지 않음.
-								// match가 되었을 경우 true
+						// 로우에 있는 품목코드와 바코드의 품목코드, 로우에 있는 품목구분과 바코드의 품목구분 비교
+						// QR코드가 비어있느 항목에 값이 들어가도록 설정
+						
+						console.log(row.dataItem.st11Code);
+						console.log(code);
+						
+						if(row.dataItem.st11Code == code) {
+							if(wijmo.isNullOrWhiteSpace(row.dataItem.st11Qrcode) || wijmo.isUndefined(row.dataItem.st11Qrcode)){
 								matchBar = true;
-								// 바코드 값들어가는 경우 select값 true로 변경
-								//grid._flexGrid.setCellData(index,'select',true);
-								
-								// 중복체크가 되어야한다.
+								//grid._flexGrid.setCellData(row.index, 'select', true);
+
+								// 중복체크 기능 필요
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
-									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st02Qrcode'))){
-										if(barcode == grid._flexGrid.getCellData(i,'st02Qrcode')){
-											grid._flexGrid.setCellData(index, 'st02Qrcode', '');
-											alertWarning('작업 불가','QR코드는 중복될 수 없습니다.');
+									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'st11Qrcode'))){
+										if(beforeBar == grid._flexGrid.getCellData(i, 'st11Qrcode')){
+											grid._flexGrid.setCellData(index, 'st11Qrcode', "");
+											alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 											return ;
 										}
 									}
 								}
-
-								// 값 넣어주기
-								grid._flexGrid.setCellData(index, 'st02Qrcode', barcode);
+								
+								var lot = barcode[3];
+								var lotSeq = barcode[2];
+								
+								grid._flexGrid.setCellData(index, 'st11Lot', lot);
+								grid._flexGrid.setCellData(index, 'st11LotSeq', lotSeq);
+								grid._flexGrid.setCellData(index, 'st11Qrcode', beforeBar);
+								// 창고, 구역 가져와서 넣어주고 return true 해야한다.
+								//getStokDistInfo(index, code, lot, lotSeq);
 								return true;
 							}
 						}
-
-					} else {
-						alertWarning("작업불가", "납품확인서를 선택해주세요");
-						return ;
 					}
 				});
 
 				// 바코드의 lot와 row의 lot가 매치가 되지 않았을 경우
-				if(matchBar == false){
+				if(matchBar == false) {
 					alertWarning("작업불가", "리딩한 바코드와 일치하는 LOT번호가 존재하지 않습니다.")
 					return ;
 				}
-
+			// SCM 라벨을 조회 시 17자리
 			} else {
-				alertWarning('작업 불가', 'QR코드의 길이가 맞지않습니다.', 'warning');
-				return;
-			}
+				// SCM QR코드 값으로 입고테이블을 검색해서 입고 데이터를 가져와서 뿌려줘야함.
+				let params ={
+					uri :"warehousing/warehousing/stock/getInputInfo",
+					barcode : barcode
+				};
 
-			
+				ajax.getAjax(params, false).then(data => {	
+					
+					let inputInfo = data["inputInfo"];
+					
+					console.log(inputInfo);
+
+					if(inputInfo != null) {
+						grid._flexGrid.rows.some((row,index,array)=>{
+							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
+								if(row.dataItem.st11Code == inputInfo.st02Code && barcode == inputInfo.st02Qrcode){
+									if(wijmo.isNullOrWhiteSpace(row.dataItem.st11Qrcode) || wijmo.isUndefined(row.dataItem.st11Qrcode)){
+										matchBar = true;
+										for(var i=0; i<grid._flexGrid.rows.length; i++){
+											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st11Qrcode'))){
+												if(barcode == grid._flexGrid.getCellData(i,'st11Qrcode')){
+													grid._flexGrid.setCellData(index, 'st11Qrcode', '');
+													alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
+													return;
+												}
+											}
+										}
+										
+										grid._flexGrid.setCellData(index, 'st11Lot', inputInfo.st02Lot);
+										grid._flexGrid.setCellData(index, 'st11LotSeq', inputInfo.st02LotSeq);
+										grid._flexGrid.setCellData(index, 'st11Qrcode', inputInfo.st02Qrcode);
+										grid._flexGrid.setCellData(index, 'st11Stok', inputInfo.st02Stok);
+										grid._flexGrid.setCellData(index, 'st11Dist', inputInfo.st02Dist);
+										
+										return true;
+									}
+								}
+							}
+						})
+						
+						// 바코드의 lot와 row의 lot가 매치가 되지 않았을 경우
+					  	if(matchBar == false){
+							 alertWarning("작업불가", "리딩한 바코드와 일치하는 LOT번호가 존재하지 않습니다.");
+						 	return ;
+					  	}
+						
+					// 품번과 일치하지 않는 경우
+					} else {
+						alertWarning('작업 불가', '리딩한 QR코드의 LOT가 존재하지않거나\n 재고가 존재하지 않습니다.');
+						return ;
+					}
+
+
+				});
+			}
 		}
 	});
 

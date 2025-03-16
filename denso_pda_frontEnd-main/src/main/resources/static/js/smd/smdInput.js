@@ -20,12 +20,12 @@ const smdInput = function(){
         let columnsDefinition = [
 			{binding: 'mf14Company'	,header:'회사'			,width:100		,align:'center'		,dataType:'String'		,visible:false},
 			{binding: 'mf14Factory'	,header:'공장'			,width:100		,align:'center'		,dataType:'String'		,visible:false},
-			{binding: 'mf14No'		,header:'출고요청완료상세번호'	,width:150		,align:'center'		,dataType:'String'		,isReadOnly:true},
-			{binding: 'mf14Code'	,header:'품번'			,width:120		,align:'center'		,dataType:'String'		,isReadOnly:true},
-			{binding: 'cm08Dgbn'	,header:'라벨정보구분'		,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true	,visible:false},
+			{binding: 'mf14No'		,header:'출고요청완료상세번호'	,width:150		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
+			{binding: 'mf14Code'	,header:'품번'			,width:120		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
+			{binding: 'cm08Dgbn'	,header:'라벨정보구분'		,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'cm08Name'	,header:'품명'			,width:200		,align:'center'		,dataType:'String'		,isReadOnly:true},
-			{binding: 'cm08Gbn'		,header:'품목구분'			,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true	},
-			{binding: 'mf14Lot'		,header:'LOT번호'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true},
+			{binding: 'cm08Gbn'		,header:'품목구분'			,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
+			{binding: 'mf14Lot'		,header:'LOT번호'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true		,visible:false},
 			{binding: 'mf14Qrcode'	,header:'QR코드'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false},
 			{binding: 'mf14Qty'		,header:'출고요청수량'		,width:100		,align:'center'		,dataType:'Number'		,isRequired:false},
 			{binding: 'mf14Unt'		,header:'출고단위'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,visible:false},
@@ -264,7 +264,7 @@ const smdInput = function(){
 		$('#btnSave').on('click', saveSmdInput);
 		$('#btnBack').on('click', goBack);
 
-		$("#btnTest1").on('click',function(){
+		/*$("#btnTest1").on('click',function(){
 			bacodeSearch("CO25031400001-001")
 		});
 		$("#btnTest2").on('click',function(){
@@ -272,7 +272,7 @@ const smdInput = function(){
 		});
 		$("#btnTest3").on('click',function(){
 			bacodeSearch("QQ25031000001-004")
-		});
+		});*/
     }
 
 	// 스캐너 값 얻기
@@ -286,10 +286,7 @@ const smdInput = function(){
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
 
-
-
-
-			/*if(barcode.substring(0, 3) == "3N1"){
+			if(barcode.substring(0, 3) == "3N1"){
 
 				var beforeBar = barcode;
 	            // 트레스 라벨 앞부분 짜르기
@@ -304,15 +301,15 @@ const smdInput = function(){
 						// 로우에 있는 품목코드와 바코드의 품목코드, 로우에 있는 품목구분과 바코드의 품목구분 비교
 						// QR코드가 비어있느 항목에 값이 들어가도록 설정
 						if(row.dataItem.cm08Code == code) {
-							if(wijmo.isNullOrWhiteSpace(row.dataItem.st03Qr) || wijmo.isUndefined(row.dataItem.st03Qr)){
+							if(wijmo.isNullOrWhiteSpace(row.dataItem.mf14Qrcode) || wijmo.isUndefined(row.dataItem.mf14Qrcode)){
 								matchBar = true;
 								//grid._flexGrid.setCellData(row.index, 'select', true);
 
 								// 중복체크 기능 필요
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
-									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'st03Qr'))){
-										if(beforeBar == grid._flexGrid.getCellData(i, 'st03Qr')){
-											grid._flexGrid.setCellData(index, 'st03Qr', "");
+									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'mf14Qrcode'))){
+										if(beforeBar == grid._flexGrid.getCellData(i, 'mf14Qrcode')){
+											grid._flexGrid.setCellData(index, 'mf14Qrcode', "");
 											alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 											return ;
 										}
@@ -322,9 +319,9 @@ const smdInput = function(){
 								var lot = barcode[3];
 								var lotSeq = barcode[2];
 
-								grid._flexGrid.setCellData(index, 'st03Lot', lot);
-								grid._flexGrid.setCellData(index, 'st03LotSeq', lotSeq);
-								grid._flexGrid.setCellData(index, 'st03Qr', beforeBar);
+								grid._flexGrid.setCellData(index, 'mf14Lot', lot);
+								grid._flexGrid.setCellData(index, 'mf14LotSeq', lotSeq);
+								grid._flexGrid.setCellData(index, 'mf14Qrcode', beforeBar);
 								// 창고, 구역 가져와서 넣어주고 return true 해야한다.
 								getStokDistInfo(index, code, lot, lotSeq);
 								return true;
@@ -354,23 +351,23 @@ const smdInput = function(){
 						grid._flexGrid.rows.some((row,index,array)=>{
 							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
 								if(row.dataItem.cm08Code == inputInfo.st02Code && barcode == inputInfo.st02Qrcode){
-									if(wijmo.isNullOrWhiteSpace(row.dataItem.st03Qr) || wijmo.isUndefined(row.dataItem.st03Qr)){
+									if(wijmo.isNullOrWhiteSpace(row.dataItem.mf14Qrcode) || wijmo.isUndefined(row.dataItem.mf14Qrcode)){
 										matchBar = true;
 										for(var i=0; i<grid._flexGrid.rows.length; i++){
-											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st03Qr'))){
-												if(barcode == grid._flexGrid.getCellData(i,'st03Qr')){
-													grid._flexGrid.setCellData(index, 'st03Qr', '');
+											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'mf14Qrcode'))){
+												if(barcode == grid._flexGrid.getCellData(i,'mf14Qrcode')){
+													grid._flexGrid.setCellData(index, 'mf14Qrcode', '');
 													alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 													return;
 												}
 											}
 										}
 
-										grid._flexGrid.setCellData(index, 'st03Lot', inputInfo.st02Lot);
-										grid._flexGrid.setCellData(index, 'st03LotSeq', inputInfo.st02LotSeq);
-										grid._flexGrid.setCellData(index, 'st03Qr', inputInfo.st02Qrcode);
-										grid._flexGrid.setCellData(index, 'st03Stok', inputInfo.st02Stok);
-										grid._flexGrid.setCellData(index, 'st03Dist', inputInfo.st02Dist);
+										grid._flexGrid.setCellData(index, 'mf14Lot', inputInfo.st02Lot);
+										grid._flexGrid.setCellData(index, 'mf14LotSeq', inputInfo.st02LotSeq);
+										grid._flexGrid.setCellData(index, 'mf14Qrcode', inputInfo.st02Qrcode);
+										grid._flexGrid.setCellData(index, 'mf14Stok', inputInfo.st02Stok);
+										grid._flexGrid.setCellData(index, 'mf14Dist', inputInfo.st02Dist);
 
 										return true;
 									}
@@ -392,7 +389,7 @@ const smdInput = function(){
 
 
 				});
-			}*/
+			}
 		}
 	});
 
