@@ -160,6 +160,12 @@ const partsInput = function(){
 			addRow.st02LotSeq = partsInputRequestInfo.st02LotSeq;
 			addRow.st02Code = partsInputRequestInfo.st02Code;
 
+			addRow.st02Gbn = partsInputRequestInfo.st02Gbn;
+			addRow.st02Ipunt = partsInputRequestInfo.st02Ipunt;
+			addRow.st02Line = partsInputRequestInfo.st02Line;
+			addRow.st02Moq = partsInputRequestInfo.st02Moq;
+			addRow.st02Cus = partsInputRequestInfo.st02Cus;
+
 			grid._flexCv.commitNew();
 
         } catch(error) {
