@@ -59,22 +59,22 @@
           <div class="row g-3">
             <div class="col-lg-12">
               <form id="submitForm" onsubmit="return false">
-                <!-- <div class="card mb-2">
+                <div class="card mb-2">
                 	<div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
                 	<div class="card-body card-search position-relative">
                 		<div class="row">
-						    <label for="relReqNo" class="col-5 col-form-label fw-bold">출고요청서번호</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext fw-bold text-dark" id="st03OutputNo" value="">
+						    <label for="st08Line" class="col-3 col-form-label fw-bold">라인</label>
+						    <div class="col-9">
+						      <div id="st08Line"></div>
 						    </div>
 						</div>
 						<div class="row">
-						    <label for="relReqDt" class="col-5 col-form-label">출고요청일자</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="st03Dat" value="">
+						    <label for="st08EquipCode" class="col-3 col-form-label">설비</label>
+						    <div class="col-9">
+						      <div id="st08EquipCode"></div>
 						    </div>
 						</div>
-						<div class="row">
+						<!-- <div class="row">
 						    <label for="relReqTm" class="col-5 col-form-label">출고요청시간</label>
 						    <div class="col-7">
 						      <input type="text" readonly class="form-control-plaintext" id="st03DatTime" value="">
@@ -92,9 +92,9 @@
 						      <input type="text" readonly class="form-control-plaintext" id="st03Line" value="">
 						      <input type="hidden" readonly class="form-control-plaintext" id="st03Linena" value="">
 						    </div>
-						</div>
+						</div> -->
                 	</div>
-                </div> -->
+                </div>
               </form>
             </div>
           </div>
@@ -198,7 +198,7 @@
 				<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
 					<button class="btn btn-falcon-default btn-sm mt-1" id="btnSave" type="button" style="width: 11rem; font-size: 1.2rem;">
 						<span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
-						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">이상 등록</span>
+						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">불량 등록</span>
 					</button>
 				</div>
 			</div>

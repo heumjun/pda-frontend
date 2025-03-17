@@ -27,16 +27,17 @@ const fault = function(){
 					}
 				})
 			},
-            {binding:'st08Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
-            {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center'},
-			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-            {binding:'st08Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'},
-			{binding:'st08Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'},
+            {binding:'st08Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
+            {binding:'st08Name'		,header:'품목명'		,width:200	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
+			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
+            {binding:'st08Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'	,visible:false},
+			{binding:'st08Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'	,visible:false},
 			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st08Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st08Seq'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st08Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,isReadOnly: true},
+			{binding:'st08Pgbn'		,header:'품목구분'		,width:90	,align:'center'		,dataType:'String'	,visible: false},
         ];
 		
         //그리드 컬럼셋팅
@@ -122,55 +123,54 @@ const fault = function(){
 	    if(list === undefined) return null;
 	    return list["districtList"];
 	}
-
+	
 	// 바코드 스캔시 품목 검사
 	const bacodeSearch = async(barcode) => {
 
         grid.disableAutoRows();
 		
+		//① ASSY품번 10자리 + 1자리(층별용) : 11자리
+		//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
+		//③ lot내 순번(3자리)/LOT 수(3자리):6자리
+		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
+		//⑤ 기판폭 : 3자리
+		//⑥ SEQ No : 4자리
+		var barcode = "411120516102503161000 020168 000000004158007";
+		
+		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
+		if(temp.length != 0){
+			alertWarning('중복 항목', `중복된 항목입니다.`);
+			return;
+		}
+		
 		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
-       /* let params = {
-            uri: `deadOnArrival/deadOnArrival/getDeadOnArrivalInfo`,
-			st02Qrcode : bacode
+        let params = {
+            uri: `fault/fault`,
+			st08Qrcode : barcode
         }
-        params = {...params,...ajax.getParams('searchForm')}*/
+        params = {...params,...ajax.getParams('searchForm')}
 
         try {
-            //let {deadOnArrival} = await ajax.getAjax(params, true);
+            let {faultInfo} = await ajax.getAjax(params, true);
 
-			/*let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === deadOnArrival.st08Qrcode ));
-			if(temp.length != 0){
-				alertWarning('중복 항목', `중복된 항목입니다.`);
-				return;
-			}*/
-
-			//var barcode = "4111205162025031712490201680000000041580001";
-			//var barcode = "4111205162023030616130201680000000041580007";
-			//var barcode = "1032702440023030616130201680000000041580007";
-			
-			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
-			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
-			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
-			//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
-			//⑤ 기판폭 : 3자리
-			//⑥ SEQ No : 4자리
-			let addRow = grid._flexCv.addNew();
-			
-			
-			//alert(barcode.substring(39, 43));
-			//addRow.st08Company = barcode.substring(0, 11);
-			//addRow.st08Factory = barcode.substring(11, 10);
-			addRow.st08Dat = barcode.substring(11, 21);
-			addRow.st08Code = barcode.substring(0, 5) + "-" + barcode.substring(5, 10);
-			addRow.st08LotSeq = barcode.substring(39, 43);
-			addRow.st08Lot = barcode.substring(21, 27);
-			addRow.st08Gbn = 'ER';
-			addRow.st08Qty = 1;
-			addRow.st08Stok = '03';
-			addRow.st08Dist = '0301';
-			addRow.st08Qrcode = barcode;
-			
-			grid._flexCv.commitNew();
+			if ( faultInfo != null ) {
+				 
+				let addRow = grid._flexCv.addNew();
+				
+				addRow.st08Dat = barcode.substring(11, 21);
+				addRow.st08Code = faultInfo.st08Code;
+				addRow.st08Name = faultInfo.st08Name;
+				addRow.st08LotSeq = faultInfo.st08LotSeq;
+				addRow.st08Lot = faultInfo.st08Lot;
+				addRow.st08Gbn = 'ER';
+				addRow.st08Pgbn = faultInfo.st08Pgbn;
+				addRow.st08Qty = 1;
+				addRow.st08Qrcode = barcode;
+				
+				grid._flexCv.commitNew();
+			} else {
+				alertWarning('등록불가','PCB 입고 품목에 없습니다.');	
+			}
 
         } catch(error) {
             console.debug(error);
@@ -191,7 +191,7 @@ const fault = function(){
 		form.submit();
 	}
 
-	const saveLotFault = () => {
+	const saveFault = () => {
 
 		grid.disableAutoRows();
 
@@ -206,7 +206,7 @@ const fault = function(){
             return;
         }
 
-		confirm("이상처리을 등록하시겠습니까?", "이상처리 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("불량처리을 등록하시겠습니까?", "불량처리 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
 			let params = {
                 uri: `fault/fault`,
@@ -217,7 +217,7 @@ const fault = function(){
 
         	ajax.postAjax(params, true).then(async (data)=>{
 				$("#btnSave").hide();
-	            pushMsg('이상처리가 등록되었습니다.');
+	            pushMsg('불량처리가 등록되었습니다.');
             }).catch((e)=>{
                 //console.debug(e);
             });
@@ -230,9 +230,9 @@ const fault = function(){
     const handleEvent = () => {
 
         gridInit();
-		//bacodeSearch();
+		bacodeSearch();
 
-		$('#btnSave').on('click', saveLotFault);
+		$('#btnSave').on('click', saveFault);
 		$('#btnBack').on('click', goBack);
     }
 
