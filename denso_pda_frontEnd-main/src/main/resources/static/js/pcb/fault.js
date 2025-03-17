@@ -31,8 +31,6 @@ const fault = function(){
             {binding:'st08Name'		,header:'품목명'		,width:200	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
 			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
-            {binding:'st08Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'	,visible:false},
-			{binding:'st08Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'	,visible:false},
 			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
@@ -51,10 +49,10 @@ const fault = function(){
 
 		let st08Gbn = getCommonCodeList('E001');
 		grid._flexGrid.getColumn('st08Gbn').dataMap = new wijmo.grid.DataMap(st08Gbn, 'cm05Value', 'cm05Name');
-		let st08Stok = getWarehouseCodeList();
+		/*let st08Stok = getWarehouseCodeList();
         grid._flexGrid.getColumn('st08Stok').dataMap = new wijmo.grid.DataMap(st08Stok, 'cm15Code', 'cm15Name');
 		let st08Dist = getDistrictCodeList();
-		grid._flexGrid.getColumn('st08Dist').dataMap = new wijmo.grid.DataMap(st08Dist, 'cm16Code', 'cm16Name');
+		grid._flexGrid.getColumn('st08Dist').dataMap = new wijmo.grid.DataMap(st08Dist, 'cm16Code', 'cm16Name');*/
 
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
@@ -93,39 +91,8 @@ const fault = function(){
 
 	}
 
-	/**
-	 * 창고조회
-	 */
-	const getWarehouseCodeList = (code) => {
-	    let params = {
-	        uri : "criteria/warehouse",
-	        cm15Code : code,
-	        cm15Lock : 'N'
-	    };
-
-	    let list = ajax.getAjaxSync(params);
-
-	    if(list === undefined) return null;
-	    return list["warehouseList"];
-	}
-
-	/**
-	 * 구역
-	 */
-	const getDistrictCodeList = (code) => {
-	    let params = {
-	        uri : "criteria/district",
-	        cm16Code : code,
-	    };
-
-	    let list = ajax.getAjaxSync(params);
-
-	    if(list === undefined) return null;
-	    return list["districtList"];
-	}
-	
 	// 바코드 스캔시 품목 검사
-	const bacodeSearch = async(barcode) => {
+	const barcodeSearch = async(barcode) => {
 
         grid.disableAutoRows();
 		
@@ -135,7 +102,7 @@ const fault = function(){
 		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
 		//⑤ 기판폭 : 3자리
 		//⑥ SEQ No : 4자리
-		var barcode = "411120516102503161000 020168 000000004158007";
+		//var barcode = "411120516102503161000 020168 000000004158007";
 		
 		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
 		if(temp.length != 0){
@@ -230,7 +197,7 @@ const fault = function(){
     const handleEvent = () => {
 
         gridInit();
-		bacodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', saveFault);
 		$('#btnBack').on('click', goBack);
@@ -258,44 +225,6 @@ const fault = function(){
 			if ( matchBar ) {
 				bacodeSearch(barcode);	
 			}
-				
-			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
-			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
-			
-			//barcode = "4111205162023030616130201680000000041580007";
-			
-			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
-			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
-			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
-			//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
-			//⑤ 기판폭 : 3자리
-			//⑥ SEQ No : 4자리
-			/*let addRow = grid._flexCv.addNew();
-
-			addRow.st08Company = barcode.substring(0, 11);
-			addRow.st08Factory = barcode.substring(11, 10);
-			addRow.st08Dat = barcode.substring(11, 21);
-			addRow.st08Code = barcode.substring(0, 11);
-			addRow.st08LotSeq = barcode.substring(39, 43);
-			addRow.st08Lot = barcode.substring(21, 27);
-			addRow.st08Gbn = 'ER';
-			addRow.st08Qty = 1;
-			addRow.st08Stok = '03';
-			addRow.st08Dist = '0301';*/
-			
-			//addRow.st08Pgbn = deadOnArrival.cm08Name; //상세품목
-			
-			/*addRow.st08Unt = deadOnArrival.cm08Name;
-			addRow.st08Rmk = deadOnArrival.cm08Name;
-			addRow.st08Stok = deadOnArrival.cm08Name;
-			addRow.st08Indte = deadOnArrival.cm08Name;
-			addRow.st08Empno = deadOnArrival.cm08Name;
-			addRow.st08Dist = deadOnArrival.cm08Name;*/
-			/*addRow.st08Qrcode = barcode;
-			
-			console.log(addRow);
-			
-			grid._flexCv.commitNew();*/
 
 			/*if(barcode.substring(0, 3) == "3N1"){
 

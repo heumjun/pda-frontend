@@ -7,7 +7,30 @@ import { pushMsg, alertWarning, confirm } from "../common/msgBox.js";
 
 const anomaly = function(){
 
+	const getComboLineList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboLineList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboLineList"];
+	};
+	const getComboEquipCodeList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboEquipCodeList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboEquipCodeList"];
+	};
+	
     let grid  = new GridFactory('#grid');
+	let st09Line = input.comboBox('#st09Line', getComboLineList(), 'lineCode','lineNm');
+	let st09EquipCode = input.comboBox('#st09EquipCode', getComboEquipCodeList(), 'cm07Code','cm07Name');
     /**
      * 그리드 초기화
      */
@@ -17,7 +40,7 @@ const anomaly = function(){
         let columnsDefinition = [
 			{binding:'delete'	,header: '삭제'	,width: 80
 				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
-					text: '<b>삭제</b>'
+					text: '<b style="color:red;">삭제</b>'
 					,click: (e, ctx) => {
 						let view = grid._flexCv;
 						let rowIndex = ctx.row.index; // rowIndex 가져오기
@@ -27,34 +50,26 @@ const anomaly = function(){
 					}
 				})
 			},
-            {binding:'st08Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
-            {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center'},
-			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-            {binding:'st08Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'},
-			{binding:'st08Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'},
-			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:true},
-			{binding:'st08LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:true},
-			{binding:'st08Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,visible:true},
-			{binding:'st08Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:true},
-			{binding:'st08Seq'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:true},
+			{binding:'st09Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
+            {binding:'st09Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st09Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'},
+            {binding:'st09Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
+			{binding:'st09Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
+			{binding:'st09Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st09LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st09Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
         ];
 		
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
         grid.setDynamicHeight(550);
-        //체크박스 컬럼 생성
-        //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
         grid.optionPanel('#grid-option');
 
-		let st08Gbn = getCommonCodeList('E001');
-		grid._flexGrid.getColumn('st08Gbn').dataMap = new wijmo.grid.DataMap(st08Gbn, 'cm05Value', 'cm05Name');
-		let st08Stok = getWarehouseCodeList();
-        grid._flexGrid.getColumn('st08Stok').dataMap = new wijmo.grid.DataMap(st08Stok, 'cm15Code', 'cm15Name');
-		let st08Dist = getDistrictCodeList();
-		grid._flexGrid.getColumn('st08Dist').dataMap = new wijmo.grid.DataMap(st08Dist, 'cm16Code', 'cm16Name');
-
+		let st09Gbn = getCommonCodeList('AN01');
+		grid._flexGrid.getColumn('st09Gbn').dataMap = new wijmo.grid.DataMap(st09Gbn, 'cm05Value', 'cm05Name');
+		
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
             //셀수정모드 일경우 오류검증 안함 (포커스 이동이 안됨으로)
@@ -92,97 +107,56 @@ const anomaly = function(){
 
 	}
 
-	/**
-	 * 창고조회
-	 */
-	const getWarehouseCodeList = (code) => {
-	    let params = {
-	        uri : "criteria/warehouse",
-	        cm15Code : code,
-	        cm15Lock : 'N'
-	    };
-
-	    let list = ajax.getAjaxSync(params);
-
-	    if(list === undefined) return null;
-	    return list["warehouseList"];
-	}
-
-	/**
-	 * 구역
-	 */
-	const getDistrictCodeList = (code) => {
-	    let params = {
-	        uri : "criteria/district",
-	        cm16Code : code,
-	    };
-
-	    let list = ajax.getAjaxSync(params);
-
-	    if(list === undefined) return null;
-	    return list["districtList"];
-	}
-
 	// 바코드 스캔시 품목 검사
-	const bacodeSearch = async(bacode) => {
+	const barcodeSearch = async(barcode) => {
 
-        grid.disableAutoRows();
+		grid.disableAutoRows();
+		
+		//① ASSY품번 10자리 + 1자리(층별용) : 11자리
+		//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
+		//③ lot내 순번(3자리)/LOT 수(3자리):6자리
+		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
+		//⑤ 기판폭 : 3자리
+		//⑥ SEQ No : 4자리
+		//var barcode = "411120516102503161000 020168 000000004158008";
+		
+		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st09Qrcode === barcode ));
+		if(temp.length != 0) {
+			alertWarning('중복 항목', `중복된 항목입니다.`);
+			return;
+		}
 
-		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
-       /* let params = {
-            uri: `deadOnArrival/deadOnArrival/getDeadOnArrivalInfo`,
-			st02Qrcode : bacode
-        }
-        params = {...params,...ajax.getParams('searchForm')}*/
+		let params = {
+	        uri: `anomaly/anomaly`,
+			st09Qrcode : barcode
+	    }
+	    params = {...params,...ajax.getParams('searchForm')}
 
-        try {
-            //let {deadOnArrival} = await ajax.getAjax(params, true);
+	    try {
+	        let {anomalyInfo} = await ajax.getAjax(params, true);
 
-			/*let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === deadOnArrival.st08Qrcode ));
-			if(temp.length != 0){
-				alertWarning('중복 항목', `중복된 항목입니다.`);
-				return;
-			}*/
+			if ( anomalyInfo != null ) {
+				 
+				let addRow = grid._flexCv.addNew();
+				
+				addRow.st09Dat = barcode.substring(11, 21);
+				addRow.st09Code = anomalyInfo.st09Code;
+				addRow.st09Name = anomalyInfo.st09Name;
+				addRow.st09LotSeq = anomalyInfo.st09LotSeq;
+				addRow.st09Lot = anomalyInfo.st09Lot;
+				addRow.st09Gbn = '0001';
+				addRow.st09Qty = 1;
+				addRow.st09Qrcode = barcode;
+				
+				grid._flexCv.commitNew();
+			} else {
+				alertWarning('등록불가','이상처리 품목 대상이 아닙니다.');	
+			}
 
-			var barcode = "4111205162023030616130201680000000041580007";
-						
-			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
-			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
-			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
-			//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
-			//⑤ 기판폭 : 3자리
-			//⑥ SEQ No : 4자리
-			let addRow = grid._flexCv.addNew();
-						
-			addRow.st08Company = barcode.substring(0, 11);
-			addRow.st08Factory = barcode.substring(11, 10);
-			addRow.st08Dat = barcode.substring(11, 21);
-			addRow.st08Code = barcode.substring(0, 11);
-			addRow.st08LotSeq = barcode.substring(39, 43);
-			addRow.st08Lot = barcode.substring(21, 27);
-			addRow.st08Gbn = 'ER';
-			addRow.st08Qty = 1;
-			addRow.st08Stok = '03';
-			addRow.st08Dist = '0301';
-			
-			//addRow.st08Pgbn = deadOnArrival.cm08Name; //상세품목
-			
-			/*addRow.st08Unt = deadOnArrival.cm08Name;
-			addRow.st08Rmk = deadOnArrival.cm08Name;
-			addRow.st08Stok = deadOnArrival.cm08Name;
-			addRow.st08Indte = deadOnArrival.cm08Name;
-			addRow.st08Empno = deadOnArrival.cm08Name;
-			addRow.st08Dist = deadOnArrival.cm08Name;*/
-			addRow.st08Qrcode = barcode;
-			
-			console.log(addRow);
-			
-			grid._flexCv.commitNew();
-
-        } catch(error) {
-            console.debug(error);
-            return;
-        }
+	    } catch(error) {
+	        console.debug(error);
+	        return;
+	    }
 
     }
 
@@ -217,7 +191,9 @@ const anomaly = function(){
 
 			let params = {
                 uri: `anomaly/anomaly`,
-                insertList: insertList
+                insertList: insertList,
+				st09Line: st09Line.selectedValue,
+				st09EquipCode: st09EquipCode.selectedValue
             };
 
 			params = {...params,...ajax.getParams('#submitForm')};
@@ -237,7 +213,7 @@ const anomaly = function(){
     const handleEvent = () => {
 
         gridInit();
-		bacodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', saveAnomaly);
 		$('#btnBack').on('click', goBack);
@@ -249,45 +225,24 @@ const anomaly = function(){
 		startChar: [16, 45, 189], // Prefix character for the cabled scanner (OPL6845R)
 		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
 		onComplete: function(barcode, qty) {
-			let matchBar = false;
+			
 			barcode = barcode.toUpperCase();
-			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
-			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
+			let matchBar = true;
+			//barcode = barcode.toUpperCase();
 			
-			barcode = "4111205162023030616130201680000000041580007";
+			// 중복체크 기능 필요
+			grid._flexGrid.rows.some((row, index, array) => {
+				if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
+					if(row.dataItem.st09Qrcode == barcode) {
+						alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
+						matchBar = false;
+					}
+				}
+			});
 			
-			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
-			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
-			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
-			//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
-			//⑤ 기판폭 : 3자리
-			//⑥ SEQ No : 4자리
-			let addRow = grid._flexCv.addNew();
-
-			addRow.st08Company = barcode.substring(0, 11);
-			addRow.st08Factory = barcode.substring(11, 10);
-			addRow.st08Dat = barcode.substring(11, 21);
-			addRow.st08Code = barcode.substring(0, 11);
-			addRow.st08LotSeq = barcode.substring(39, 43);
-			addRow.st08Lot = barcode.substring(21, 27);
-			addRow.st08Gbn = 'ER';
-			addRow.st08Qty = 1;
-			addRow.st08Stok = '03';
-			addRow.st08Dist = '0301';
-			
-			//addRow.st08Pgbn = deadOnArrival.cm08Name; //상세품목
-			
-			/*addRow.st08Unt = deadOnArrival.cm08Name;
-			addRow.st08Rmk = deadOnArrival.cm08Name;
-			addRow.st08Stok = deadOnArrival.cm08Name;
-			addRow.st08Indte = deadOnArrival.cm08Name;
-			addRow.st08Empno = deadOnArrival.cm08Name;
-			addRow.st08Dist = deadOnArrival.cm08Name;*/
-			addRow.st08Qrcode = barcode;
-			
-			console.log(addRow);
-			
-			grid._flexCv.commitNew();
+			if ( matchBar ) {
+				barcodeSearch(barcode);	
+			}
 
 			/*if(barcode.substring(0, 3) == "3N1"){
 
