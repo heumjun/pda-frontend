@@ -144,8 +144,10 @@ const fault = function(){
 				return;
 			}*/
 
+			//var barcode = "4111205162025031712490201680000000041580001";
 			//var barcode = "4111205162023030616130201680000000041580007";
-						
+			//var barcode = "1032702440023030616130201680000000041580007";
+			
 			//① ASSY품번 10자리 + 1자리(층별용) : 11자리
 			//② QR CODE 작성일시(YYMMDDHHMM) : 10자리
 			//③ lot내 순번(3자리)/LOT 수(3자리):6자리
@@ -153,11 +155,13 @@ const fault = function(){
 			//⑤ 기판폭 : 3자리
 			//⑥ SEQ No : 4자리
 			let addRow = grid._flexCv.addNew();
-						
-			addRow.st08Company = barcode.substring(0, 11);
-			addRow.st08Factory = barcode.substring(11, 10);
+			
+			
+			//alert(barcode.substring(39, 43));
+			//addRow.st08Company = barcode.substring(0, 11);
+			//addRow.st08Factory = barcode.substring(11, 10);
 			addRow.st08Dat = barcode.substring(11, 21);
-			addRow.st08Code = barcode.substring(0, 11);
+			addRow.st08Code = barcode.substring(0, 5) + "-" + barcode.substring(5, 10);
 			addRow.st08LotSeq = barcode.substring(39, 43);
 			addRow.st08Lot = barcode.substring(21, 27);
 			addRow.st08Gbn = 'ER';
