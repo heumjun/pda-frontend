@@ -11,7 +11,7 @@ import * as commonFunc from "../common/common.js";
 const partsInput = function(){
 	const getCompMfList = () => {
 		let params = {
-	        uri : "smd/partsInput/getCompMfList",
+	        uri : "mfr/partsInput/getCompMfList",
 	        cm08Smd : 'Y',
 	    };
 
@@ -45,20 +45,17 @@ const partsInput = function(){
 				})
 			},
             {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'		,isReadOnly: true},
-            {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center' 	,isReadOnly: true},
-			{binding:'st02Ipqty'	,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-			{binding:'st02Status'	,header:'상태'		,width:130	,dataType:'Number'	,align:'center'		,isReadOnly:true},
-            {binding:'st02Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
-			{binding:'st02Dist'		,header:'구역'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
+            {binding:'st01Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center' 	,isReadOnly: true},
+			{binding:'st01Qty'		,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},
+            {binding:'st01Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
+			{binding:'st01Distric'	,header:'구역'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
 
-			{binding:'st02Lot'		,header: 'LOT번호'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02LotSeq'	,header: 'LOT SEQ'	,width: 90	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Code'		,header: '품목코드'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Gbn'		,header: 'GBN'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Ipunt'	,header: 'IPUNT'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Line'		,header: 'Line'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Moq'		,header: 'Moq'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st02Cus'		,header: 'Cus'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st01Lot'		,header: 'LOT번호'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st01LotSeq'	,header: 'LOT SEQ'	,width: 90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st01Code'		,header: '품목코드'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st01Unt'		,header: 'UNT'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'cm08Cus'		,header: 'CUS'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'cm08Moq'		,header: 'MOQ'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
         ];
 
         //그리드 컬럼셋팅
@@ -70,10 +67,10 @@ const partsInput = function(){
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
         grid.optionPanel('#grid-option');
 
-		let st02Stok = getWarehouseCodeList();
-        grid._flexGrid.getColumn('st02Stok').dataMap = new wijmo.grid.DataMap(st02Stok, 'cm15Code', 'cm15Name');
-		let st02Dist = getDistrictCodeList();
-		grid._flexGrid.getColumn('st02Dist').dataMap = new wijmo.grid.DataMap(st02Dist, 'cm16Code', 'cm16Name');
+		let st01Stok = getWarehouseCodeList();
+        grid._flexGrid.getColumn('st01Stok').dataMap = new wijmo.grid.DataMap(st01Stok, 'cm15Code', 'cm15Name');
+		let st01Distric = getDistrictCodeList();
+		grid._flexGrid.getColumn('st01Distric').dataMap = new wijmo.grid.DataMap(st01Distric, 'cm16Code', 'cm16Name');
 
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
@@ -81,15 +78,15 @@ const partsInput = function(){
             if(grid._flexCv.isEditingItem) return null;
 
 			let sameCode = grid._flexCv.sourceCollection.filter((c) =>
-							( c.st02Company == item.st02Company && c.st02Factory == item.st02Factory && c.st02Code == item.st02Code && c.st02Lot == item.st02Lot && c.st02Qrcode == item.st03Qrcode));
+							( c.st01Company == item.st01Company && c.st01Factory == item.st01Factory && c.st01Code == item.st01Code && c.st01Lot == item.st01Lot && c.st01Qrcode == item.st01Qrcode));
 
             switch (prop) {
-                case 'st02Qrcode':
-                    if(wijmo.isNullOrWhiteSpace(item.st02Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
+                case 'st01Qrcode':
+                    if(wijmo.isNullOrWhiteSpace(item.st01Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
 					if(sameCode.length > 1) return '[QR코드]는 중복될 수 없습니다.';
                     break;
-                case 'st02Ipqty':
-                    if(item.st02Ipqty <= 0) return '[박스수량]은 0보다 커야합니다.';
+                case 'st01Qty':
+                    if(item.st01Qty <= 0) return '[박스수량]은 0보다 커야합니다.';
                     break;
                 default:
                     return null;
@@ -130,33 +127,33 @@ const partsInput = function(){
 	}
 
 	// 바코드 스캔시 품목 검사
-	const bacodeSearch = async(bacode) => {
+	const bacodeSearch = async(barcode) => {
 
         grid.disableAutoRows();
 
-		/*let addRow = grid._flexCv.addNew();
-		addRow.cm08Name = "fdsfa";
-		addRow.st02Qr = "QQ25031000001-001";
-		addRow.st02Qty = 3;
-		addRow.st02Status = item.mf14Code;
-		addRow.st02Stok = item.cm08Name;
-		addRow.st02Dist = item.cm08Gbn;
-
-		addRow.st03Stok = "01";
-		addRow.st03Dist = "001";
-
-		grid._flexCv.commitNew();*/
+		var beforeBar = barcode;
+        // 트레스 라벨 앞부분 짜르기
+        barcode = barcode.replaceAll("3N1", "");
+        // 트레스 라벨을 공백으로 자름
+        barcode = barcode.split(" ");
+        // 품번 가져오기
+        var code = barcode[0];
+		var lot = barcode[3];
+		var lotSeq = barcode[2];
 
         let params = {
-            uri: `smd/partsInput/getPartsInputRequestInfo`,
-			st02Qrcode : bacode
+            uri: `mfr/partsInput/getPartsInputRequestInfo`,
+			st01Code : code,
+			st01Lot : lot,
+			st01LotSeq : lotSeq,
+			st01Qrcode : beforeBar
         }
         params = {...params,...ajax.getParams('searchForm')}
 
         try {
             let {partsInputRequestInfo} = await ajax.getAjax(params, true);
 
-			let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === partsInputRequestInfo.st02Qrcode ));
+			let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st01Qrcode === partsInputRequestInfo.st01Qrcode ));
 			if(temp.length != 0){
 				alertWarning('중복 항목',`중복된 항목입니다.`);
 				return;
@@ -164,21 +161,16 @@ const partsInput = function(){
 
 			let addRow = grid._flexCv.addNew();
 			addRow.cm08Name = partsInputRequestInfo.cm08Name;
-			addRow.st02Qrcode = partsInputRequestInfo.st02Qrcode;
-			addRow.st02Ipqty = partsInputRequestInfo.st02Ipqty;
-			addRow.st02Status = partsInputRequestInfo.st02Status;
-			addRow.st02Stok = partsInputRequestInfo.st02Stok;
-			addRow.st02Dist = partsInputRequestInfo.st02Dist;
-
-			addRow.st02Lot = partsInputRequestInfo.st02Lot;
-			addRow.st02LotSeq = partsInputRequestInfo.st02LotSeq;
-			addRow.st02Code = partsInputRequestInfo.st02Code;
-
-			addRow.st02Gbn = partsInputRequestInfo.st02Gbn;
-			addRow.st02Ipunt = partsInputRequestInfo.st02Ipunt;
-			addRow.st02Line = partsInputRequestInfo.st02Line;
-			addRow.st02Moq = partsInputRequestInfo.st02Moq;
-			addRow.st02Cus = partsInputRequestInfo.st02Cus;
+			addRow.st01Qrcode = partsInputRequestInfo.st01Qrcode;
+			addRow.st01Qty = partsInputRequestInfo.st01Qty;
+			addRow.st01Stok = partsInputRequestInfo.st01Stok;
+			addRow.st01Distric = partsInputRequestInfo.st01Distric;
+			addRow.st01Lot = partsInputRequestInfo.st01Lot;
+			addRow.st01LotSeq = partsInputRequestInfo.st01LotSeq;
+			addRow.st01Code = partsInputRequestInfo.st01Code;
+			addRow.st01Unt = partsInputRequestInfo.st01Unt;
+			addRow.cm08Cus = partsInputRequestInfo.cm08Cus;
+			addRow.cm08Moq = partsInputRequestInfo.cm08Moq;
 
 			grid._flexCv.commitNew();
 
@@ -220,7 +212,7 @@ const partsInput = function(){
 		confirm("부품투입을 등록하시겠습니까?", "부품투입 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
 			let params = {
-                uri: `smd/partsInput`,
+                uri: `mfr/partsInput`,
 				compMfCode: compMf.selectedValue,
 				compMfQty: compMfQty.value,
                 insertList: insertList
@@ -247,6 +239,8 @@ const partsInput = function(){
 
 		$('#btnSave').on('click', saveOutput);
 		$('#btnBack').on('click', goBack);
+
+		bacodeSearch("3N1A00102 17 000000000054 G1000120250227");
     }
 
 	// 스캐너 값 얻기
