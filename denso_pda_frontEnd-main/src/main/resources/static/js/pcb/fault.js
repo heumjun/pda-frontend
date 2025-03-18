@@ -223,7 +223,7 @@ const fault = function(){
 			});
 			
 			if ( matchBar ) {
-				bacodeSearch(barcode);	
+				barcodeSearch(barcode);	
 			}
 
 			/*if(barcode.substring(0, 3) == "3N1"){
