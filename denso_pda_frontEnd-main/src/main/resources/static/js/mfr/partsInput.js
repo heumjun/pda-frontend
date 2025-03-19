@@ -48,7 +48,7 @@ const partsInput = function(){
             {binding:'st01Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center' 	,isReadOnly: true},
 			{binding:'st01Qty'		,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},
             {binding:'st01Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
-			{binding:'st01Distric'	,header:'구역'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
+			{binding:'st01District'	,header:'구역'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
 
 			{binding:'st01Lot'		,header: 'LOT번호'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st01LotSeq'	,header: 'LOT SEQ'	,width: 90	,align:'center'		,dataType:'String'	,visible:false},
@@ -69,8 +69,8 @@ const partsInput = function(){
 
 		let st01Stok = getWarehouseCodeList();
         grid._flexGrid.getColumn('st01Stok').dataMap = new wijmo.grid.DataMap(st01Stok, 'cm15Code', 'cm15Name');
-		let st01Distric = getDistrictCodeList();
-		grid._flexGrid.getColumn('st01Distric').dataMap = new wijmo.grid.DataMap(st01Distric, 'cm16Code', 'cm16Name');
+		let st01District = getDistrictCodeList();
+		grid._flexGrid.getColumn('st01District').dataMap = new wijmo.grid.DataMap(st01District, 'cm16Code', 'cm16Name');
 
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
@@ -164,7 +164,7 @@ const partsInput = function(){
 			addRow.st01Qrcode = partsInputRequestInfo.st01Qrcode;
 			addRow.st01Qty = partsInputRequestInfo.st01Qty;
 			addRow.st01Stok = partsInputRequestInfo.st01Stok;
-			addRow.st01Distric = partsInputRequestInfo.st01Distric;
+			addRow.st01District = partsInputRequestInfo.st01District;
 			addRow.st01Lot = partsInputRequestInfo.st01Lot;
 			addRow.st01LotSeq = partsInputRequestInfo.st01LotSeq;
 			addRow.st01Code = partsInputRequestInfo.st01Code;
@@ -223,7 +223,7 @@ const partsInput = function(){
         	ajax.postAjax(params, true).then(async (data)=>{
 	            $(".text-bg-danger").text("출고완료");
 				$("#btnSave").hide();
-	            pushMsg('출고이력이 등록되었습니다.');
+	            pushMsg('부품투입 등록이 완료되었습니다.');
             }).catch((e)=>{
                 console.debug(e);
             });
@@ -240,7 +240,7 @@ const partsInput = function(){
 		$('#btnSave').on('click', saveOutput);
 		$('#btnBack').on('click', goBack);
 
-		//bacodeSearch("3N1A00102 17 000000000054 G1000120250227");
+		bacodeSearch("3N1A00102 17 000000000054 G1000120250227");
     }
 
 	// 스캐너 값 얻기

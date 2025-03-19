@@ -14,7 +14,7 @@ const outputRegister = function(){
     /**
      * 그리드 초기화
      */
-    const gridInit = ()=>{
+    const gridInit = ()=> {
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [

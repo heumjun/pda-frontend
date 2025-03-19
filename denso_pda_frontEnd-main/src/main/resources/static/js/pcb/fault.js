@@ -7,7 +7,31 @@ import { pushMsg, alertWarning, confirm } from "../common/msgBox.js";
 
 const fault = function(){
 
+	const getComboLineList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboLineList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboLineList"];
+	};
+	const getComboEquipCodeList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboEquipCodeList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboEquipCodeList"];
+	};
+	
     let grid  = new GridFactory('#grid');
+	let st08Line = input.comboBox('#st08Line', getComboLineList(), 'lineCode','lineNm');
+	let st08EquipCode = input.comboBox('#st08EquipCode', getComboEquipCodeList(), 'cm07Code','cm07Name');
+		
     /**
      * 그리드 초기화
      */
@@ -102,7 +126,7 @@ const fault = function(){
 		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
 		//⑤ 기판폭 : 3자리
 		//⑥ SEQ No : 4자리
-		//var barcode = "411120516102503161000 020168 000000004158007";
+		var barcode = "411120516102503161000 020168 000000004158012";
 		
 		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
 		if(temp.length != 0){
@@ -177,7 +201,9 @@ const fault = function(){
 
 			let params = {
                 uri: `fault/fault`,
-                insertList: insertList
+                insertList: insertList,
+				st08Line: st08Line.selectedValue,
+				st08EquipCode: st08EquipCode.selectedValue,
             };
 
 			params = {...params,...ajax.getParams('#submitForm')};
@@ -197,7 +223,7 @@ const fault = function(){
     const handleEvent = () => {
 
         gridInit();
-		//barcodeSearch();
+		barcodeSearch();
 
 		$('#btnSave').on('click', saveFault);
 		$('#btnBack').on('click', goBack);

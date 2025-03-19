@@ -253,7 +253,7 @@ const lotFault = function(){
     const handleEvent = () => {
 
         gridInit();
-		//bacodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', saveLotFault);
 		$('#btnBack').on('click', goBack);
