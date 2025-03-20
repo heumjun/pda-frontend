@@ -126,7 +126,7 @@ const fault = function(){
 		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
 		//⑤ 기판폭 : 3자리
 		//⑥ SEQ No : 4자리
-		var barcode = "411120516102503161000 020168 000000004158012";
+		//var barcode = "411120516102503161000 020168 000000004158012";
 		
 		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
 		if(temp.length != 0){
@@ -223,7 +223,7 @@ const fault = function(){
     const handleEvent = () => {
 
         gridInit();
-		barcodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', saveFault);
 		$('#btnBack').on('click', goBack);
