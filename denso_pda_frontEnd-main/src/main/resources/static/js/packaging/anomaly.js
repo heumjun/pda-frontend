@@ -27,8 +27,19 @@ const anomaly = function(){
 	    if(list === undefined) return null;
 	    return list["comboEquipCodeList"];
 	};
+	const getComboDeptCodeList = () => {
+		let params = {
+	        uri : "anomaly/anomaly/getComboDeptCodeList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboDeptCodeList"];
+	};
 	
     let grid  = new GridFactory('#grid');
+	let st09Dept = input.comboBox('#st09Dept', getComboDeptCodeList(), 'cm03Code','cm03Name');
 	let st09Line = input.comboBox('#st09Line', getComboLineList(), 'lineCode','lineNm');
 	let st09EquipCode = input.comboBox('#st09EquipCode', getComboEquipCodeList(), 'cm07Code','cm07Name');
     /**
@@ -58,6 +69,7 @@ const anomaly = function(){
 			{binding:'st09Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st09LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st09Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st09Unt'		,header:'단위'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
         ];
 		
         //그리드 컬럼셋팅
@@ -146,6 +158,7 @@ const anomaly = function(){
 				addRow.st09Lot = anomalyInfo.st09Lot;
 				addRow.st09Gbn = '0001';
 				addRow.st09Qty = 1;
+				addRow.st09Unt = anomalyInfo.st09Unt;
 				addRow.st09Qrcode = barcode;
 				
 				grid._flexCv.commitNew();
@@ -192,6 +205,7 @@ const anomaly = function(){
 			let params = {
                 uri: `anomaly/anomaly`,
                 insertList: insertList,
+				st09Dept: st09Dept.selectedValue,
 				st09Line: st09Line.selectedValue,
 				st09EquipCode: st09EquipCode.selectedValue
             };

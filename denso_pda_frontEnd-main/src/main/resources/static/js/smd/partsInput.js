@@ -146,7 +146,7 @@ const partsInput = function(){
 	const bacodeSearch = async(bacode) => {
 
         grid.disableAutoRows();
-
+		
 		/*let addRow = grid._flexCv.addNew();
 		addRow.cm08Name = "fdsfa";
 		addRow.st02Qr = "QQ25031000001-001";
@@ -243,9 +243,9 @@ const partsInput = function(){
 			params = {...params,...ajax.getParams('#submitForm')};
 
         	ajax.postAjax(params, true).then(async (data)=>{
-	            $(".text-bg-danger").text("출고완료");
+	            $(".text-bg-danger").text("부품투입 완료");
 				$("#btnSave").hide();
-	            pushMsg('출고이력이 등록되었습니다.');
+	            pushMsg('부품투입이 완료되었습니다.');
             }).catch((e)=>{
                 console.debug(e);
             });
@@ -258,6 +258,8 @@ const partsInput = function(){
     const handleEvent = () => {
 		compMfQty.value = 24;
         gridInit();
+		
+		//bacodeSearch("3N110301-00180 1000 000000000278 G1000120250316");
 
 		$('#btnSave').on('click', saveOutput);
 		$('#btnBack').on('click', goBack);
