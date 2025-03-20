@@ -112,7 +112,7 @@ const recycle = function(){
 		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
 		//⑤ 기판폭 : 3자리
 		//⑥ SEQ No : 4자리
-		var barcode = "3811201327025031807080201680000000041580002";
+		//var barcode = "3811201327025031807080201680000000041580002";
 		
 		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st09Qr === barcode ));
 		if(temp.length != 0) {
@@ -206,7 +206,7 @@ const recycle = function(){
     const handleEvent = () => {
 
         gridInit();
-		barcodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', saveRecycle);
 		$('#btnBack').on('click', goBack);
