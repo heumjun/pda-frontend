@@ -217,6 +217,8 @@ const partsInput = function(){
 	const saveOutput = () => {
 
 		grid.disableAutoRows();
+		
+		alert(compMfLine.value);
 
 		if(!grid.gridValidation()){
             alertWarning('저장불가', '그리드 오류내역을 확인하세요.');
@@ -236,7 +238,7 @@ const partsInput = function(){
                 uri: `smd/partsInput`,
 				compMfCode: compMf.selectedValue,
 				compMfQty: compMfQty.value,
-				compMfLine: compMfLine.value,
+				compMfLine: compMfLine.selectedValue,
                 insertList: insertList
             };
 
