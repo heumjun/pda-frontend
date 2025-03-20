@@ -240,7 +240,6 @@ const partsInput = function(){
 		$('#btnSave').on('click', saveOutput);
 		$('#btnBack').on('click', goBack);
 
-		bacodeSearch("3N1A00102 17 000000000054 G1000120250227");
     }
 
 	// 스캐너 값 얻기
