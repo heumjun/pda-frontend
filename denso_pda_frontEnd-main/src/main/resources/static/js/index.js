@@ -111,7 +111,11 @@ const index = function(){
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고 처리' }));
 				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: codeData }));
 			} else if (linkType == 'OT') {
-				let otInfo = getOuputReqSel(codeData);
+				/*let otInfo = getOuputReqSel(codeData);
+				otInfo.COMP_GBN = Y 
+				FLASE Aalert -> 자재 > SMD출고
+				ELSE */
+				
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));

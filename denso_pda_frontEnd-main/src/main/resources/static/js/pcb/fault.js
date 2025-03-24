@@ -28,10 +28,26 @@ const fault = function(){
 	    return list["comboEquipCodeList"];
 	};
 	
+	let selectableValues = [];
+	for(let index = 1; index <= 5; index++) {
+	   selectableValues.push({key:index, name:index});
+	}
+
+	let levelDataMap = new wijmo.grid.DataMap(selectableValues, 'key', 'name');
+	
     let grid  = new GridFactory('#grid');
 	let st08Line = input.comboBox('#st08Line', getComboLineList(), 'lineCode','lineNm');
 	let st08EquipCode = input.comboBox('#st08EquipCode', getComboEquipCodeList(), 'cm07Code','cm07Name');
 		
+	const getDynamicDataMap = (rowValue) => {
+	   let selectableValues = [];
+	        for(let index = 1; index <= rowValue; index++) {
+	                selectableValues.push({key:index,name:index});
+	        }
+	        return new wijmo.grid.DataMap(selectableValues,'key','name');
+	}
+
+
     /**
      * 그리드 초기화
      */
@@ -54,18 +70,20 @@ const fault = function(){
             {binding:'st08Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
             {binding:'st08Name'		,header:'품목명'		,width:200	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
+			{binding:'st08Array'	,header:'Level'		,width:80	,dataType:'Number'	,align:'center'	,dataMap:levelDataMap},
 			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
 			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,isReadOnly: true},
 			{binding:'st08Pgbn'		,header:'품목구분'		,width:90	,align:'center'		,dataType:'String'	,visible: false},
+			{binding:'st08ArrayTemp',header:'품목구분'		,width:90	,align:'center'		,dataType:'String'	,visible: false},
         ];
 		
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(550);
+        grid.setDynamicHeight(450);
         //체크박스 컬럼 생성
         //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
@@ -73,10 +91,18 @@ const fault = function(){
 
 		let st08Gbn = getCommonCodeList('E001');
 		grid._flexGrid.getColumn('st08Gbn').dataMap = new wijmo.grid.DataMap(st08Gbn, 'cm05Value', 'cm05Name');
-		/*let st08Stok = getWarehouseCodeList();
-        grid._flexGrid.getColumn('st08Stok').dataMap = new wijmo.grid.DataMap(st08Stok, 'cm15Code', 'cm15Name');
-		let st08Dist = getDistrictCodeList();
+		//let st08Stok = getWarehouseCodeList();
+        //grid._flexGrid.getColumn('st08Stok').dataMap = new wijmo.grid.DataMap(st08Stok, 'cm15Code', 'cm15Name');
+		/*let st08Dist = getDistrictCodeList();
 		grid._flexGrid.getColumn('st08Dist').dataMap = new wijmo.grid.DataMap(st08Dist, 'cm16Code', 'cm16Name');*/
+		
+		grid._flexGrid.beginningEdit.addHandler((s, e)=>{
+			let col = s.columns[e.col];
+			if(col.binding==='st08Array'){
+				let rowData = s.rows[e.row].dataItem;
+				col.dataMap = getDynamicDataMap(rowData.st08ArrayTemp);
+			}
+		});
 
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop)=>{
@@ -126,7 +152,7 @@ const fault = function(){
 		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
 		//⑤ 기판폭 : 3자리
 		//⑥ SEQ No : 4자리
-		//var barcode = "411120516102503161000 020168 000000004158012";
+		//var barcode = "1117614520025032309020201680000000041580004";
 		
 		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
 		if(temp.length != 0){
@@ -151,6 +177,8 @@ const fault = function(){
 				addRow.st08Dat = barcode.substring(11, 21);
 				addRow.st08Code = faultInfo.st08Code;
 				addRow.st08Name = faultInfo.st08Name;
+				addRow.st08Array = faultInfo.st08Array;
+				addRow.st08ArrayTemp = faultInfo.st08Array;
 				addRow.st08LotSeq = faultInfo.st08LotSeq;
 				addRow.st08Lot = faultInfo.st08Lot;
 				addRow.st08Gbn = 'ER';
