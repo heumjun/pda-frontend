@@ -7,8 +7,9 @@ import * as consts from "../common/constants.js";
 import * as commonRestApi from "../common/commonRestApi.js";
 import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
 import * as commonFunc from "../common/common.js";
+import { menuLoad } from "../common/commonMenu.js";
 
-const returnReg = function(){
+const warehousing = function(){
     
     let grid  = new GridFactory('#grid');
 	//let qtyInput = input.number('#qtyInput',1,0,999999,'G10');
@@ -335,6 +336,7 @@ const returnReg = function(){
 
     return{
         init:()=>{
+			menuLoad();
             handleEvent();
         }
     }
@@ -342,5 +344,5 @@ const returnReg = function(){
 
 
 $(()=>{
-    returnReg.init();
+    warehousing.init();
 });

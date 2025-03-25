@@ -7,6 +7,7 @@ import * as consts from "../common/constants.js";
 import * as commonRestApi from "../common/commonRestApi.js";
 import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
 import * as commonFunc from "../common/common.js";
+import { menuLoad } from "../common/commonMenu.js";
 
 const outputRegister = function(){
     
@@ -372,6 +373,7 @@ const outputRegister = function(){
 
     return{
         init:()=>{
+			menuLoad();
             handleEvent();
         }
     }

@@ -4,6 +4,7 @@ import * as input from "../common/wijmo/inputFactory.js";
 import * as ajax from "../common/ajax.js";
 import * as consts from "../common/constants.js";
 import { pushMsg } from "../common/msgBox.js";
+import { menuLoad } from "../common/commonMenu.js";
 
 const outputReqSel = function(){
     
@@ -107,6 +108,7 @@ const outputReqSel = function(){
 
     return{
         init:()=>{
+			menuLoad();
             handleEvent();
 			search();
         }

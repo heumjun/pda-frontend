@@ -1,5 +1,6 @@
 
 import * as ajax from "../common/ajax.js";
+import { menuLoad } from "../common/commonMenu.js";
 
 const material = function(){
 
@@ -93,6 +94,7 @@ const material = function(){
 
     return{
         init:()=>{
+			menuLoad();
             handleEvent();
 			getMaterial();
         }

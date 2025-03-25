@@ -4,6 +4,7 @@ import * as input from "../common/wijmo/inputFactory.js";
 import * as ajax from "../common/ajax.js";
 import * as consts from "../common/constants.js";
 import { pushMsg, alertWarning, confirm } from "../common/msgBox.js";
+import { menuLoad } from "../common/commonMenu.js";
 
 const materialsMove = function() {
 	
@@ -258,7 +259,8 @@ const materialsMove = function() {
 	return {
 		
        init:()=>{
-           handleEvent();
+			menuLoad();
+			handleEvent();
        }
 	   
    }

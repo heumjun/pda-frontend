@@ -7,6 +7,7 @@ import * as consts from "../common/constants.js";
 import * as commonRestApi from "../common/commonRestApi.js";
 import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
 import * as commonFunc from "../common/common.js";
+import { menuLoad } from "../common/commonMenu.js";
 
 const partsInput = function(){
 	const getCompMfList = () => {
@@ -278,6 +279,7 @@ const partsInput = function(){
 
     return{
         init:()=>{
+			menuLoad();
             handleEvent();
         }
     }

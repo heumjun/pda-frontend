@@ -7,6 +7,7 @@ import * as consts from "../common/constants.js";
 import * as commonRestApi from "../common/commonRestApi.js";
 import { pushMsg,alertError,alertWarning,alertInfo,confirm } from "../common/msgBox.js";
 import * as commonFunc from "../common/common.js";
+import { menuLoad } from "../common/commonMenu.js";
 
 const returnsMaterials = function(){
     
@@ -271,6 +272,7 @@ const returnsMaterials = function(){
 
     return{
         init:()=>{
+			menuLoad();
             handleEvent();
         }
     }

@@ -2,6 +2,7 @@
 /// <reference path ="../vendors/dhtmlx/codebase/dhtmlx.d.ts"/>
 
 import * as ajax from "./common/ajax.js";
+import { menuLoad } from "./common/commonMenu.js";
 import { pushMsg } from "./common/msgBox.js";
 
 const index = function(){
@@ -145,16 +146,17 @@ const index = function(){
 			
 	    },
 		onerror : function (barcode, qty) {
-			pushMsg(`바코드를 인식할 수 없습니다.\n관리자에게 문의 해주세요.`);	
+			pushMsg(`바코드를 인식할 수 없습니다.\n관리자에게 문의 해주세요.`);
 		}
 	});
-    
+	
     return {
         /**
          * 초기화
          */
         init:()=>{
-            //handleEvents();
+            handleEvents();
+			menuLoad();
 			$("#textInput").focus();
         }
         

@@ -423,10 +423,13 @@ $(()=>{
     //nav 메뉴 클릭시 해당 페이지로 이동
     $('[data-path]').on('click',function(e){
         e.preventDefault();
+		
         let view = $(this).attr('href');
-        let title = $(this).data('path');
+        let title = $(this).data('data-path');
         let url = `view?view=${view}&title=${title}&authUrl=${view}`;
 
+		
+		
         location.href =url;
     });
 

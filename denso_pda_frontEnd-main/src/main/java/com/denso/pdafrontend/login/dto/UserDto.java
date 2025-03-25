@@ -30,6 +30,9 @@ public class UserDto implements UserDetails{
 	private String ip;
 
 	private int seq;
+	
+	private String deptCode;
+	private String deptName;
 
 	// 이하 코드는 security 를 위한 용도
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
