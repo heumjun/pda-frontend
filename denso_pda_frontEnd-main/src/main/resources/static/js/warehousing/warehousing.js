@@ -200,7 +200,7 @@ const returnReg = function(){
 			} else {
 				$("#st02Pno").val($('#data-params').data('params').pu01No);
 				$("#st02Dat").val(dateUtils.today('YYYY-MM-DD'));
-				pushMsg(`입고처리 내역이 존재하지\n않습니다.`);	
+				//pushMsg(`입고처리 내역이 존재하지\n않습니다.`);	
 			}	
 
         } catch(error) {

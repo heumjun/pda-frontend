@@ -23,7 +23,7 @@ const index = function(){
 	const handleEvents = ()=> {
 		
 		// pu20250305001(발주서), ot2025030500003(출고요청서), EK24092700169-001(품목)
-		/*var barcode = "EK24092700169-001".toUpperCase(); 
+		/*var barcode = "OT2025032400011".toUpperCase(); 
 		var linkType = barcode.substr(0, 2);
 		var codeData = barcode.substr(2, barcode.length-1);
     	console.log(linkType);
@@ -66,7 +66,7 @@ const index = function(){
 		form.attr("action","view");
 		form.attr("target","_self");
 		form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
-		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'output/outputRegister' }));
 		form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));
 		form.append($('<input/>', {type: 'hidden', name: 'mf13No', value: otInfo.mf13No }));
 		form.append($('<input/>', {type: 'hidden', name: 'mf13Dat', value: otInfo.mf13Dat }));
@@ -89,9 +89,7 @@ const index = function(){
 	    	//var barcode = "ot2025030500003".toUpperCase();
 			barcode = barcode.toUpperCase();
 	    	var linkType = barcode.substr(0, 2);
-			console.log(linkType);
 			var codeData = barcode.substr(2, barcode.length-1);
-			console.log(codeData);
 			let form = $('<form></form>');
 			form.attr("method","get");
 			form.attr("action","view");
@@ -115,6 +113,8 @@ const index = function(){
 				otInfo.COMP_GBN = Y 
 				FLASE Aalert -> 자재 > SMD출고
 				ELSE */
+				
+				let otInfo = getOuputReqSel(codeData);
 				
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
@@ -154,7 +154,7 @@ const index = function(){
          * 초기화
          */
         init:()=>{
-            handleEvents();
+            //handleEvents();
 			$("#textInput").focus();
         }
         
