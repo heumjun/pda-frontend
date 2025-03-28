@@ -59,7 +59,7 @@ export const menuLoad = ()=>{
         let menuTree = treeToObject(menu,'code','upcode');
         // console.debug(menuTree);
         
-        let sss = ` <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+        let sss = ` <div class="row navbar-vertical-label-wrapper mt-1 mb-2">
 						<div class="col-auto navbar-vertical-label">DENSO PDA</div>
 						<div class="col ps-0">
 							<hr class="mb-0 navbar-vertical-divider">

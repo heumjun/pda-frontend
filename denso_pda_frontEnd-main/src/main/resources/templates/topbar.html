@@ -19,19 +19,26 @@
     </div>
     
     <div class="ms-auto me-5 d-none d-sm-block"> [<span class="text-primary" th:text="${userInfo.empName}"></span>]님 반갑습니다.</div> 
-    
     <!-- top menu -->
     
   
     <!-- 버튼들 -->
     <ul class="navbar-nav navbar-nav-icons flex-row align-items-center">
-      <!-- 선택되어 있는 탭 새로고침 
-      <li class="nav-item " id="refresh-tab">
+    	<!-- <button id="btn-logOut" class="btn btn-falcon-primary me-1 mb-1" type="button">로그아웃</button> -->
+      
+      <li class="nav-item" id="refresh-tab">
+        <a data-bs-toggle="tooltip" data-bs-original-title="로그아웃" data-bs-placement="bottom" class="cursor-pointer" id="btn-logOut">
+          <span class="fas fa-sign-out-alt" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
+        </a>
+      </li> 
+      
+      <!-- 선택되어 있는 탭 새로고침 --> 
+      <!-- <li class="nav-item " id="refresh-tab">
         <a data-bs-toggle="tooltip" data-bs-original-title="탭 새로고침" data-bs-placement="bottom" class="cursor-pointer">
           <span class="fas fa-retweet" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
         </a>
-      </li> 
-      -->
+      </li> --> 
+      
       <!-- 전체화면 
       <li class="nav-item " id="fullscreen">
         <a data-bs-toggle="tooltip" data-bs-original-title="전체화면보기" data-bs-placement="bottom" class="cursor-pointer">

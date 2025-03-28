@@ -40,7 +40,7 @@ const smdInput = function(){
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(550);
+        grid.setDynamicHeight(450);
         grid.optionPanel('#grid-option');
 
 		let cm08Gbn = getCommonCodeList('G001');

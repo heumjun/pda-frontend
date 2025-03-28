@@ -2,6 +2,7 @@
 /// <reference path ="../vendors/dhtmlx/codebase/dhtmlx.d.ts"/>
 
 import * as ajax from "./common/ajax.js";
+import * as commonFunc from "./common/common.js";
 import { menuLoad } from "./common/commonMenu.js";
 import { pushMsg } from "./common/msgBox.js";
 

@@ -84,7 +84,7 @@ const fault = function(){
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(450);
+        grid.setDynamicHeight(350);
         //체크박스 컬럼 생성
         //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)

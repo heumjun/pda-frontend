@@ -439,7 +439,7 @@
 }
 
 .navbar-vertical {
-	top : 3.5rem
+	top : 6.0rem
 }
 
 .navbar-toggler-humburger-icon:hover, .navbar-toggler-humburger-icon:focus {
@@ -451,5 +451,20 @@
 
 .card-header:first-child {
 	border-radius : 0 !important;
+}
+
+body {
+	margin-top : 40px;
+	margin-bottom : 30px;
+	overflow-x: hidden;
+}
+
+.btn-falcon-default {
+	background-color: #010a14c4;
+	color: #fff;
+}
+
+.content {
+	background-color: #fff;
 }
 

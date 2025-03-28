@@ -21883,7 +21883,7 @@ pre[class*=language-] {
 /*                                    Height                                  */
 /* -------------------------------------------------------------------------- */
 .content {
-  min-height: 100vh;
+  min-height: 90vh;
   position: relative;
   padding-bottom: 6.375rem;
 }
