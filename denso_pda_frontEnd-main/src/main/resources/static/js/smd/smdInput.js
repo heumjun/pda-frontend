@@ -10,7 +10,7 @@ import * as commonFunc from "../common/common.js";
 import { menuLoad } from "../common/commonMenu.js";
 
 const smdInput = function(){
-
+	
     let grid  = new GridFactory('#grid');
     /**
      * 그리드 초기화
@@ -21,20 +21,18 @@ const smdInput = function(){
         let columnsDefinition = [
 			{binding: 'mf14Company'	,header:'회사'			,width:100		,align:'center'		,dataType:'String'		,visible:false},
 			{binding: 'mf14Factory'	,header:'공장'			,width:100		,align:'center'		,dataType:'String'		,visible:false},
-			{binding: 'mf14No'		,header:'출고요청완료상세번호'	,width:150		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
-			{binding: 'mf14Code'	,header:'품번'			,width:120		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
-			{binding: 'cm08Dgbn'	,header:'라벨정보구분'		,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
+			{binding: 'mf14No'		,header:'출고완료번호'		,width:150		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
+			{binding: 'st02Code'	,header:'품번'			,width:120		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'cm08Name'	,header:'품명'			,width:200		,align:'center'		,dataType:'String'		,isReadOnly:true},
+			{binding: 'st02Qrcode'	,header:'QR코드'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false},
+			{binding: 'st02Ipqty'	,header:'박스수량'			,width:100		,align:'center'		,dataType:'Number'		,isRequired:false},
+			{binding: 'cm08Dgbn'	,header:'라벨정보구분'		,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'cm08Gbn'		,header:'품목구분'			,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
-			{binding: 'mf14Lot'		,header:'LOT번호'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true		,visible:false},
-			{binding: 'mf14Qrcode'	,header:'QR코드'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false},
-			{binding: 'mf14Qty'		,header:'출고요청수량'		,width:100		,align:'center'		,dataType:'Number'		,isRequired:false},
-			{binding: 'mf14Unt'		,header:'출고단위'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,visible:false},
-			{binding: 'mf14Stok'	,header:'창고'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false},
-			{binding: 'mf14Dist'	,header:'구역'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false},
-			{binding: 'mf14Indte'	,header:'등록일자'			,width:100		,align:'center'		,dataType:'String'		,visible:false},
-			{binding: 'mf14Empno'	,header:'등록자'			,width:100		,align:'center'		,dataType:'String'		,visible:false}
-			
+			{binding: 'st02Lot'		,header:'LOT번호'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true		,visible:false},
+			{binding: 'st02LotSeq'	,header:'LOT SEQ'		,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true		,visible:false},
+			{binding: 'st02Ipunt'	,header:'출고단위'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,visible:false},
+			{binding: 'st02Stok'	,header:'창고'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true},
+			{binding: 'st02Dist'	,header:'구역'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true},
         ];
 
         //그리드 컬럼셋팅
@@ -45,12 +43,12 @@ const smdInput = function(){
 
 		let cm08Gbn = getCommonCodeList('G001');
 		grid._flexGrid.getColumn('cm08Gbn').dataMap = new wijmo.grid.DataMap(cm08Gbn, 'cm05Value', 'cm05Name');
-		let mf14Unt = getCommonCodeList('LU01');
-		grid._flexGrid.getColumn('mf14Unt').dataMap = new wijmo.grid.DataMap(mf14Unt, 'cm05Value', 'cm05Name');
-		let mf14Stok = getWarehouseCodeList();
-        grid._flexGrid.getColumn('mf14Stok').dataMap = new wijmo.grid.DataMap(mf14Stok, 'cm15Code', 'cm15Name');
-		let mf14Dist = getDistrictCodeList();
-		grid._flexGrid.getColumn('mf14Dist').dataMap = new wijmo.grid.DataMap(mf14Dist, 'cm16Code', 'cm16Name');
+		let st02Ipunt = getCommonCodeList('LU01');
+		grid._flexGrid.getColumn('st02Ipunt').dataMap = new wijmo.grid.DataMap(st02Ipunt, 'cm05Value', 'cm05Name');
+		let st02Stok = getWarehouseCodeList();
+        grid._flexGrid.getColumn('st02Stok').dataMap = new wijmo.grid.DataMap(st02Stok, 'cm15Code', 'cm15Name');
+		let st02Dist = getDistrictCodeList();
+		grid._flexGrid.getColumn('st02Dist').dataMap = new wijmo.grid.DataMap(st02Dist, 'cm16Code', 'cm16Name');
 
 		//그리드 오류체크
         grid._flexCv.getError = (item,prop) => {
@@ -58,24 +56,18 @@ const smdInput = function(){
             if(grid._flexCv.isEditingItem) return null;
 
             switch (prop) {
-                case 'mf14Lot':
-                    if(wijmo.isNullOrWhiteSpace(item.mf14Lot)) return '[LOT번호]는 필수 입력 항목입니다.';
+                case 'st02Lot':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Lot)) return '[LOT번호]는 필수 입력 항목입니다.';
                     break;
-				case 'mf14Qrcode':
-                    if(wijmo.isNullOrWhiteSpace(item.mf14Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
+				case 'st02Qrcode':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
                     break;	
-				case 'mf14Stok':
-                    if(wijmo.isNullOrWhiteSpace(item.mf14Stok)) return '[창고]는 필수 입력 항목입니다.';
+				case 'st02Stok':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Stok)) return '[창고]는 필수 입력 항목입니다.';
                     break;	
-				case 'mf14Dist':
-                    if(wijmo.isNullOrWhiteSpace(item.mf14Dist)) return '[구역]는 필수 입력 항목입니다.';
+				case 'st02Dist':
+                    if(wijmo.isNullOrWhiteSpace(item.st02Dist)) return '[구역]는 필수 입력 항목입니다.';
                     break;	
-				case 'mf14Code':
-                    if(wijmo.isNullOrWhiteSpace(item.mf14Code)) return '[품번]는 필수 입력 항목입니다.';
-                    break;	
-                case 'mf14Qty':
-                    if(item.mf14Qty <= 0) return '[출고요청수량]은 0보다 커야합니다.';
-                    break;
                 default:
                     return null;
             }
@@ -132,10 +124,14 @@ const smdInput = function(){
 	const searchSmdInput = async() => {
 
         grid.disableAutoRows();
+		
+		$("#mf13No").val($('#data-params').data('params').mf13No);
+		$("#mf13LineCode").val($('#data-params').data('params').mf13LineCode);
 
+		// TODO 여기서 가져오는 쿼리 수정
 		let params ={
 			uri: `output/getOutputRegisterList`,
-			mf13No : "2025031400002" //$('#data-params').data('params').mf13No
+			mf13No : $('#data-params').data('params').mf13No
 		};
         params = {...params,...ajax.getParams('searchForm')}
 
@@ -148,19 +144,20 @@ const smdInput = function(){
 				outputRegisterList.forEach( (item, index) => {
 									
 					let addRow = grid._flexCv.addNew();
-					addRow.mf13No = item.mf13No;
-					addRow.mf14No = item.mf14No;
-					addRow.mf14Qty = item.mf14Qty;
-					addRow.mf14Code = item.mf14Code;
+					
+					addRow.st02RequestNo = item.mf13No;
+					addRow.st02Ipqty = 1;
+					addRow.st02Code = item.mf14Code;
 					addRow.cm08Name = item.cm08Name;
 					addRow.cm08Gbn = item.cm08Gbn;
 					addRow.cm08Dgbn = item.cm08Dgbn;
-					addRow.mf14Unt = item.mf14Unt;
+					addRow.st02Ipunt = item.mf14Unt;
+					addRow.st02Stok = '03';
+					addRow.st02Dist = '0301';
 	
 					grid._flexCv.commitNew();
 
 	        	});
-					
 			}
         } catch(error) {
             return;
@@ -198,6 +195,17 @@ const smdInput = function(){
 
 		confirm("출고완료요청을 등록하시겠습니까?", "출고완료요청이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
+			
+			insertList.forEach((item) => {
+				// 출고요청 완료 번호
+				item.mf13No = $('#data-params').data('params').mf13No;
+				// 헤더에 라인 추가
+				// TODO
+				item.mf13LineCode = outputData.pmf13Line;
+				item.mf13Dat = outputData.pmf13Dat;
+				// item.mf13DatTime = outputData.pmf13DatTime;
+			})
+			
 			let params = {
                 uri: `smdInput/smdInput`,
                 insertList: insertList
@@ -213,44 +221,6 @@ const smdInput = function(){
                 console.debug(e);
             });
 		});
-		
-		
-		
-		/*let flag = $(this).attr("data-flag");
-
-		if(flag == "insert") {
-			
-			//모달창 폼에 validation 체크
-			if (!$('#upOutputRequestCompReg-form').valid()) {
-				return false;
-			}
-			//그리드에 필수값이 모두 등록되어 있을 경우 -> cv.geterror를 만족해야함
-			if (!gridValidation()) {
-				alertWarning('등록 불가', '필수 값이 입력되지 않아 저장할 수 없습니다.', 'warning');
-				return;
-			}
-
-			common.confirm("출고완료요청이 등록하시겠습니까?", "출고완료요청이 등록됩니다.", commonConst.INSERT, function () {
-				let outputData = $("form[name=upOutputRequestCompReg-form]").serializeObject();
-				let outputRequestCompInfo = commonGrid.convertJsonOfGrid(outputRequestCompRegCv.itemsAdded);
-
-				outputRequestCompInfo.forEach((item) => {
-					item.mf13No = outputData.pmf13No;
-					item.mf13LineCode = outputData.pmf13Line;
-					item.mf13Dat = outputData.pmf13Dat;
-					item.mf13DatTime = outputData.pmf13DatTime;
-				})
-
-				let params = {
-					uri: 'manufacture/outputRequestComp',
-					outputHeadInfo: outputData,
-					outputRequestCompInfo: commonGrid.convertJsonOfGrid(outputRequestCompRegCv.itemsAdded) -- insertList
-				};
-				save(params);
-			});
-		} else if(flag == "update"){
-			common.confirm("출고완료요청이 수정하시겠습니까?","출고완료요청이 수정됩니다.",commonConst.UPDATE, modalUpdate);
-		}*/
 		
 	}
 
@@ -287,8 +257,9 @@ const smdInput = function(){
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
 
-			if(barcode.substring(0, 3) == "3N1"){
+			if(barcode.substring(0,3) == '3N1') {
 
+				// 기존 트레스 라벨 들고 있어야 중복 비교 및 데이터 저장 시 라벨 넣을 수 있음.
 				var beforeBar = barcode;
 	            // 트레스 라벨 앞부분 짜르기
 	            barcode = barcode.replaceAll("3N1", "");
@@ -301,16 +272,16 @@ const smdInput = function(){
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
 						// 로우에 있는 품목코드와 바코드의 품목코드, 로우에 있는 품목구분과 바코드의 품목구분 비교
 						// QR코드가 비어있느 항목에 값이 들어가도록 설정
-						if(row.dataItem.cm08Code == code) {
-							if(wijmo.isNullOrWhiteSpace(row.dataItem.mf14Qrcode) || wijmo.isUndefined(row.dataItem.mf14Qrcode)){
+						if(row.dataItem.st02Code == code) {
+							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
 								matchBar = true;
 								//grid._flexGrid.setCellData(row.index, 'select', true);
 
 								// 중복체크 기능 필요
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
-									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'mf14Qrcode'))){
-										if(beforeBar == grid._flexGrid.getCellData(i, 'mf14Qrcode')){
-											grid._flexGrid.setCellData(index, 'mf14Qrcode', "");
+									if(!wijmo.isUndefined(grid._flexGrid.getCellData(i, 'st02Qrcode'))){
+										if(beforeBar == grid._flexGrid.getCellData(i, 'st02Qrcode')){
+											grid._flexGrid.setCellData(index, 'st02Qrcode', "");
 											alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 											return ;
 										}
@@ -320,11 +291,8 @@ const smdInput = function(){
 								var lot = barcode[3];
 								var lotSeq = barcode[2];
 
-								grid._flexGrid.setCellData(index, 'mf14Lot', lot);
-								grid._flexGrid.setCellData(index, 'mf14LotSeq', lotSeq);
-								grid._flexGrid.setCellData(index, 'mf14Qrcode', beforeBar);
-								// 창고, 구역 가져와서 넣어주고 return true 해야한다.
-								getStokDistInfo(index, code, lot, lotSeq);
+								// lot와 lotSeq로 재고테이블을 검색해서 해당 정보를 가져와야한다.
+								getLotInfo(index, code, lot, lotSeq, beforeBar);
 								return true;
 							}
 						}
@@ -346,29 +314,31 @@ const smdInput = function(){
 
 				ajax.getAjax(params, false).then(data => {
 
-					let inputInfo = data["inputInfo"];
+					// TODO
+					let outputInfo = data["outputInfo"];
 
 					if(inputInfo != null) {
 						grid._flexGrid.rows.some((row,index,array)=>{
 							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
-								if(row.dataItem.cm08Code == inputInfo.st02Code && barcode == inputInfo.st02Qrcode){
-									if(wijmo.isNullOrWhiteSpace(row.dataItem.mf14Qrcode) || wijmo.isUndefined(row.dataItem.mf14Qrcode)){
+								if(row.dataItem.st02Code == outputInfo.st03Code && barcode == outputInfo.st03Qr){
+									if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
 										matchBar = true;
 										for(var i=0; i<grid._flexGrid.rows.length; i++){
-											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'mf14Qrcode'))){
-												if(barcode == grid._flexGrid.getCellData(i,'mf14Qrcode')){
-													grid._flexGrid.setCellData(index, 'mf14Qrcode', '');
+											if(!wijmo.isUndefined(grid._flexGrid.getCellData(i,'st02Qrcode'))){
+												if(barcode == grid._flexGrid.getCellData(i,'st02Qrcode')){
+													grid._flexGrid.setCellData(index, 'st02Qrcode', '');
 													alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 													return;
 												}
 											}
 										}
 
-										grid._flexGrid.setCellData(index, 'mf14Lot', inputInfo.st02Lot);
-										grid._flexGrid.setCellData(index, 'mf14LotSeq', inputInfo.st02LotSeq);
-										grid._flexGrid.setCellData(index, 'mf14Qrcode', inputInfo.st02Qrcode);
-										grid._flexGrid.setCellData(index, 'mf14Stok', inputInfo.st02Stok);
-										grid._flexGrid.setCellData(index, 'mf14Dist', inputInfo.st02Dist);
+										grid._flexGrid.setCellData(index, 'st02Lot', outputInfo.st03Lot);
+										grid._flexGrid.setCellData(index, 'st02LotSeq', outputInfo.st03LotSeq);
+										grid._flexGrid.setCellData(index, 'st02Qrcode', outputInfo.st03Qr);
+										grid._flexGrid.setCellData(index, 'st02Moq', outputInfo.st03Moq);
+										grid._flexGrid.setCellData(index, 'st02Stok', '03');
+										grid._flexGrid.setCellData(index, 'st02Dist', '0301');
 
 										return true;
 									}
@@ -393,6 +363,34 @@ const smdInput = function(){
 			}
 		}
 	});
+	
+	// TODO
+	const getLotInfo = (index, code, lot, lotSeq, barcode)=>{
+		let params = {
+			uri : 'material/outputHistorySearch/getLotInfo',
+			st03Code : code,
+			st03Lot : lot,
+			st03LotSeq : lotSeq
+		};
+
+		commonAjax.getAjax("GET",params, function (data) {
+			let lotInfo = data["lotInfo"];
+
+			// 값이 있는 경우 그리드에 넣어줌
+			if(lotInfo != null){
+				outputRequestCompRegGrid.setCellData(index, 'st02Stok', '03');
+				outputRequestCompRegGrid.setCellData(index, 'st02Dist', '0301');
+				outputRequestCompRegGrid.setCellData(index, 'st02Lot', lotInfo.st01Lot);
+				outputRequestCompRegGrid.setCellData(index, 'st02LotSeq', lotInfo.st01LotSeq);
+				outputRequestCompRegGrid.setCellData(index, 'st02Moq', lotInfo.st02Moq);
+				outputRequestCompRegGrid.setCellData(index, 'st02Qrcode', barcode);
+				// 값이 없는 경우 경고메시지
+			} else {
+				swal('작업 불가','리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다','warning');
+				return ;
+			}
+		});
+	}
 
 	const getStokDistInfo = async (index, code, lot, lotSeq)=>{
 		let params = {
