@@ -218,26 +218,16 @@ const consignedMaterialsReg = function(){
         }*/
 		
 		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
-		let updateList = grid.gridItemListToArray(grid._flexCv.itemsEdited);
-		if(insertList.length < 1 && updateList.length < 1) {
+		if(insertList.length < 1) {
 			alertWarning('저장불가','저장할 내역이 없습니다.');
             return;
         }
-		
-		insertList.forEach((item) => {
-			item.st03Cus = $("#st03Cus").val();
-			item.st03Dat = $("#st03Dat").val();
-			item.st03DatTime = $("#st03DatTime").val();
-			item.st03Line = $("#st03Line").val();
-			item.st03Gbn = 'PR';
-		})
 
-		confirm("출고이력을 등록하시겠습니까?", "출고이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("사급요청을 등록하시겠습니까?", "사급요청이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 			
 			let params = {
                 uri: `output`,
-                insertList: insertList,
-                updateList: updateList,
+                insertList: insertList
             };
 			
 			params = {...params,...ajax.getParams('#submitForm')};
@@ -245,7 +235,7 @@ const consignedMaterialsReg = function(){
         	ajax.postAjax(params, true).then(async (data)=>{
 	            $(".text-bg-danger").text("출고완료");
 				$("#btnSave").hide();
-	            pushMsg('출고이력이 등록되었습니다.');
+	            pushMsg('사급요청이 등록되었습니다.');
             }).catch((e)=>{
                 console.debug(e);
             });
