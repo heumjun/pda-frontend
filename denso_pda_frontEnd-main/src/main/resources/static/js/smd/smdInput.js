@@ -11,7 +11,19 @@ import { menuLoad } from "../common/commonMenu.js";
 
 const smdInput = function(){
 	
+	const getComboLineList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboLineList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboLineList"];
+	};
+	
     let grid  = new GridFactory('#grid');
+	let mf13LineCode = input.comboBox('#mf13LineCode', getComboLineList(), 'lineCode','lineNm');
     /**
      * 그리드 초기화
      */
@@ -24,12 +36,13 @@ const smdInput = function(){
 			{binding: 'mf14No'		,header:'출고완료번호'		,width:150		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'st02Code'	,header:'품번'			,width:120		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'cm08Name'	,header:'품명'			,width:200		,align:'center'		,dataType:'String'		,isReadOnly:true},
-			{binding: 'st02Qrcode'	,header:'QR코드'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false},
-			{binding: 'st02Ipqty'	,header:'박스수량'			,width:100		,align:'center'		,dataType:'Number'		,isRequired:false},
+			{binding: 'st02Qrcode'	,header:'QR코드'			,width:200		,align:'center'		,dataType:'String'},
+			{binding: 'st02Ipqty'	,header:'박스수량'			,width:100		,align:'center'		,dataType:'Number'		,isReadOnly:true},
 			{binding: 'cm08Dgbn'	,header:'라벨정보구분'		,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'cm08Gbn'		,header:'품목구분'			,width:100		,align:'center'		,dataType:'String'		,isReadOnly:true		,visible:false},
 			{binding: 'st02Lot'		,header:'LOT번호'			,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true		,visible:false},
 			{binding: 'st02LotSeq'	,header:'LOT SEQ'		,width:200		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true		,visible:false},
+			{binding: 'st02Moq'		,header:'MOQ'			,width:200		,align: 'center'	,dataType:'Number'		,isRequired:false	,visible:false},
 			{binding: 'st02Ipunt'	,header:'출고단위'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,visible:false},
 			{binding: 'st02Stok'	,header:'창고'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true},
 			{binding: 'st02Dist'	,header:'구역'			,width:100		,align:'center'		,dataType:'String'		,isRequired:false	,isReadOnly:true},
@@ -126,7 +139,6 @@ const smdInput = function(){
         grid.disableAutoRows();
 		
 		$("#mf13No").val($('#data-params').data('params').mf13No);
-		$("#mf13LineCode").val($('#data-params').data('params').mf13LineCode);
 
 		// TODO 여기서 가져오는 쿼리 수정
 		let params ={
@@ -137,25 +149,28 @@ const smdInput = function(){
 
         try {
             let {outputRegisterList} = await ajax.getAjax(params, true);
-
+			
 			if( outputRegisterList.length > 0 ) {
 				grid._flexCv.sourceCollection = [];
 				
 				outputRegisterList.forEach( (item, index) => {
-									
-					let addRow = grid._flexCv.addNew();
 					
-					addRow.st02RequestNo = item.mf13No;
-					addRow.st02Ipqty = 1;
-					addRow.st02Code = item.mf14Code;
-					addRow.cm08Name = item.cm08Name;
-					addRow.cm08Gbn = item.cm08Gbn;
-					addRow.cm08Dgbn = item.cm08Dgbn;
-					addRow.st02Ipunt = item.mf14Unt;
-					addRow.st02Stok = '03';
-					addRow.st02Dist = '0301';
-	
-					grid._flexCv.commitNew();
+					for(var i=0; i<item.mf14Qty; i++){				
+					
+						let addRow = grid._flexCv.addNew();
+						
+						addRow.st02RequestNo = item.mf13No;
+						addRow.st02Ipqty = 1;
+						addRow.st02Code = item.mf14Code;
+						addRow.cm08Name = item.cm08Name;
+						addRow.cm08Gbn = item.cm08Gbn;
+						addRow.cm08Dgbn = item.cm08Dgbn;
+						addRow.st02Ipunt = item.mf14Unt;
+						addRow.st02Stok = '03';
+						addRow.st02Dist = '0301';
+		
+						grid._flexCv.commitNew();
+					}
 
 	        	});
 			}
@@ -194,20 +209,18 @@ const smdInput = function(){
         }
 
 		confirm("출고완료요청을 등록하시겠습니까?", "출고완료요청이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
-
 			
 			insertList.forEach((item) => {
 				// 출고요청 완료 번호
 				item.mf13No = $('#data-params').data('params').mf13No;
 				// 헤더에 라인 추가
-				// TODO
-				item.mf13LineCode = outputData.pmf13Line;
-				item.mf13Dat = outputData.pmf13Dat;
-				// item.mf13DatTime = outputData.pmf13DatTime;
+				item.mf13LineCode = mf13LineCode.selectedValue;
 			})
 			
 			let params = {
                 uri: `smdInput/smdInput`,
+				mf13No : $('#data-params').data('params').mf13No,
+				mf13LineCode : mf13LineCode.selectedValue,
                 insertList: insertList
             };
 
@@ -248,17 +261,17 @@ const smdInput = function(){
 
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
-		/*timeBeforeScanTest: 50, // wait for the next character for upto 200ms
-		startChar: [16, 45, 189], // Prefix character for the cabled scanner (OPL6845R)
-		changeChar: [189], // Prefix character for the cabled scanner (OPL6845R)*/
+		timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+		avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
 		onComplete: function(barcode, qty) {
 			let matchBar = false;
 			barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
 
-			if(barcode.substring(0,3) == '3N1') {
 
+			if(barcode.substring(0,3) == '3N1') {
+				
 				// 기존 트레스 라벨 들고 있어야 중복 비교 및 데이터 저장 시 라벨 넣을 수 있음.
 				var beforeBar = barcode;
 	            // 트레스 라벨 앞부분 짜르기
@@ -267,7 +280,7 @@ const smdInput = function(){
 	            barcode = barcode.split(" ");
 	            // 품번 가져오기
 	            var code = barcode[0];
-
+				
 				grid._flexGrid.rows.some((row,index,array) => {
 					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
 						// 로우에 있는 품목코드와 바코드의 품목코드, 로우에 있는 품목구분과 바코드의 품목구분 비교
@@ -367,29 +380,33 @@ const smdInput = function(){
 	// TODO
 	const getLotInfo = (index, code, lot, lotSeq, barcode)=>{
 		let params = {
-			uri : 'material/outputHistorySearch/getLotInfo',
+			uri : 'smdInput/smdInput/getLotInfo',
 			st03Code : code,
 			st03Lot : lot,
 			st03LotSeq : lotSeq
 		};
-
-		commonAjax.getAjax("GET",params, function (data) {
+		
+		ajax.getAjax(params, true).then(async (data)=>{
+			
 			let lotInfo = data["lotInfo"];
-
-			// 값이 있는 경우 그리드에 넣어줌
-			if(lotInfo != null){
-				outputRequestCompRegGrid.setCellData(index, 'st02Stok', '03');
-				outputRequestCompRegGrid.setCellData(index, 'st02Dist', '0301');
-				outputRequestCompRegGrid.setCellData(index, 'st02Lot', lotInfo.st01Lot);
-				outputRequestCompRegGrid.setCellData(index, 'st02LotSeq', lotInfo.st01LotSeq);
-				outputRequestCompRegGrid.setCellData(index, 'st02Moq', lotInfo.st02Moq);
-				outputRequestCompRegGrid.setCellData(index, 'st02Qrcode', barcode);
+			
+			if(lotInfo != null) {
+				console.log(lotInfo);
+				grid._flexGrid.setCellData(index, 'st02Stok', '03');
+				grid._flexGrid.setCellData(index, 'st02Dist', '0301');
+				grid._flexGrid.setCellData(index, 'st02Lot', lotInfo.st01Lot);
+				grid._flexGrid.setCellData(index, 'st02LotSeq', lotInfo.st01LotSeq);
+				grid._flexGrid.setCellData(index, 'st02Moq', lotInfo.st02Moq);
+				grid._flexGrid.setCellData(index, 'st02Qrcode', barcode);
 				// 값이 없는 경우 경고메시지
 			} else {
 				swal('작업 불가','리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다','warning');
 				return ;
 			}
-		});
+        }).catch((e)=>{
+            console.debug(e);
+        });
+		
 	}
 
 	const getStokDistInfo = async (index, code, lot, lotSeq)=>{

@@ -20,20 +20,11 @@ const restore = function(){
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
-            /*{binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},*/
-			/*{binding:'delete'	,header: ' '	,width:60	
-				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
-					text: '삭제',
-					click: (e, ctx) => {
-						
-						grid._flexCv.remove(ctx.item);
-						//console.log(ctx);
-						alert('Clicked Button Delete** ' + ctx.item.st02No + ' **');
-					}
-				})
-			},*/
-            {binding:'st11Code'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
+            {binding:'st11No'		,header:'반납요청서상세번호'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
+            {binding:'cm08Gbn'		,header:'품목구분'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
+            {binding:'st11Code'		,header:'품번'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
             {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
+			
             {binding:'st11Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'},
 			{binding:'st11Qty'		,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput},
 			

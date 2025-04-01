@@ -20,14 +20,14 @@ const consignedMaterialsReq = function(){
 			{binding:'mf15No'		,header:'사급요청서번호'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
 			{binding:'mf15Dat'		,header:'요청일자'			,width:110	,dataType:'Date'	,align:'center'	,isReadOnly: true},
 			{binding:'mf15Time'		,header:'요청시간'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'mf15Cus'		,header:'제조사'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true},
-			{binding:'mf15CusName'	,header:'제조사'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
+			{binding:'mf15Cus'		,header:'제조사'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true,visible:false},
+			{binding:'mf15CusName'	,header:'제조사'			,width:70	,dataType:'String'	,align:'center'	,isReadOnly: true},
         ];
 
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(650);
+        grid.setDynamicHeight(500);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
         grid.optionPanel('#grid-option');
     }

@@ -10,15 +10,11 @@ const index = function(){
     
 	const getOuputReqSel = (code)=> {
 		let params = {
-			uri: 'output/outputReqSel',
+			uri: 'smdInput/smdInput',
 			mf13No : code
 		}
 		let data = ajax.getAjaxSync(params);
-		if (data == null) {
-			pushMsg(`해당 작업요청서는 존재하지 않습니다.`);
-		} else {
-			return data['detailInfo'][0];
-		}
+		return data;
 		
 	};
 	
@@ -116,34 +112,36 @@ const index = function(){
 				FLASE Aalert -> 자재 > SMD출고
 				ELSE */
 				
+				// 출고인지, 출고요청완료인지 구분
 				let otInfo = getOuputReqSel(codeData);
 				
-				alert(otInfo.mf13CompGbn);
-				if (otInfo.mf13CompGbn == "N") {
-					// 출고요청
-					//OT2025032800003
-					form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
-					form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
-					form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13No', value: otInfo.mf13No }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13Dat', value: otInfo.mf13Dat }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13DatTime', value: otInfo.mf13DatTime }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13LineCode', value: otInfo.mf13LineCode }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13LineNm', value: otInfo.mf13LineNm }));
+				if (otInfo == null) {
+					// 출고요청일경우 정보를 받아서 파라미터로 넘겨준다.
+					let params = {
+						uri: 'output/outputReqSel',
+						mf13No : code
+					}
+					let data = ajax.getAjaxSync(params);
+					if (data == null) {
+						pushMsg(`해당 작업요청서는 존재하지 않습니다.`);
+					} else {
+						form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
+						form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
+						form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));
+						form.append($('<input/>', {type: 'hidden', name: 'mf13No', value: data['detailInfo'][0].mf13No }));
+						form.append($('<input/>', {type: 'hidden', name: 'mf13Dat', value: data['detailInfo'][0].mf13Dat }));
+						form.append($('<input/>', {type: 'hidden', name: 'mf13DatTime', value: data['detailInfo'][0].mf13DatTime }));
+						form.append($('<input/>', {type: 'hidden', name: 'mf13LineCode', value: data['detailInfo'][0].mf13LineCode }));
+						form.append($('<input/>', {type: 'hidden', name: 'mf13LineNm', value: data['detailInfo'][0].mf13LineNm }));
+					}
 					
 				} else {
 					// 출고요청완료 SMD 입고
-					//OT2025032300002
 					form.append($('<input/>', {type: 'hidden', name: 'view', value:'smd/smdInput' }));
 					form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'smd/smdInput' }));
 					form.append($('<input/>', {type: 'hidden', name: 'title', value:'SMD 입고처리' }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13No', value: otInfo.mf13No }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13Dat', value: otInfo.mf13Dat }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13DatTime', value: otInfo.mf13DatTime }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13LineCode', value: otInfo.mf13LineCode }));
-					form.append($('<input/>', {type: 'hidden', name: 'mf13LineNm', value: otInfo.mf13LineNm }));
+					form.append($('<input/>', {type: 'hidden', name: 'mf13No', value: codeData }));
 				}
-				
 			} else if (linkType == 'OC') { // 부품투입
 										
 			} else if (linkType == 'RE') { //RESTORE 반납
