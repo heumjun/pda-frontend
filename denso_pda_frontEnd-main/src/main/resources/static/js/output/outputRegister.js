@@ -21,11 +21,11 @@ const outputRegister = function(){
         let columnsDefinition = [
             /*{binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},*/
             {binding:'cm08Name'	,header:'품목명'	,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
-            {binding:'st03Qr'	,header:'QR코드'	,width:150	,dataType:'String'	,align:'center'},
-			{binding:'st03Qty'	,header:'출고수량'	,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
-            {binding:'st03Stok'	,header:'창고'	,width:130	,dataType:'String'	,align:'left'},
-			{binding:'st03Dist'	,header:'구역'	,width:130	,dataType:'String'	,align:'left'},
-			
+            {binding:'st03Qr'	,header:'QR코드'	,width:150	,dataType:'String'	,align:'center' ,isReadOnly: true},
+			{binding:'st03Qty'	,header:'박스수량'	,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},
+			{binding:'st03Moq'	,header:'MOQ'	,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},
+            {binding:'st03Stok'	,header:'창고'	,width:130	,dataType:'String'	,align:'left' ,isReadOnly: true},
+			{binding:'st03Dist'	,header:'구역'	,width:130	,dataType:'String'	,align:'left' ,isReadOnly: true},
 			{binding:'st03Lot', header: 'LOT번호', width: 180, align:'center', dataType:'String'	,visible:false},
 			{binding:'st03LotSeq', header: 'LOT SEQ', width: 90, align:'center', dataType:'String'	,visible:false},
 			
@@ -128,21 +128,22 @@ const outputRegister = function(){
             //grid._flexCv.sourceCollection = warehousingList.map(item => ({...item, select:false}));
 			
 			grid._flexCv.sourceCollection = [];
+			
 			outputRegisterList.forEach( (item, index) => {
-				let addRow = grid._flexCv.addNew();
-				addRow.st03OutputNo = item.mf13No;
-				addRow.st03OutputDtlNo = item.mf14No;
-				addRow.st03Qty = item.mf14Qty;
-				addRow.cm08Code = item.mf14Code;
-				addRow.cm08Name = item.cm08Name;
-				addRow.cm08Gbn = item.cm08Gbn;
-				addRow.cm08Dgbn = item.cm08Dgbn;
-				addRow.st03Unt = item.mf14Unt;
 				
-				addRow.st03Stok = "01";
-				addRow.st03Dist = "001";
-
-				grid._flexCv.commitNew();
+				for(var i=0; i < item.mf14Qty; i++) {
+					let addRow = grid._flexCv.addNew();
+					addRow.st03OutputNo = item.mf13No;
+					addRow.st03OutputDtlNo = item.mf14No;
+					addRow.st03Qty = 1;
+					addRow.cm08Code = item.mf14Code;
+					addRow.cm08Name = item.cm08Name;
+					addRow.cm08Gbn = item.cm08Gbn;
+					addRow.cm08Dgbn = item.cm08Dgbn;
+					addRow.st03Unt = item.mf14Unt;
+					
+					grid._flexCv.commitNew();
+				}
 
 	        });
 			
@@ -277,11 +278,7 @@ const outputRegister = function(){
 								var lot = barcode[3];
 								var lotSeq = barcode[2];
 								
-								grid._flexGrid.setCellData(index, 'st03Lot', lot);
-								grid._flexGrid.setCellData(index, 'st03LotSeq', lotSeq);
-								grid._flexGrid.setCellData(index, 'st03Qr', beforeBar);
-								// 창고, 구역 가져와서 넣어주고 return true 해야한다.
-								getStokDistInfo(index, code, lot, lotSeq);
+								getLotInfo(index, code, lot, lotSeq, beforeBar);
 								return true;
 							}
 						}
@@ -326,6 +323,7 @@ const outputRegister = function(){
 										grid._flexGrid.setCellData(index, 'st03Qr', inputInfo.st02Qrcode);
 										grid._flexGrid.setCellData(index, 'st03Stok', inputInfo.st02Stok);
 										grid._flexGrid.setCellData(index, 'st03Dist', inputInfo.st02Dist);
+										grid._flexGrid.setCellData(index, 'st03Moq', inputInfo.st02Moq);
 										
 										return true;
 									}
@@ -350,6 +348,38 @@ const outputRegister = function(){
 			}
 		}
 	});
+	
+	const getLotInfo = (index, code, lot, lotSeq, barcode) => {
+			
+		let params = {
+			uri : 'smdInput/smdInput/getLotInfo',
+			st03Code : code,
+			st03Lot : lot,
+			st03LotSeq : lotSeq
+		};
+		
+		ajax.getAjax(params, true).then(async (data)=>{
+			
+			let lotInfo = data["lotInfo"];
+			
+			if(lotInfo != null) {
+				console.log(lotInfo);
+				grid._flexGrid.setCellData(index, 'st03Stok', lotInfo.st01Stok);
+				grid._flexGrid.setCellData(index, 'st03Dist', lotInfo.st01District);
+				grid._flexGrid.setCellData(index, 'st03Lot', lotInfo.st01Lot);
+				grid._flexGrid.setCellData(index, 'st03LotSeq', lotInfo.st01LotSeq);
+				grid._flexGrid.setCellData(index, 'st03Qr', barcode);
+				grid._flexGrid.setCellData(index, 'st03Moq', lotInfo.st02Moq);
+				// 값이 없는 경우 경고메시지
+			} else {
+				swal('작업 불가','리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다','warning');
+				return ;
+			}
+        }).catch((e)=>{
+            console.debug(e);
+        });
+		
+	}
 	
 	const getStokDistInfo = async (index, code, lot, lotSeq)=>{
 		let params = {

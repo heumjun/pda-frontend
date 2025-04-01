@@ -107,20 +107,14 @@ const index = function(){
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고 처리' }));
 				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: codeData }));
 			} else if (linkType == 'OT') {
-				/*let otInfo = getOuputReqSel(codeData);
-				otInfo.COMP_GBN = Y 
-				FLASE Aalert -> 자재 > SMD출고
-				ELSE */
-				
 				// 출고인지, 출고요청완료인지 구분
 				let otInfo = getOuputReqSel(codeData);
-				alert(otInfo);
 				
-				if (otInfo < 1) {
+				if (otInfo.selectCnt < 1) {
 					// 출고요청일경우 정보를 받아서 파라미터로 넘겨준다.
 					let params = {
 						uri: 'output/outputReqSel',
-						mf13No : code
+						mf13No : codeData
 					}
 					let data = ajax.getAjaxSync(params);
 					if (data == null) {
