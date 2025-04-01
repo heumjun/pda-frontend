@@ -230,10 +230,10 @@ const consignedMaterialsReg = function(){
 			
 		grid.disableAutoRows();
 		
-		/*if(!grid.gridValidation()){
+		if(!grid.gridValidation()){
             alertWarning('저장불가', '그리드 오류내역을 확인하세요.');
             return;
-        }*/
+        }
 		
 		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
 		if(insertList.length < 1) {
@@ -241,10 +241,12 @@ const consignedMaterialsReg = function(){
             return;
         }
 
-		confirm("사급요청을 등록하시겠습니까?", "사급요청이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("사급출고를 등록하시겠습니까?", "사급출고가 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 			
 			let params = {
-                uri: `output`,
+                uri: `consignedMaterialsReg/consignedMaterialsReg`,
+				cm01Code : $("#mf15Cus").val(), // 제조사코드
+				mf15No : $("#mf15No").val(), // 사급요청서번호
                 insertList: insertList
             };
 			
@@ -253,7 +255,7 @@ const consignedMaterialsReg = function(){
         	ajax.postAjax(params, true).then(async (data)=>{
 	            $(".text-bg-danger").text("사급출고 완료");
 				$("#btnSave").hide();
-	            pushMsg('사급요청이 등록되었습니다.');
+	            pushMsg('사급이 등록되었습니다.');
             }).catch((e)=>{
                 console.debug(e);
             });

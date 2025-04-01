@@ -114,8 +114,9 @@ const index = function(){
 				
 				// 출고인지, 출고요청완료인지 구분
 				let otInfo = getOuputReqSel(codeData);
+				alert(otInfo);
 				
-				if (otInfo == null) {
+				if (otInfo < 1) {
 					// 출고요청일경우 정보를 받아서 파라미터로 넘겨준다.
 					let params = {
 						uri: 'output/outputReqSel',
@@ -126,7 +127,7 @@ const index = function(){
 						pushMsg(`해당 작업요청서는 존재하지 않습니다.`);
 					} else {
 						form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputRegister' }));
-						form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'system/outputRegister' }));
+						form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'output/outputRegister' }));
 						form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 처리' }));
 						form.append($('<input/>', {type: 'hidden', name: 'mf13No', value: data['detailInfo'][0].mf13No }));
 						form.append($('<input/>', {type: 'hidden', name: 'mf13Dat', value: data['detailInfo'][0].mf13Dat }));
