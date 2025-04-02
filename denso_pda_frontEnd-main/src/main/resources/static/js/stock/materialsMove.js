@@ -167,6 +167,17 @@ const materialsMove = function() {
 		
 		//barcode = "3N110305-01530 2000 000000000279 G1000120250316";
 
+		var st02LotSeq = "";
+		var qrCode = "";
+		
+		if(barcode.substring(0,3) == '3N1') {
+			qrCode = "";
+			st02LotSeq = barcode.split(" ")[2];
+		} else {
+			qrCode = barcode;
+			st02LotSeq = "";
+		}
+		
         grid.disableAutoRows();
 		
 		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
@@ -178,7 +189,8 @@ const materialsMove = function() {
 		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
         let params = {
             uri: `materialsMove/materialsMove`,
-			st02Qrcode : barcode
+			st02Qrcode : qrCode,
+			st02LotSeq : st02LotSeq
         }
 		
         params = {...params,...ajax.getParams('searchForm')}
