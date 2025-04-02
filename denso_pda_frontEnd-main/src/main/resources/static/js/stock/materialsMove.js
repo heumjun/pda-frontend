@@ -273,7 +273,7 @@ const materialsMove = function() {
 
 			let params = {
                 uri: `materialsMove/materialsMove`,
-				Stok : cmbStok.selectedValue,
+				stok : cmbStok.selectedValue,
 				dist : cmbDist.selectedValue,
                 insertList: insertList
             };
