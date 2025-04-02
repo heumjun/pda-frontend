@@ -279,7 +279,8 @@ const warehousing = function(){
 		onComplete: function(barcode, qty){
 
 			let matchBar = false;
-			//barcode = barcode.toUpperCase();
+			barcode = barcode.toUpperCase();
+			
 			// 길이는 추후 변경될 수도 있음
 			if(barcode.length == 17) {
 
@@ -289,11 +290,8 @@ const warehousing = function(){
 						// 납품확인서의 LOT번호와 다른 LOT번호를 찍은 경우에 경고메시지 및 입력이 안되도록 막아줘야함
 						if(row.dataItem.st02Lot == barcode.substring(0, 13)){
 							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
-								// 리딩 시 여기 if문 안들어오면 일치하는 품번이 존재하지 않음.
-								// match가 되었을 경우 true
+								
 								matchBar = true;
-								// 바코드 값들어가는 경우 select값 true로 변경
-								//grid._flexGrid.setCellData(index,'select',true);
 								
 								// 중복체크가 되어야한다.
 								for(var i=0; i < grid._flexGrid.rows.length; i++){
@@ -308,6 +306,7 @@ const warehousing = function(){
 
 								// 값 넣어주기
 								grid._flexGrid.setCellData(index, 'st02Qrcode', barcode);
+								grid._flexGrid.setCellData(index, 'st02DefLot', barcode);
 								return true;
 							}
 						}
