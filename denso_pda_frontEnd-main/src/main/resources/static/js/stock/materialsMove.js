@@ -72,13 +72,15 @@ const materialsMove = function() {
             {binding:'st02Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
             {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true 	,visible:false},
-			{binding:'st02Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
+			{binding:'st02Qty'		,header:'박스수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
 			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
 			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
 			{binding:'st02Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st02Moq'		,header:'수량'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st02DefLot'	,header:'DEF LOT'	,width:90	,align:'center'		,dataType:'String'	,visible:false}
         ];
 		
         //그리드 컬럼셋팅
@@ -211,7 +213,9 @@ const materialsMove = function() {
 				addRow.st02Gbn = 'SM';
 				addRow.st02Qty = data.st02Qty;
 				addRow.st02Ipqty = data.st02Ipqty;
-				addRow.st02Qrcode = barcode;
+				addRow.st02Qrcode = data.st02Qrcode;
+				addRow.st02Moq = data.st02Moq;
+				addRow.st02DefLot = data.st02DefLot;
 				
 				grid._flexCv.commitNew();
 			} else {
@@ -222,36 +226,6 @@ const materialsMove = function() {
 			
 		});
 		
-
-        /*try {
-            let {materialsMove} = ajax.getAjax(params, true);
-
-			if ( materialsMove != null ) {
-				 
-				let addRow = grid._flexCv.addNew();
-				
-				addRow.st02Dat = materialsMove.st02Dat;
-				addRow.st02Code = materialsMove.st02Code;
-				addRow.st02Name = materialsMove.st02Name;
-				addRow.st02Stok = materialsMove.st02CurStok;
-				addRow.st02Dist = materialsMove.st02CurDist;
-				addRow.st02LotSeq = materialsMove.st02LotSeq;
-				addRow.st02Lot = materialsMove.st02Lot;
-				addRow.st02Gbn = 'SM';
-				addRow.st02Qty = materialsMove.st02Qty;
-				addRow.st02Ipqty = materialsMove.st02Ipqty;
-				addRow.st02Qrcode = barcode;
-				
-				grid._flexCv.commitNew();
-			} else {
-				alertWarning('등록불가','품목이 없습니다.');	
-			}
-
-        } catch(error) {
-            console.debug(error);
-            return;
-        }
-*/
     }
 	
 	const saveMaterialsMove = () => {
@@ -284,7 +258,6 @@ const materialsMove = function() {
 				$("#btnSave").hide();
 	            pushMsg('재고이동이 등록되었습니다.');
             }).catch((e) => {
-                //console.debug(e);
             });
 		});
 	}
