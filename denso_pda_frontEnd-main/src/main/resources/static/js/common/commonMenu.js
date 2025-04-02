@@ -71,9 +71,6 @@ export const menuLoad = ()=>{
 
         //collapse 에서 펼치기로 설정된 엘리먼트 가져온다.
         let collapseElementList = $('.nav-link[aria-expanded=true]');
-        
-		
-		console.log(collapseElementList);
         //루프를 돌면서 펼치기로 설정되어 있는 자식의 id값을 가져와서 collapse('show')를 사용하여 풀어준다.
         collapseElementList.map((index,element)=>{
             let parentId = $(element).attr('aria-controls');

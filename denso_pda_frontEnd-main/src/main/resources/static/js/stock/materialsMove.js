@@ -167,6 +167,14 @@ const materialsMove = function() {
 		
 		//barcode = "3N110305-01530 2000 000000000279 G1000120250316";
 
+        grid.disableAutoRows();
+		
+		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === barcode ));
+		if(duplication.length != 0) {
+			alertWarning('중복 항목', `중복된 항목입니다.`);
+			return;
+		}
+		
 		var st02LotSeq = "";
 		var qrCode = "";
 		
@@ -178,25 +186,45 @@ const materialsMove = function() {
 			st02LotSeq = "";
 		}
 		
-        grid.disableAutoRows();
-		
-		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === barcode ));
-		if(duplication.length != 0) {
-			alertWarning('중복 항목', `중복된 항목입니다.`);
-			return;
-		}
-		
 		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
         let params = {
-            uri: `materialsMove/materialsMove`,
+            uri: `materialsMove/materialsMove/getMaterialsMove`,
 			st02Qrcode : qrCode,
 			st02LotSeq : st02LotSeq
         }
 		
         params = {...params,...ajax.getParams('searchForm')}
+		
+		ajax.postAjax(params, true).then(async (data) => {
+						
+			if ( data != null ) {
+							 
+				let addRow = grid._flexCv.addNew();
+				
+				addRow.st02Dat = data.st02Dat;
+				addRow.st02Code = data.st02Code;
+				addRow.st02Name = data.st02Name;
+				addRow.st02Stok = data.st02CurStok;
+				addRow.st02Dist = data.st02CurDist;
+				addRow.st02LotSeq = data.st02LotSeq;
+				addRow.st02Lot = data.st02Lot;
+				addRow.st02Gbn = 'SM';
+				addRow.st02Qty = data.st02Qty;
+				addRow.st02Ipqty = data.st02Ipqty;
+				addRow.st02Qrcode = barcode;
+				
+				grid._flexCv.commitNew();
+			} else {
+				alertWarning('등록불가','품목이 없습니다.');	
+			}
+			
+        }).catch((e)=>{
+			
+		});
+		
 
-        try {
-            let {materialsMove} = await ajax.getAjax(params, true);
+        /*try {
+            let {materialsMove} = ajax.getAjax(params, true);
 
 			if ( materialsMove != null ) {
 				 
@@ -223,7 +251,7 @@ const materialsMove = function() {
             console.debug(error);
             return;
         }
-
+*/
     }
 	
 	const saveMaterialsMove = () => {

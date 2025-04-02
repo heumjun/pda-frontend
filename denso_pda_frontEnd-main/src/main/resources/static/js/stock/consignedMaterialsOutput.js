@@ -145,10 +145,21 @@ const consignedMaterialsOutput = function() {
 
         grid.disableAutoRows();
 		
-		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
+		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === barcode ));
 		if(duplication.length != 0) {
 			alertWarning('중복 항목', `중복된 항목입니다.`);
 			return;
+		}
+		
+		var st02LotSeq = "";
+		var qrCode = "";
+		
+		if(barcode.substring(0,3) == '3N1') {
+			qrCode = "";
+			st02LotSeq = barcode.split(" ")[2];
+		} else {
+			qrCode = barcode;
+			st02LotSeq = "";
 		}
 		
 		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
