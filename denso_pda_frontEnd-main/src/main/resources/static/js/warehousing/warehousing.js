@@ -39,6 +39,7 @@ const warehousing = function(){
             {binding:'st02Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	},
 			{binding:'st02Dist'		,header:'구역'	,width:150	,dataType:'String'	,align:'center'	},
 			{binding:'st02Lot'		,header:'lot'	,width:150	,dataType:'String'	,align:'center',visible:false	},
+			{binding:'st02DefLot'	,header:'lot'	,width:150	,dataType:'String'	,align:'center',visible:false	},
 			// button with regular bound text
         ];
 
