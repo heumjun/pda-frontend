@@ -141,13 +141,13 @@ const consignedMaterialsReg = function(){
             return;
         }
 		
-		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
+		let insertList = grid.gridItemListToArray(grid._flexCv.itemsEdited);
 		if(insertList.length < 1) {
 			alertWarning('저장불가','저장할 내역이 없습니다.');
             return;
         }
 
-		confirm("사급출고를 등록하시겠습니까?", "사급출고가 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("사급등록 하시겠습니까?", "사급등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 			
 			let params = {
                 uri: `consignedMaterialsReg/consignedMaterialsReg`,
