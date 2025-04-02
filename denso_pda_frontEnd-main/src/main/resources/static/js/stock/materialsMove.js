@@ -180,7 +180,7 @@ const materialsMove = function() {
 		
         grid.disableAutoRows();
 		
-		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
+		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === barcode ));
 		if(duplication.length != 0) {
 			alertWarning('중복 항목', `중복된 항목입니다.`);
 			return;
