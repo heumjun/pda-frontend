@@ -11,45 +11,21 @@ const consignedMaterialsOutput = function() {
 	/**
 	 * 창고조회
 	 */
-	const getComboStokCodeList = (code) => {
+	const getComboCusCodeList = (code) => {
 	    let params = {
-	        uri : "criteria/warehouse",
-	        cm15Code : code,
-	        cm15Lock : 'N'
+	        uri : "consignedMaterialsOutput/consignedMaterialsOutput/getComboCusList",
 	    };
 
 	    let list = ajax.getAjaxSync(params);
 
 	    if(list === undefined) return null;
-	    return list["warehouseList"];
-	}
-	
-	/**
-	 * 구역
-	 */
-	const getComboDistCodeList = (code) => {
-	    let params = {
-	        uri : "criteria/district",
-	        cm16Code : code,
-	    };
-
-	    let list = ajax.getAjaxSync(params);
-
-	    if(list === undefined) return null;
-	    return list["districtList"];
+		console.log(list);
+	    return list["cmbCusList"];
 	}
 	
 	let grid  = new GridFactory('#grid');
-	let cmbStok = input.comboBox('#stok', getComboStokCodeList(), 'cm15Code','cm15Name');
-	let cmbDist = input.comboBox('#dist', getComboDistCodeList(), 'cm16Code','cm16Name');
-	
-    cmbDist.collectionView.filter = (dist) => {
-        return dist.cm16Stok === cmbStok.collectionView.currentItem.cm15Code;
-    };
-    cmbStok.collectionView.currentChanged.addHandler(() => {
-        cmbDist.collectionView.refresh(); // apply the filter
-    });
-	
+	let cmbCus = input.comboBox('#cm01Cus', getComboCusCodeList(), 'cm01Code','cm01Name');
+
 	/**
      * 그리드 초기화
      */
@@ -229,7 +205,7 @@ const consignedMaterialsOutput = function() {
             return;
         }
 
-		confirm("재고이동을 하시겠습니까?", "재고이동 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("사급등록을 하시겠습니까?", "사급등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
 			let params = {
                 uri: `materialsMove/materialsMove`,
@@ -242,7 +218,7 @@ const consignedMaterialsOutput = function() {
 
         	ajax.postAjax(params, true).then(async (data)=>{
 				$("#btnSave").hide();
-	            pushMsg('재고이동이 등록되었습니다.');
+	            pushMsg('사급등록 등록되었습니다.');
             }).catch((e) => {
                 //console.debug(e);
             });
