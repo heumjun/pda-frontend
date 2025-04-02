@@ -42,7 +42,7 @@ const consignedMaterialsReq = function(){
 
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'stock/consignedMaterialsReg' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'stock/consignedMaterialsReg' }));
-				form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급 출고 처리' }));
+				form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급 요청 등록' }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf15No', value:grid._flexGrid.getCellData(ht._row,ht.col) }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf15Dat', value:grid._flexGrid.getCellData(ht._row, 1) }));
 				form.append($('<input/>', {type: 'hidden', name: 'mf15Time', value:grid._flexGrid.getCellData(ht._row, 2) }));

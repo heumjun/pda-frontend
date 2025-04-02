@@ -113,9 +113,9 @@ const consignedMaterialsReg = function(){
 		form.attr("method","get");
 		form.attr("action","view");
 		form.attr("target","_self");
-		form.append($('<input/>', {type: 'hidden', name: 'view', value:'output/outputReqSel' }));
-		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'output/outputReqSel' }));
-		form.append($('<input/>', {type: 'hidden', name: 'title', value:'출고 조회' }));
+		form.append($('<input/>', {type: 'hidden', name: 'view', value:'stock/consignedMaterialsReq' }));
+		form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'stock/consignedMaterialsReq' }));
+		form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급 출고 조회' }));
 		form.appendTo('body');
 		form.submit();
 	}

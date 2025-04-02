@@ -139,8 +139,11 @@ const index = function(){
 					form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'restore/restore' }));
 					form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
 					form.append($('<input/>', {type: 'hidden', name: 'st10No', value: codeData }));
-				} else if (linkType == 'RT') { //RETURN 반품
-					
+				} else if (linkType == 'SB') { //RETURN 반품
+					form.append($('<input/>', {type: 'hidden', name: 'view', value:'stock/consignedMaterialsReg' }));
+					form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'stock/consignedMaterialsReg' }));
+					form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
+					form.append($('<input/>', {type: 'hidden', name: 'mf15No', value: codeData }));
 				} else  {
 					form.append($('<input/>', {type: 'hidden', name: 'view', value:'materialInfo/materialInfo' }));
 					form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'materialInfo/materialInfo' }));
