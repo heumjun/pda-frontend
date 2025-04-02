@@ -61,42 +61,23 @@
           <div class="row g-3">
             <div class="col-lg-12">
               <form id="submitForm" onsubmit="return false">
-                <!-- <div class="card mb-2">
+                <div class="card mb-2">
                 	<div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
                 	<div class="card-body card-search position-relative">
                 		<div class="row">
-						    <label for="relReqNo" class="col-5 col-form-label fw-bold">출고요청서번호</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext fw-bold text-dark" id="st03OutputNo" value="">
+						    <label for="stok" class="col-3 col-form-label fw-bold">창고</label>
+						    <div class="col-9">
+						      <div id="stok"></div>
 						    </div>
 						</div>
 						<div class="row">
-						    <label for="relReqDt" class="col-5 col-form-label">출고요청일자</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="st03Dat" value="">
+						    <label for="dist" class="col-3 col-form-label">구역</label>
+						    <div class="col-9">
+						      <div id="dist"></div>
 						    </div>
 						</div>
-						<div class="row">
-						    <label for="relReqTm" class="col-5 col-form-label">출고요청시간</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="st03DatTime" value="">
-						    </div>
-						</div>
-						<div class="mb-1 row">
-						    <label for="relReqClient" class="col-5 col-form-label">거래처</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="relReqClient" value="거래처명">
-						    </div>
-						</div>
-						<div class="row">
-						    <label for="relReqLineCode" class="col-5 col-form-label">라인코드</label>
-						    <div class="col-7">
-						      <input type="text" readonly class="form-control-plaintext" id="st03Line" value="">
-						      <input type="hidden" readonly class="form-control-plaintext" id="st03Linena" value="">
-						    </div>
-						</div>
-                	</div>
-                </div> -->
+					</div>	
+                </div>
               </form>
             </div>
           </div>
@@ -104,7 +85,7 @@
           <div class="row g-3 mb-3">
             <div class="col-lg-12">
             	<div class="col-lg-12 d-flex justify-content-between mb-1">
-            		<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2 mt-1">재고 이동 목록</span>
+            		<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2 mt-1">재고 이동</span>
             	</div>
 
                 <div class="card">

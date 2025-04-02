@@ -8,7 +8,47 @@ import { menuLoad } from "../common/commonMenu.js";
 
 const materialsMove = function() {
 	
+	/**
+	 * 창고조회
+	 */
+	const getComboStokCodeList = (code) => {
+	    let params = {
+	        uri : "criteria/warehouse",
+	        cm15Code : code,
+	        cm15Lock : 'N'
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["warehouseList"];
+	}
+	
+	/**
+	 * 구역
+	 */
+	const getComboDistCodeList = (code) => {
+	    let params = {
+	        uri : "criteria/district",
+	        cm16Code : code,
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["districtList"];
+	}
+	
 	let grid  = new GridFactory('#grid');
+	let cmbStok = input.comboBox('#stok', getComboStokCodeList(), 'cm15Code','cm15Name');
+	let cmbDist = input.comboBox('#dist', getComboDistCodeList(), 'cm16Code','cm16Name');
+	
+    cmbDist.collectionView.filter = (dist) => {
+        return dist.cm16Stok === cmbStok.collectionView.currentItem.cm15Code;
+    };
+    cmbStok.collectionView.currentChanged.addHandler(() => {
+        cmbDist.collectionView.refresh(); // apply the filter
+    });
 	
 	/**
      * 그리드 초기화
@@ -17,7 +57,7 @@ const materialsMove = function() {
 
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');
         let columnsDefinition = [
-			{binding:'delete'	,header: '삭제'	,width: 80
+			{binding:'delete'	,header: '삭제'	,width: 60
 				,cellTemplate: wijmo.grid.cellmaker.CellMaker.makeButton({
 					text: '<b style="color:red;">삭제</b>'
 					,click: (e, ctx) => {
@@ -31,12 +71,10 @@ const materialsMove = function() {
 			},
             {binding:'st02Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
             {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
-            {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
+            {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true 	,visible:false},
 			{binding:'st02Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
-			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'	},
-			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'	},
-			{binding:'st02CurStok'	,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,visible:false},
-			{binding:'st02CurDist'	,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,visible:false},
+			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
+			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
 			{binding:'st02Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
@@ -46,7 +84,7 @@ const materialsMove = function() {
         //그리드 컬럼셋팅
         grid.setColumnsDefinition(columnsDefinition);
         //그리드 높이 자동조절
-        grid.setDynamicHeight(450);
+        grid.setDynamicHeight(350);
         //체크박스 컬럼 생성
         //grid.checkBoxColumns(["select"]);
         //옵션판넬 생성(모바일상태에서는 없어지고 데스크톱모드에서 보여짐)
@@ -127,7 +165,7 @@ const materialsMove = function() {
 	// 바코드 스캔시 품목 검사
 	const barcodeSearch = async(barcode) => {
 		
-		barcode = "3N110305-01530 2000 000000000279 G1000120250316";
+		//barcode = "3N110305-01530 2000 000000000279 G1000120250316";
 
         grid.disableAutoRows();
 		
@@ -155,10 +193,8 @@ const materialsMove = function() {
 				addRow.st02Dat = materialsMove.st02Dat;
 				addRow.st02Code = materialsMove.st02Code;
 				addRow.st02Name = materialsMove.st02Name;
-				addRow.st02Stok = materialsMove.st02Stok;
-				addRow.st02Dist = materialsMove.st02Dist;
-				addRow.st02CurStok = materialsMove.st02CurStok;
-				addRow.st02CurDist = materialsMove.st02CurDist;
+				addRow.st02Stok = materialsMove.st02CurStok;
+				addRow.st02Dist = materialsMove.st02CurDist;
 				addRow.st02LotSeq = materialsMove.st02LotSeq;
 				addRow.st02Lot = materialsMove.st02Lot;
 				addRow.st02Gbn = 'SM';
@@ -197,6 +233,8 @@ const materialsMove = function() {
 
 			let params = {
                 uri: `materialsMove/materialsMove`,
+				Stok : cmbStok.selectedValue,
+				dist : cmbDist.selectedValue,
                 insertList: insertList
             };
 
@@ -226,7 +264,7 @@ const materialsMove = function() {
 	const handleEvent = () => {
 
         gridInit();
-		barcodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', saveMaterialsMove);
 		$('#btnBack').on('click', goBack);
@@ -250,7 +288,7 @@ const materialsMove = function() {
 			});
 			
 			if ( matchBar ) {
-				bacodeSearch(barcode);	
+				barcodeSearch(barcode);	
 			}
 			
 		}

@@ -453,10 +453,15 @@
 	border-radius : 0 !important;
 }
 
-body {
+.container-fluid {
 	margin-top : 40px;
 	margin-bottom : 40px;
 	overflow-x: hidden;
+}
+
+.wj-dropdown-panel {
+	margin-top : -40px !important;
+	margin-bottom : -40px !important;	
 }
 
 .btn-falcon-default {
