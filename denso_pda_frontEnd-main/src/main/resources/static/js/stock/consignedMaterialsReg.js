@@ -80,6 +80,24 @@ const consignedMaterialsReg = function(){
 		
     }
 	
+	const search = async ()=>{
+	        
+        grid.disableAutoRows();
+        
+        let params = {
+            uri: `consignedMaterialsReq/consignedMaterialsReq`,
+			mf15No : $('#data-params').data('params').mf15No
+        }
+		
+		params = {...params,...ajax.getParams('searchForm')}
+		let {consignedMaterialsReqList} = await ajax.getAjax(params, true);  
+		
+		$("#mf15No").val($('#data-params').data('params').mf15No);
+		$("#mf15Dat").val(consignedMaterialsReqList[0].mf15Dat + " " + consignedMaterialsReqList[0].mf15Time);
+		$("#mf15Cus").val(consignedMaterialsReqList[0].mf15Cus);
+		$("#mf15CusName").val(consignedMaterialsReqList[0].mf15CusName);
+    }
+	
 	const detailSearch = async() => {
 			
         grid.disableAutoRows();
@@ -93,12 +111,6 @@ const consignedMaterialsReg = function(){
         try {
             let {consignedMaterialsHistDetailAllList} = await ajax.getAjax(params, true);  
             grid._flexCv.sourceCollection = consignedMaterialsHistDetailAllList.map(item => ({...item}));
-			
-			$("#mf15No").val($('#data-params').data('params').mf15No);
-			$("#mf15Dat").val($('#data-params').data('params').mf15Dat + " " + $('#data-params').data('params').mf15Time);
-			$("#mf15Cus").val($('#data-params').data('params').mf15Cus);
-			$("#mf15CusName").val($('#data-params').data('params').mf15CusName);
-			
             pushMsg(`${grid.getRowCnt()}행 조회 되었습니다.`);
 
         } catch(error) {
@@ -119,112 +131,6 @@ const consignedMaterialsReg = function(){
 		form.appendTo('body');
 		form.submit();
 	}
-	
-	/**
-     *  사급 신규/수정 저장
-     */
-    const save = () => {
-        console.log("=========== save-start ===========");
-        console.log("=========== 사급 팝업 저장 ===========");
-
-        let data = $("form[name=consignedMaterials-form]").serializeObject();
-
-        let consignedMaterialsGrid = wijmo.Control.getControl("#consignedMaterialsGrid");
-        let consignedMaterialsCv = consignedMaterialsGrid.collectionView;
-
-        console.log(data);
-
-        let cm01Code = data.cm01Code; // 제조사코드
-        let mf15No = data.mf15No; // 사급요청서번호
-        //let st03No = data.st03No; // 출고번호 - 사용안함
-
-        if (inputMode == "update") {
-            if (wijmo.isNullOrWhiteSpace(mf15No)) {
-                swal('등록 불가','사급요청서번호가 없어서 저장할 수 없습니다.','warning');
-                return;
-            }
-        }
-
-        if (inputMode == "insert") { // 신규
-            // if (wijmo.isNullOrWhiteSpace(st03No)) {
-            //     swal('등록 불가','출고번호가 입력되지 않아 저장할 수 없습니다.','warning');
-            //     return;
-            // }
-        }
-
-        if (inputMode == "update") { // 수정
-
-            // 변경사항 체크
-            let oldData = $('#consignedMaterialsEditPopUp').data('oldData');
-            let noChgFlag = false;
-
-            console.log(oldData);
-
-            if (!wijmo.isNullOrWhiteSpace(oldData)) {
-                if (oldData.cm01Code  == cm01Code
-                    && oldData.mf15No  == mf15No) {
-                    noChgFlag = true;
-                }
-            }
-
-            if (noChgFlag == false) {
-                swal('작업 불가', '사급 정보가 변경되어 수정할 수 없습니다.', 'warning');
-                return;
-            }
-
-            if(consignedMaterialsCv.itemsAdded.length == 0 && consignedMaterialsCv.itemsEdited.length == 0){
-                swal('작업 불가', '수정할 내용이 없습니다.', 'warning');
-                return;
-            }
-        } else { // 신규
-            if(consignedMaterialsCv.itemsAdded.length == 0 && consignedMaterialsCv.itemsEdited.length == 0){
-                swal('작업 불가', '등록할 내용이 없습니다.', 'warning');
-                return;
-            }
-        }
-
-        if (consignedMaterialsCv.isEditingItem) {
-            swal('등록 불가','입력 값을 확인해주세요.','warning');
-            return;
-        }
-
-        if (!gridValidationNew(consignedMaterialsGrid,consignedMaterialsCv)) {
-            swal('등록 불가','필수 값이 입력되지 않아 저장할 수 없습니다.','warning');
-            return;
-        }
-
-        let confirmStr = "사급을 등록하시겠습니까?";
-        let confirmTitleStr = "사급이 등록됩니다.";
-
-        if (inputMode == "update") {
-            confirmStr = "사급을 수정하시겠습니까?";
-            confirmTitleStr = "사급이 수정됩니다.";
-        }
-
-        common.confirm(confirmStr, confirmTitleStr, commonConst.INSERT, function () {
-
-            // 신규/수정 정보 파라메터 등록
-            let params ={
-                consignedMaterialsAddedInfo: commonGrid.convertJsonOfGrid(consignedMaterialsCv.itemsAdded),
-                consignedMaterialsEditedInfo: commonGrid.convertJsonOfGrid(consignedMaterialsCv.itemsEdited),
-                consignedMaterialsHead: [data],
-                inputMode:inputMode,
-                uri :"purchase/order/consignedMaterialsHist"
-            }
-
-            // 저장 수행
-            console.log(params);
-
-            commonAjax.getAjax("POST",params, function () {
-                $('#consignedMaterialsEditPopUp').modal('hide');
-                search();
-            });
-
-        });
-
-        console.log("=========== save-end ===========");
-    }
-	
 	
 	const saveOutput = () => {
 			
@@ -429,6 +335,7 @@ const consignedMaterialsReg = function(){
         init:() => {
 			menuLoad();
             handleEvent();
+			search();
         }
     }
 }();

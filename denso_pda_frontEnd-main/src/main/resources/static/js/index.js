@@ -142,7 +142,7 @@ const index = function(){
 				} else if (linkType == 'SB') { //RETURN 반품
 					form.append($('<input/>', {type: 'hidden', name: 'view', value:'stock/consignedMaterialsReg' }));
 					form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'stock/consignedMaterialsReg' }));
-					form.append($('<input/>', {type: 'hidden', name: 'title', value:'반납 등록' }));
+					form.append($('<input/>', {type: 'hidden', name: 'title', value:'사급 요청 등록' }));
 					form.append($('<input/>', {type: 'hidden', name: 'mf15No', value: codeData }));
 				} else  {
 					form.append($('<input/>', {type: 'hidden', name: 'view', value:'materialInfo/materialInfo' }));
