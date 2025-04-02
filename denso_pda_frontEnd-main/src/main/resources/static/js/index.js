@@ -91,11 +91,10 @@ const index = function(){
 			form.attr("target","_self");
 			
 	    	if (linkType == 'DLV') {
-				var codeData = barcode.substr(3, barcode.length-1);
 				form.append($('<input/>', {type: 'hidden', name: 'view', value:'warehousing/warehousing' }));
 				form.append($('<input/>', {type: 'hidden', name: 'authUrl', value:'warehousing/warehousing' }));
 				form.append($('<input/>', {type: 'hidden', name: 'title', value:'입고 처리' }));
-				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: codeData }));
+				form.append($('<input/>', {type: 'hidden', name: 'pu01No', value: barcode }));
 			} else {
 				
 				var codeData = barcode.substr(2, barcode.length-1);
