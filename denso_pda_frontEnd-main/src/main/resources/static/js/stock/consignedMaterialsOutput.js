@@ -9,9 +9,9 @@ import { menuLoad } from "../common/commonMenu.js";
 const consignedMaterialsOutput = function() {
 	
 	/**
-	 * 창고조회
+	 * 제조사 조회
 	 */
-	const getComboCusCodeList = (code) => {
+	const getComboCusCodeList = () => {
 	    let params = {
 	        uri : "consignedMaterialsOutput/consignedMaterialsOutput/getComboCusList",
 	    };
@@ -19,7 +19,6 @@ const consignedMaterialsOutput = function() {
 	    let list = ajax.getAjaxSync(params);
 
 	    if(list === undefined) return null;
-		console.log(list);
 	    return list["cmbCusList"];
 	}
 	
@@ -45,16 +44,20 @@ const consignedMaterialsOutput = function() {
 					}
 				})
 			},
-            {binding:'st02Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
+            {binding:'st02Code'		,header:'품목코드'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
             {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st02Cus'		,header:'제조사'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true 	,visible:false},
+            {binding:'st02CusName'	,header:'제조사'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true 	,visible:false},
-			{binding:'st02Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
-			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
-			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
+			{binding:'st02Qty'		,header:'박스수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
+			{binding:'st02Moq'		,header:'MOQ'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
+			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	,visible:false	},
+			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	,visible:false	},
 			{binding:'st02Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st02Dgbn'		,header:'품목구분'		,width:90	,align:'center'		,dataType:'String'	,visible:false}
         ];
 		
         //그리드 컬럼셋팅
@@ -141,6 +144,7 @@ const consignedMaterialsOutput = function() {
 	// 바코드 스캔시 품목 검사
 	const barcodeSearch = async(barcode) => {
 		
+		barcode = "EK25032600091-005";
 		//barcode = "3N110305-01530 2000 000000000279 G1000120250316";
 
         grid.disableAutoRows();
@@ -162,46 +166,49 @@ const consignedMaterialsOutput = function() {
 			st02LotSeq = "";
 		}
 		
-		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
         let params = {
-            uri: `materialsMove/materialsMove`,
-			st02Qrcode : barcode
+            uri: `consignedMaterialsOutput/consignedMaterialsOutput/getConsignedMaterialsOutput`,
+			st02Qrcode : qrCode,
+			st02LotSeq : st02LotSeq
         }
 		
         params = {...params,...ajax.getParams('searchForm')}
 
-        try {
-            let {materialsMove} = await ajax.getAjax(params, true);
-
-			if ( materialsMove != null ) {
-				 
+		
+		ajax.postAjax(params, true).then(async (data) => {
+								
+			if ( data != null ) {
+							 
 				let addRow = grid._flexCv.addNew();
 				
-				addRow.st02Dat = materialsMove.st02Dat;
-				addRow.st02Code = materialsMove.st02Code;
-				addRow.st02Name = materialsMove.st02Name;
-				addRow.st02Stok = materialsMove.st02CurStok;
-				addRow.st02Dist = materialsMove.st02CurDist;
-				addRow.st02LotSeq = materialsMove.st02LotSeq;
-				addRow.st02Lot = materialsMove.st02Lot;
-				addRow.st02Gbn = 'SM';
-				addRow.st02Qty = materialsMove.st02Qty;
-				addRow.st02Ipqty = materialsMove.st02Ipqty;
-				addRow.st02Qrcode = barcode;
+				addRow.st02Code = data.st02Code;
+				addRow.st02Name = data.st02Name;
+				addRow.st02Cus = data.st02Cus;
+				addRow.st02CusName = data.st02CusName;
+				addRow.st02Stok = data.st02CurStok;
+				addRow.st02Dist = data.st02CurDist;
+				addRow.st02LotSeq = data.st02LotSeq;
+				addRow.st02Lot = data.st02Lot;
+				addRow.st02Qty = data.st02Qty;
+				addRow.st02Ipqty = data.st02Ipqty;
+				addRow.st02Qrcode = data.st02Qrcode;
+				addRow.st02Moq = data.st02Moq;
+				addRow.st02DefLot = data.st02DefLot;
+				addRow.st02Dgbn = data.st02Dgbn;
 				
 				grid._flexCv.commitNew();
 			} else {
 				alertWarning('등록불가','품목이 없습니다.');	
 			}
-
-        } catch(error) {
-            console.debug(error);
-            return;
-        }
+			
+        }).catch((e)=>{
+			console.debug(error);
+			return;
+		});
 
     }
 	
-	const saveMaterialsMove = () => {
+	const save = () => {
 
 		grid.disableAutoRows();
 
@@ -219,9 +226,8 @@ const consignedMaterialsOutput = function() {
 		confirm("사급등록을 하시겠습니까?", "사급등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
 			let params = {
-                uri: `materialsMove/materialsMove`,
-				Stok : cmbStok.selectedValue,
-				dist : cmbDist.selectedValue,
+                uri: `consignedMaterialsOutput/consignedMaterialsOutput`,
+				cusCode : cmbCus.selectedValue,
                 insertList: insertList
             };
 
@@ -251,9 +257,9 @@ const consignedMaterialsOutput = function() {
 	const handleEvent = () => {
 
         gridInit();
-		//barcodeSearch();
+		barcodeSearch();
 
-		$('#btnSave').on('click', saveMaterialsMove);
+		$('#btnSave').on('click', save);
 		$('#btnBack').on('click', goBack);
     }
 	
