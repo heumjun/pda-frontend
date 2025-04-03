@@ -144,7 +144,7 @@ const consignedMaterialsOutput = function() {
 	// 바코드 스캔시 품목 검사
 	const barcodeSearch = async(barcode) => {
 		
-		barcode = "EK25032600091-005";
+		//barcode = "EK25032600091-005";
 		//barcode = "3N110305-01530 2000 000000000279 G1000120250316";
 
         grid.disableAutoRows();
@@ -257,7 +257,7 @@ const consignedMaterialsOutput = function() {
 	const handleEvent = () => {
 
         gridInit();
-		barcodeSearch();
+		//barcodeSearch();
 
 		$('#btnSave').on('click', save);
 		$('#btnBack').on('click', goBack);
