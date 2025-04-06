@@ -211,11 +211,11 @@ const materialsMove = function() {
 				
 				if ( matchBar ) {
 					
-					const myAudio = document.getElementById("warningAudio") // Audio객체 취득
+/*					const myAudio = document.getElementById("warningAudio") // Audio객체 취득
 					myAudio.play(); // 음원 재생
-					
-					/*var audio = new Audio('991FA8425CE2D43436.mp3');
-					audio.play();*/
+*/					
+					var audio = new Audio('/sound/warning.mp3');
+					audio.play();
 					alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 					return false;
 				}
