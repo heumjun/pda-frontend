@@ -62,10 +62,17 @@
           <div class="row g-3">
             <div class="col-lg-12">
               <form id="submitForm" onsubmit="return false">
+              	<audio src="991FA8425CE2D43436.mp3" autoplay loop controls id="warningAudio"></audio>
               	<input type="hidden" id="dist" name="dist" value="" /> 
                 <div class="card mb-2">
                 	<div class="bg-holder d-none d-lg-block bg-card search-bg-img"></div>
                 	<div class="card-body card-search position-relative">
+                		<div class="row">
+						    <label for="line" class="col-5 col-form-label fw-bold">라인</label>
+						    <div class="col-7">
+						      <div id="line"></div>
+						    </div>
+						</div>
                 		<div class="row">
 						    <label for="stok" class="col-5 col-form-label fw-bold">이동처 창고</label>
 						    <div class="col-7">
@@ -81,7 +88,7 @@
           <div class="row g-3 mb-3">
             <div class="col-lg-12">
             	<div class="col-lg-12 d-flex justify-content-between mb-1">
-            		<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2 mt-1">불출 등록</span>
+            		<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2 mt-1">재고 이동</span>
             	</div>
 
                 <div class="card">
@@ -99,50 +106,8 @@
                 </div>
             </div>
           </div>
-
-	          <!-- <div class="row g-3">
-	          	<div class="col-lg-12">
-	          		<div class="col-md-auto d-flex justify-content-start mb-2 mb-md-0 ">
-	          			<div class="col-md-auto order-md-0 mb-1 mb-sm-0">
-			                <div class="wj-labeled-input">
-	                          <input id="qtyInput" name="qtyInput" type="number">
-	                          <label for="qtyInput">출고수량입력</label>
-	                        </div>
-						</div>
-						<div class="col-md-auto order-md-1 mb-1 mb-sm-0 flex-fill">
-							<div class="col-lg-12 mb-1">
-								<div id="btn-actions">
-									<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-plus-one" type="button">
-			                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-			                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">1</span>
-		                          	</button>
-		                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-plus-ten" type="button">
-			                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-			                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">10</span>
-		                          	</button>
-		                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-plus-hundred" type="button">
-			                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-			                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">100</span>
-		                          	</button>
-		                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-minus-one" type="button">
-			                            <span class="fas fa-minus" data-fa-transform="shrink-3 down-2"></span>
-			                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">1</span>
-		                          	</button>
-		                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-minus-ten" type="button">
-			                            <span class="fas fa-minus" data-fa-transform="shrink-3 down-2"></span>
-			                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">10</span>
-		                          	</button>
-		                          	<button class="btn btn-falcon-default btn-sm me-2 mt-1" id="btn-minus-hundred" type="button">
-			                            <span class="fas fa-minus" data-fa-transform="shrink-3 down-2"></span>
-			                            <span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">100</span>
-		                          	</button>
-								</div>
-							</div>
-						</div>
-					</div>
-	          	</div>
-	          </div> -->
         </div>
+        
         <footer class="footer" style="position: absolute; bottom: 0; width: 100%;">
 		<div class="col-lg-12">
 			<div class="col-md-auto d-flex justify-content-between mb-md-0 mb-1" style="height: 5rem;">
@@ -155,7 +120,7 @@
 				<div class="col-md-auto order-md-0 mb-sm-0">
 					<button class="btn btn-falcon-default btn-sm mt-1" id="btnSave" type="button" style="width: 11rem; font-size: 1.2rem;">
 						<span class="fas fa-save" data-fa-transform="shrink-3 down-2"></span>
-						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">불츨 등록</span>
+						<span class="d-sm-block d-lg-inline-block d-xxl-inline-block ms-2">재고 이동</span>
 					</button>
 				</div>
 			</div>
@@ -183,7 +148,7 @@
   <script>
 
     import('/js/common/common.js');
-    import('/js/stock/materialsMove.js');
+    import('/js/stock/materialsRelease.js');
 
 
   </script>

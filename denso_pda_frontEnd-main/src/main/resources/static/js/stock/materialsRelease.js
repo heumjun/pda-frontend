@@ -6,8 +6,21 @@ import * as consts from "../common/constants.js";
 import { pushMsg, alertWarning, confirm } from "../common/msgBox.js";
 import { menuLoad } from "../common/commonMenu.js";
 
-const materialsMove = function() {
-	
+const materialsRelease = function() {
+	// 라인
+	const getComboLineList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboLineList"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+		
+		console.log(list["comboLineList"])
+		
+	    return list["comboLineList"];
+	};
 	/**
 	 * 창고조회
 	 */
@@ -41,16 +54,11 @@ const materialsMove = function() {
 	}
 	
 	let grid  = new GridFactory('#grid');
-	let cmbStok = input.comboBox('#stok', getComboStokCodeList(), 'cm15Code','cm15Name');
-	//let cmbDist = input.comboBox('#dist', getComboDistCodeList(), 'cm16Code','cm16Name');
-	
-    /*cmbDist.collectionView.filter = (dist) => {
-        return dist.cm16Stok === cmbStok.collectionView.currentItem.cm15Code;
-    };*/
+	let line = input.comboBox('#line', getComboLineList(), 'lineCode', 'lineNm');
+	let cmbStok = input.comboBox('#stok', getComboStokCodeList(), 'cm15Code', 'cm15Name');
     cmbStok.collectionView.currentChanged.addHandler(() => {
 		var distCode = getComboDistCodeList(cmbStok.collectionView.currentItem.cm15Code);
 		$("#dist").val(distCode);
-        //cmbDist.collectionView.refresh(); // apply the filter
     });
 	
 	/**
@@ -107,13 +115,12 @@ const materialsMove = function() {
             //셀수정모드 일경우 오류검증 안함 (포커스 이동이 안됨으로)
             if(grid._flexCv.isEditingItem) return null;
 
-			let sameCode = grid._flexCv.sourceCollection.filter((c) =>
-							( c.st02Company == item.st02Company && c.st02Factory == item.st02Factory && c.st02Qrcode == item.st02Qrcode));
+			/*let sameCode = grid._flexCv.sourceCollection.filter((c) =>
+							( c.st02Company == item.st02Company && c.st02Factory == item.st02Factory && c.st02Qrcode == item.st02Qrcode));*/
 
             switch (prop) {
                 case 'st02Qrcode':
                     if(wijmo.isNullOrWhiteSpace(item.st02Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
-					if(sameCode.length > 1) return '[QR코드]는 중복될 수 없습니다.';
                     break;
                 case 'st02Ipqty':
                     if(item.st02Qty <= 0) return '[박스수량]은 0보다 커야합니다.';
@@ -187,7 +194,7 @@ const materialsMove = function() {
 		
 		// ST02에서 SMD(GBN:OC)창고에 있는 품목 리스트 
         let params = {
-            uri: `materialsMove/materialsMove/getMaterialsMove`,
+            uri: `materialsRelease/materialsRelease/getMaterialsRelease`,
 			st02Qrcode : qrCode,
 			st02LotSeq : st02LotSeq
         }
@@ -210,16 +217,9 @@ const materialsMove = function() {
 				});
 				
 				if ( matchBar ) {
-					
-					const myAudio = document.getElementById("warningAudio") // Audio객체 취득
-					myAudio.play(); // 음원 재생
-					
-					/*var audio = new Audio('991FA8425CE2D43436.mp3');
-					audio.play();*/
 					alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 					return false;
 				}
-				
 							 
 				let addRow = grid._flexCv.addNew();
 				
@@ -244,9 +244,7 @@ const materialsMove = function() {
 				alertWarning('등록불가','품목이 없습니다.');	
 			}
 			
-        }).catch((e)=>{
-			
-		});
+        }).catch((e)=>{});
 		
     }
 	
@@ -265,9 +263,10 @@ const materialsMove = function() {
             return;
         }
 
-		confirm("재고이동을 하시겠습니까?", "재고이동 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+		confirm("불출등록을 하시겠습니까?", "불출등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 			let params = {
-                uri: `materialsMove/materialsMove`,
+                uri: `materialsRelease/materialsRelease`,
+				line : line.selectedValue,
 				stok : cmbStok.selectedValue,
 				dist : $("#dist").val(),
                 insertList: insertList
@@ -277,7 +276,7 @@ const materialsMove = function() {
 
         	ajax.postAjax(params, true).then(async (data)=>{
 				$("#btnSave").hide();
-	            pushMsg('재고이동이 등록되었습니다.');
+	            pushMsg('불출등록이 등록되었습니다.');
             }).catch((e) => {
             });
 		});
@@ -311,6 +310,7 @@ const materialsMove = function() {
 			//let matchBar = true;
 			barcode = barcode.toUpperCase();
 			barcodeSearch(barcode);	
+			
 			// 중복체크 기능 필요
 			/*grid._flexGrid.rows.some((row, index, array) => {
 				if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
@@ -318,9 +318,6 @@ const materialsMove = function() {
 						//alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 						pushMsg('QR코드는 중복될 수 없습니다.');
 						matchBar = false;
-						
-						var audio = new Audio('audio_file.mp3');
-						audio.play();
 					}
 				}
 			});
@@ -344,5 +341,5 @@ const materialsMove = function() {
 }();
 
 $(() => {
-    materialsMove.init();
+    materialsRelease.init();
 });

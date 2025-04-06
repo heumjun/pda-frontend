@@ -207,7 +207,9 @@ const consignedMaterialsOutput = function() {
 				addRow.st02Lot = data.st02Lot;
 				addRow.st02Qty = data.st02Qty;
 				addRow.st02Ipqty = data.st02Ipqty;
-				addRow.st02Qrcode = data.st02Qrcode;
+				if(qrCode == "") {
+					addRow.st02Qrcode = barcode;
+				}
 				addRow.st02Moq = data.st02Moq;
 				addRow.st02DefLot = data.st02DefLot;
 				addRow.st02Dgbn = data.st02Dgbn;
@@ -218,7 +220,6 @@ const consignedMaterialsOutput = function() {
 			}
 			
         }).catch((e)=>{
-			alert(11);
 			console.debug(e);
 			return;
 		});
@@ -284,12 +285,9 @@ const consignedMaterialsOutput = function() {
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
 		onComplete: function(barcode, qty) {
-			
 			//let matchBar = true;
 			barcode = barcode.toUpperCase();
-			
 			barcodeSearch(barcode);	
-			
 			/*	
 			// 중복체크 기능 필요
 			grid._flexGrid.rows.some((row, index, array) => {
