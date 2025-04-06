@@ -191,6 +191,8 @@ const consignedMaterialsOutput = function() {
 				});
 				
 				if ( matchBar ) {
+					var audio = new Audio('/sound/siren.mp3');
+					audio.play();
 					alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 					return false;
 				}

@@ -210,11 +210,7 @@ const materialsMove = function() {
 				});
 				
 				if ( matchBar ) {
-					
-/*					const myAudio = document.getElementById("warningAudio") // Audio객체 취득
-					myAudio.play(); // 음원 재생
-*/					
-					var audio = new Audio('/sound/warning.mp3');
+					var audio = new Audio('/sound/siren.mp3');
 					audio.play();
 					alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
 					return false;
