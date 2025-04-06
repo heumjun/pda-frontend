@@ -287,6 +287,8 @@ const consignedMaterialsOutput = function() {
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
 		onComplete: function(barcode, qty) {
+			
+			swal.close();
 			//let matchBar = true;
 			barcode = barcode.toUpperCase();
 			barcodeSearch(barcode);	

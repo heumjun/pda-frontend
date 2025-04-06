@@ -17,8 +17,6 @@ const materialsRelease = function() {
 
 	    if(list === undefined) return null;
 		
-		console.log(list["comboLineList"])
-		
 	    return list["comboLineList"];
 	};
 	/**
@@ -266,6 +264,7 @@ const materialsRelease = function() {
         }
 
 		confirm("불출등록을 하시겠습니까?", "불출등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
+			alert($("#dist").val());
 			let params = {
                 uri: `materialsRelease/materialsRelease`,
 				line : line.selectedValue,
@@ -296,9 +295,15 @@ const materialsRelease = function() {
 		form.submit();
 	}
 	
+	const setDistVal = () => {
+		var distCode = getComboDistCodeList(cmbStok.collectionView.currentItem.cm15Code);
+		$("#dist").val(distCode);
+	}
+	
 	const handleEvent = () => {
 
         gridInit();
+		setDistVal();
 		//barcodeSearch();
 
 		$('#btnSave').on('click', saveMaterialsMove);
@@ -308,6 +313,8 @@ const materialsRelease = function() {
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
 		onComplete: function(barcode, qty) {
+			
+			swal.close();
 			
 			//let matchBar = true;
 			barcode = barcode.toUpperCase();

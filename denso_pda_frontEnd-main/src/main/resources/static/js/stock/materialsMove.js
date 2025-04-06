@@ -291,10 +291,15 @@ const materialsMove = function() {
 		form.submit();
 	}
 	
+	const setDistVal = () => {
+		var distCode = getComboDistCodeList(cmbStok.collectionView.currentItem.cm15Code);
+		$("#dist").val(distCode);
+	}
+	
 	const handleEvent = () => {
 
         gridInit();
-		//barcodeSearch();
+		setDistVal();
 
 		$('#btnSave').on('click', saveMaterialsMove);
 		$('#btnBack').on('click', goBack);
@@ -303,6 +308,8 @@ const materialsMove = function() {
 	// 스캐너 값 얻기
 	$(document).scannerDetection({
 		onComplete: function(barcode, qty) {
+			
+			swal.close();
 			
 			//let matchBar = true;
 			barcode = barcode.toUpperCase();
