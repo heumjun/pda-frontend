@@ -88,7 +88,6 @@ const consignedMaterialsOutput = function() {
             switch (prop) {
                 case 'st02Qrcode':
                     if(wijmo.isNullOrWhiteSpace(item.st02Qrcode)) return '[QR코드]는 필수 입력 항목입니다.';
-					if(sameCode.length > 1) return '[QR코드]는 중복될 수 없습니다.';
                     break;
                 case 'st02Ipqty':
                     if(item.st02Qty <= 0) return '[박스수량]은 0보다 커야합니다.';
