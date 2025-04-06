@@ -24,6 +24,7 @@ const consignedMaterialsOutput = function() {
 	
 	let grid  = new GridFactory('#grid');
 	let cmbCus = input.comboBox('#cm01Cus', getComboCusCodeList(), 'cm01Code','cm01Name');
+	let mf15Requestno = input.text('#mf15Requestno', true);
 
 	/**
      * 그리드 초기화
@@ -211,7 +212,7 @@ const consignedMaterialsOutput = function() {
 	const save = () => {
 
 		grid.disableAutoRows();
-
+		
 		/*if(!grid.gridValidation()){
             alertWarning('저장불가', '그리드 오류내역을 확인하세요.');
             return;
@@ -222,12 +223,13 @@ const consignedMaterialsOutput = function() {
 			alertWarning('저장불가','저장할 내역이 없습니다.');
             return;
         }
-
+		
 		confirm("사급등록을 하시겠습니까?", "사급등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 
 			let params = {
                 uri: `consignedMaterialsOutput/consignedMaterialsOutput`,
 				cusCode : cmbCus.selectedValue,
+				mf15Requestno : mf15Requestno.text,
                 insertList: insertList
             };
 
