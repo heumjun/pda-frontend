@@ -51,10 +51,10 @@ const recycle = function(){
 					}
 				})
 			},
-			{binding:'st12No'		,header:'NO'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st12No'		,header:'NO'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st12LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st12Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,visible:false},
-			{binding:'st12Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st12Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st12Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st12Pcc'		,header:'PCC'		,width:150	,dataType:'String'	,align:'center'	,visible:false	,isReadOnly: true},
             {binding:'st12Qr'		,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
 			{binding:'st12Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},

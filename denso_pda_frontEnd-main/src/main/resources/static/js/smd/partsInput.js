@@ -58,7 +58,8 @@ const partsInput = function(){
 					}
 				})
 			},
-            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'		,isReadOnly: true},
+            {binding:'st02Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'		,isReadOnly: true},
+            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	,visible:false},
             {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center' 	,isReadOnly: true},
 			{binding:'st02Ipqty'	,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true},
 			{binding:'st02Status'	,header:'상태'		,width:130	,dataType:'Number'	,align:'center'		,isReadOnly:true},
@@ -177,6 +178,7 @@ const partsInput = function(){
 			}
 
 			let addRow = grid._flexCv.addNew();
+			addRow.st02Code = partsInputRequestInfo.st02Code;
 			addRow.cm08Name = partsInputRequestInfo.cm08Name;
 			addRow.st02Qrcode = partsInputRequestInfo.st02Qrcode;
 			addRow.st02Ipqty = partsInputRequestInfo.st02Ipqty;

@@ -32,7 +32,8 @@ const warehousing = function(){
 					}
 				})
 			},*/
-            {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true},
+            {binding:'cm08Code'		,header:'품번'	,width:120	,dataType:'String'	,align:'center', isReadOnly:true},
+            {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true	,visible:false},
             {binding:'st02Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'},
 			{binding:'st02Ipqty'	,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
             {binding:'st02Status'	,header:'상태'	,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},

@@ -62,8 +62,8 @@ const anomaly = function(){
 					}
 				})
 			},
-			{binding:'st09Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
-            {binding:'st09Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st09Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st09Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
 			{binding:'st09Gbn'		,header:'구분'		,width:90	,align:'center'		,dataType:'String'},
             {binding:'st09Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
 			{binding:'st09Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},

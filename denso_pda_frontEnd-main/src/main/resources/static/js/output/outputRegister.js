@@ -20,7 +20,8 @@ const outputRegister = function(){
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
             /*{binding:'select'	,header:' '		,width:30	,dataType:'Boolean'	,isRequired:false},*/
-            {binding:'cm08Name'	,header:'품목명'	,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
+            {binding:'cm08Code'	,header:'품번'	,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'cm08Name'	,header:'품목명'	,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st03Qr'	,header:'QR코드'	,width:150	,dataType:'String'	,align:'center' ,isReadOnly: true},
 			{binding:'st03Qty'	,header:'박스수량'	,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},
 			{binding:'st03Moq'	,header:'MOQ'	,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},

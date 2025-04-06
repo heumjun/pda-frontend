@@ -45,7 +45,8 @@ const partsInput = function(){
 					}
 				})
 			},
-            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'		,isReadOnly: true},
+            {binding:'st01Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'		,isReadOnly: true},
+            {binding:'cm08Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	,visible:false},
             {binding:'st01Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'center' 	,isReadOnly: true},
 			{binding:'st01Qty'		,header:'투입수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true ,isReadOnly: true},
             {binding:'st01Stok'		,header:'창고'		,width:130	,dataType:'String'	,align:'left'		,isReadOnly: true},
@@ -53,7 +54,7 @@ const partsInput = function(){
 
 			{binding:'st01Lot'		,header: 'LOT번호'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st01LotSeq'	,header: 'LOT SEQ'	,width: 90	,align:'center'		,dataType:'String'	,visible:false},
-			{binding:'st01Code'		,header: '품목코드'	,width: 180	,align:'center'		,dataType:'String'	,visible:false},
+			{binding:'st01Code'		,header: '품목코드'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st01Unt'		,header: 'UNT'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'cm08Cus'		,header: 'CUS'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'cm08Moq'		,header: 'MOQ'		,width: 180	,align:'center'		,dataType:'String'	,visible:false},
@@ -161,6 +162,7 @@ const partsInput = function(){
 			}
 
 			let addRow = grid._flexCv.addNew();
+			addRow.st01Code = partsInputRequestInfo.st01Code;
 			addRow.cm08Name = partsInputRequestInfo.cm08Name;
 			addRow.st01Qrcode = partsInputRequestInfo.st01Qrcode;
 			addRow.st01Qty = partsInputRequestInfo.st01Qty;

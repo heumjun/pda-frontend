@@ -16,10 +16,10 @@ const consignedMaterialsReg = function(){
 		
         let numberInput = input.number(document.createElement('div'),1,0,999999,'G10');		
         let columnsDefinition = [
-            {binding:'cm08Gbn'		,header:'품목구분'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true	,visible:false},
-            {binding:'cm08Dgbn'		,header:'라벨정보구분'	,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true	,visible:false},
-            {binding:'mf16Code'		,header:'품목코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true	,visible:false},
-            {binding:'cm08Name'		,header:'품명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'cm08Gbn'		,header:'품목구분'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
+            {binding:'cm08Dgbn'		,header:'라벨정보구분'	,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
+            {binding:'mf16Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true	},
+            {binding:'cm08Name'		,header:'품명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
 			{binding:'st02Qrcode'	,header:'QR코드'		,width:130	,dataType:'String'	,align:'left'	,isReadOnly: true	,isRequired:true},
 			{binding:'st03Lot'		,header:'LOT번호'		,width:100	,dataType:'String'	,isRequired:true	,visible:false},
 			{binding:'st03LotSeq'	,header:'LOT SEQ'	,width:100	,dataType:'String'	,isRequired:true	,visible:false},

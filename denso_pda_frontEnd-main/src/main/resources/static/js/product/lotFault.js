@@ -52,8 +52,8 @@ const lotFault = function(){
 					}
 				})
 			},
-			{binding:'st08Code'		,header:'품목명'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
-            {binding:'st08Name'		,header:'품목명'		,width:200	,dataType:'String'	,align:'center'	,isReadOnly: true},
+			{binding:'st08Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st08Name'		,header:'품목명'		,width:200	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
 			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
 			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},

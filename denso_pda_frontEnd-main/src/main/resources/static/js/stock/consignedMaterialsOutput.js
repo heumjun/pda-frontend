@@ -45,7 +45,7 @@ const consignedMaterialsOutput = function() {
 					}
 				})
 			},
-            {binding:'st02Code'		,header:'품목코드'		,width:100	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st02Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st02Cus'		,header:'제조사'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true 	,visible:false},
             {binding:'st02CusName'	,header:'제조사'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
@@ -150,11 +150,11 @@ const consignedMaterialsOutput = function() {
 
         grid.disableAutoRows();
 		
-		let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === barcode ));
+		/*let duplication = grid._flexCv.sourceCollection.filter((c) => ( c.st02Qrcode === barcode ));
 		if(duplication.length != 0) {
 			alertWarning('중복 항목', `중복된 항목입니다.`);
 			return;
-		}
+		}*/
 		
 		var st02LotSeq = "";
 		var qrCode = "";
@@ -176,9 +176,25 @@ const consignedMaterialsOutput = function() {
         params = {...params,...ajax.getParams('searchForm')}
 
 		
+		var matchBar = false;
+		
 		ajax.postAjax(params, true).then(async (data) => {
 								
 			if ( data != null ) {
+				
+				// 중복체크 기능 필요
+				grid._flexGrid.rows.some((row, index, array) => {
+					if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
+						if(row.dataItem.st02LotSeq == data.st02LotSeq) {
+							matchBar = true;
+						}
+					}
+				});
+				
+				if ( matchBar ) {
+					alertWarning('작업 불가', 'QR코드는 중복될 수 없습니다.');
+					return false;
+				}
 							 
 				let addRow = grid._flexCv.addNew();
 				
@@ -203,7 +219,8 @@ const consignedMaterialsOutput = function() {
 			}
 			
         }).catch((e)=>{
-			console.debug(error);
+			alert(11);
+			console.debug(e);
 			return;
 		});
 
@@ -269,9 +286,12 @@ const consignedMaterialsOutput = function() {
 	$(document).scannerDetection({
 		onComplete: function(barcode, qty) {
 			
-			let matchBar = true;
+			//let matchBar = true;
 			barcode = barcode.toUpperCase();
 			
+			barcodeSearch(barcode);	
+			
+			/*	
 			// 중복체크 기능 필요
 			grid._flexGrid.rows.some((row, index, array) => {
 				if (!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)) {
@@ -284,7 +304,7 @@ const consignedMaterialsOutput = function() {
 			
 			if ( matchBar ) {
 				barcodeSearch(barcode);	
-			}
+			}*/
 			
 		}
 	});
