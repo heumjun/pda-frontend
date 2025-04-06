@@ -45,8 +45,8 @@ const consignedMaterialsOutput = function() {
 					}
 				})
 			},
-            {binding:'st02Code'		,header:'품목코드'		,width:150	,dataType:'String'	,align:'left'	,visible:false},
-            {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st02Code'		,header:'품목코드'		,width:100	,dataType:'String'	,align:'center'	,isReadOnly: true},
+            {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st02Cus'		,header:'제조사'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true 	,visible:false},
             {binding:'st02CusName'	,header:'제조사'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true 	,visible:false},
