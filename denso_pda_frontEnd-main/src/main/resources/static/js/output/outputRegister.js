@@ -185,20 +185,24 @@ const outputRegister = function(){
             return;
         }*/
 		
-		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
+		let insertListTemp = grid.gridItemListToArray(grid._flexCv.itemsAdded);
+		let insertList = [];
 		let updateList = grid.gridItemListToArray(grid._flexCv.itemsEdited);
 		if(insertList.length < 1 && updateList.length < 1) {
 			alertWarning('저장불가','저장할 내역이 없습니다.');
             return;
         }
-		
-		insertList.forEach((item) => {
-			item.st03Cus = $("#st03Cus").val();
-			item.st03Dat = $("#st03Dat").val();
-			item.st03DatTime = $("#st03DatTime").val();
-			item.st03Line = $("#st03Line").val();
-			item.st03Gbn = 'PR';
-		})
+
+		insertListTemp.forEach((item) => {
+			if(!wijmo.isNullOrWhiteSpace(item.st03Qr)) {
+				item.st03Cus = $("#st03Cus").val();
+				item.st03Dat = $("#st03Dat").val();
+				item.st03DatTime = $("#st03DatTime").val();
+				item.st03Line = $("#st03Line").val();
+				item.st03Gbn = 'PR';
+				insertList.push(item);
+			}
+		});
 
 		confirm("출고이력을 등록하시겠습니까?", "출고이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
 			
