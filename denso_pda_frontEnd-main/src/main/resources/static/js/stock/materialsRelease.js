@@ -234,7 +234,7 @@ const materialsRelease = function() {
 				addRow.st02Gbn = 'OT';
 				addRow.st02Qty = data.st02Qty;
 				addRow.st02Ipqty = data.st02Ipqty;
-				//if(qrCode == "") {
+				//if(qrCode == "") { 
 					addRow.st02Qrcode = barcode;
 				//}
 				addRow.st02Moq = data.st02Moq;
