@@ -183,8 +183,9 @@ const materialsRelease = function() {
 		var qrCode = "";
 		
 		if(barcode.substring(0,3) == '3N1') {
-			qrCode = "";
-			st02LotSeq = barcode.split(" ")[2];
+			//qrCode = "";
+			//st02LotSeq = barcode.split(" ")[2];
+			return false;
 		} else {
 			qrCode = barcode;
 			st02LotSeq = "";
@@ -230,12 +231,12 @@ const materialsRelease = function() {
 				addRow.st02Dist = data.st02CurDist;
 				addRow.st02LotSeq = data.st02LotSeq;
 				addRow.st02Lot = data.st02Lot;
-				addRow.st02Gbn = 'SM';
+				addRow.st02Gbn = 'OT';
 				addRow.st02Qty = data.st02Qty;
 				addRow.st02Ipqty = data.st02Ipqty;
-				if(qrCode == "") {
+				//if(qrCode == "") {
 					addRow.st02Qrcode = barcode;
-				}
+				//}
 				addRow.st02Moq = data.st02Moq;
 				addRow.st02DefLot = data.st02DefLot;
 				
