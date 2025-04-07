@@ -161,20 +161,24 @@ const warehousing = function(){
         params = {...params,...ajax.getParams('searchForm')}
         
         try {
-            let {warehousingList} = await ajax.getAjax(params,true);  
+            let data = await ajax.getAjax(params,true);  
             //grid._flexCv.sourceCollection = warehousingList.map(item => ({...item, select:false}));
+			
+			let completeFlag = data["completeFlag"];
+			let warehousingList = data["warehousingList"];
 			
 			if(warehousingList.length > 0 ) {
 				$("#st02Cus").val(warehousingList[0].pu01Cus);
 				
 				grid._flexCv.sourceCollection = [];
-				warehousingList.forEach( (item, index) => {
+				
+				if ( completeFlag == "Y" ) {
 					
-					var sboxsu = item.pu02Sboxsu; // 박스수량
-					var qty = item.pu02Qty;		  // 개수
-					var newRowLength = Math.ceil(qty/sboxsu);
-	
-					for( var i = 0; i < newRowLength; i++ ) {
+					$(".text-bg-danger").text("입고완료");
+					$("#btnSave").hide();
+					
+					warehousingList.forEach( (item, index) => {
+															
 						 let addRow = grid._flexCv.addNew();
 						 addRow.st02Pno = $('#data-params').data('params').pu01No;
 						 addRow.cm08Code = item.cm08Code;
@@ -191,11 +195,44 @@ const warehousing = function(){
 						 addRow.st02Status = item.st02Status;
 						 addRow.qa05Available = item.qa05Available;
 						 addRow.st02Moq = item.pu02Sboxsu;
+						 addRow.st02Qrcode = item.st02Qrcode;
 	
 						grid._flexCv.commitNew();
-					}
-	
-		        });
+		
+			        });
+					
+				} else {
+				
+					warehousingList.forEach( (item, index) => {
+										
+						var sboxsu = item.pu02Sboxsu; // 박스수량
+						var qty = item.pu02Qty;		  // 개수
+						var newRowLength = Math.ceil(qty/sboxsu);
+		
+						for( var i = 0; i < newRowLength; i++ ) {
+							 let addRow = grid._flexCv.addNew();
+							 addRow.st02Pno = $('#data-params').data('params').pu01No;
+							 addRow.cm08Code = item.cm08Code;
+							 addRow.cm08Name = item.cm08Name;
+							 addRow.st02Cus = item.pu01Cus;
+							 addRow.cm08Gbn = item.cm08Gbn;
+							 addRow.cm08Dgbn = item.cm08Dgbn;
+							 addRow.st02Dat = item.pu01Dat;
+							 addRow.st02Lot = item.pu02Lot;
+							 addRow.st02Ipqty = 1;
+							 addRow.st02Ipunt = '1';
+							 addRow.st02Stok = '01';
+							 addRow.st02Dist = '001';
+							 addRow.st02Status = item.st02Status;
+							 addRow.qa05Available = item.qa05Available;
+							 addRow.st02Moq = item.pu02Sboxsu;
+		
+							grid._flexCv.commitNew();
+						}
+		
+			        });
+						
+				}
 				
 				$("#st02Pno").val($('#data-params').data('params').pu01No);
 				$("#st02Dat").val(dateUtils.today('YYYY-MM-DD'));
