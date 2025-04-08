@@ -10,6 +10,7 @@ import * as commonFunc from "../common/common.js";
 import { menuLoad } from "../common/commonMenu.js";
 
 const partsInput = function(){
+	/*
 	const getCompMfList = () => {
 		let params = {
 	        uri : "smd/partsInput/getCompMfList",
@@ -21,6 +22,7 @@ const partsInput = function(){
 	    if(list === undefined) return null;
 	    return list["compMfList"];
 	};
+	 */
 	
 	const getCompLineList = () => {
 		let params = {
@@ -34,7 +36,8 @@ const partsInput = function(){
 	};
 
     let grid  = new GridFactory('#grid');
-	let compMf = input.comboBox('#compMf', getCompMfList(), 'cm08Code','mfDisp');
+	//let compMf = input.comboBox('#compMf', getCompMfList(), 'cm08Code','mfDisp');
+	let compMf = input.text('#compMf', false);
 	let compMfQty = input.number('#compMfQty',1,0,999999,'G10');
 	let compMfLine = input.comboBox('#compMfLine', getCompLineList(), 'lineCode','lineNm');
 	
@@ -176,6 +179,8 @@ const partsInput = function(){
 				alertWarning('중복 항목',`중복된 항목입니다.`);
 				return;
 			}
+
+			compMf.value = mfpartsInputRequestInfo.st02Code;
 
 			let addRow = grid._flexCv.addNew();
 			addRow.st02Code = partsInputRequestInfo.st02Code;
