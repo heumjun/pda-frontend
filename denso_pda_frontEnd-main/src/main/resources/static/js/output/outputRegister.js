@@ -190,8 +190,6 @@ const outputRegister = function(){
 		let updateList = grid.gridItemListToArray(grid._flexCv.itemsEdited);
 
 		insertListTemp.forEach((item) => {
-			console.debug(item.st03Qr);
-			console.debug(!wijmo.isNullOrWhiteSpace(item.st03Qr));
 			if(!wijmo.isNullOrWhiteSpace(item.st03Qr)) {
 				item.st03Cus = $("#st03Cus").val();
 				item.st03Dat = $("#st03Dat").val();

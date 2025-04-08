@@ -195,13 +195,21 @@ const smdInput = function(){
 	const saveSmdInput = () => {
 
 		grid.disableAutoRows();
-
+		/*
 		if(!grid.gridValidation()){
             alertWarning('등록 불가', '필수 값이 입력되지 않아 저장할 수 없습니다.');
             return;
         }
+		 */
 
-		let insertList = grid.gridItemListToArray(grid._flexCv.itemsAdded);
+		let insertListTemp = grid.gridItemListToArray(grid._flexCv.itemsAdded);
+		let insertList = [];
+
+		insertListTemp.forEach((item) => {
+			if(!wijmo.isNullOrWhiteSpace(item.st02Qrcode)) {
+				insertList.push(item);
+			}
+		});
 		
 		if(insertList.length < 1) {
 			alertWarning('작업불가', '등록할 내용이 없습니다.');
