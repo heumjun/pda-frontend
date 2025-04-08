@@ -180,7 +180,7 @@ const partsInput = function(){
 				return;
 			}
 
-			compMf.value = mfpartsInputRequestInfo.st02Code;
+			compMf.selectedValue = partsInputRequestInfo.st02Code;
 
 			let addRow = grid._flexCv.addNew();
 			addRow.st02Code = partsInputRequestInfo.st02Code;
