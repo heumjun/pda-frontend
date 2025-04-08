@@ -226,7 +226,7 @@ const partsInput = function(){
 
 		grid.disableAutoRows();
 		
-		alert(compMfLine.value);
+		// alert(compMfLine.value);
 
 		if(!grid.gridValidation()){
             alertWarning('저장불가', '그리드 오류내역을 확인하세요.');

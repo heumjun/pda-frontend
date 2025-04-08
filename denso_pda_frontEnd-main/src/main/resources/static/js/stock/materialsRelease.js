@@ -265,7 +265,7 @@ const materialsRelease = function() {
         }
 
 		confirm("불출등록을 하시겠습니까?", "불출등록 이력이 등록됩니다.", consts.MSGBOX.QUESTION, () => {
-			alert($("#dist").val());
+			// alert($("#dist").val());
 			let params = {
                 uri: `materialsRelease/materialsRelease`,
 				line : line.selectedValue,
