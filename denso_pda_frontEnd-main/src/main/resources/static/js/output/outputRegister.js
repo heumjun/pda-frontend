@@ -301,7 +301,9 @@ const outputRegister = function(){
 				// SCM QR코드 값으로 입고테이블을 검색해서 입고 데이터를 가져와서 뿌려줘야함.
 				let params ={
 					uri :"warehousing/warehousing/stock/getInputInfo",
-					barcode : barcode
+					barcode : barcode,
+					/* SMD창고에 있는 품번이 나오면 안된다. */
+					stok : '01'
 				};
 
 				ajax.getAjax(params, false).then(data => {	
@@ -361,7 +363,9 @@ const outputRegister = function(){
 			uri : 'smdInput/smdInput/getLotInfo',
 			st03Code : code,
 			st03Lot : lot,
-			st03LotSeq : lotSeq
+			st03LotSeq : lotSeq,
+			/* SMD창고에 있는 품번이 나오면 안된다. */
+			stok : '01'
 		};
 		
 		ajax.getAjax(params, true).then(async (data)=>{
