@@ -12,7 +12,7 @@
 	<artifactId>pda-frontend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pda-frontend</name>
-	<description>덴소pda front-end</description>
+	<description>denso pda front-end</description>
 	<packaging>jar</packaging>
 	
 	<properties>

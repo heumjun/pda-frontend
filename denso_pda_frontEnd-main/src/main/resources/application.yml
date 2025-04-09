@@ -1,5 +1,6 @@
 server:
-  port: 8082
+  port: 8080 # denso
+#  port: 8083 # aws
   http2:    #http2 사용하기위해선 ssl 적용이 되야한다.
     enabled: true
 
@@ -7,8 +8,8 @@ spring:
   application:
     name: pda-frontend   
   profiles:
-    # active: prod 
-    active: dev
+     active: prod
+#    active: dev
   servlet:
     multipart:
       maxFileSize: 100MB
@@ -22,7 +23,7 @@ jwt:
   secret: densopda!@
   
 api:
-  url: http://localhost:8083
+  url: http://localhost:8082
   
 --- #개발 환경
 spring:
