@@ -152,6 +152,9 @@ const smdInput = function(){
 			
 			if( outputRegisterList.length > 0 ) {
 				grid._flexCv.sourceCollection = [];
+
+				//라인코드 받아와서 넣기. index.js 128행에서 미리 받아와서 데이터파람으로 넘기는것이 더 좋음.
+				mf13LineCode.selectedValue = outputRegisterList[0].mf13LineCode;
 				
 				outputRegisterList.forEach( (item, index) => {
 					
@@ -276,7 +279,8 @@ const smdInput = function(){
 			barcode = barcode.toUpperCase();
 			// 길이에 따라 QR코드가 구분이 되어야한다. 현재는 트레스라벨만 찍음 -> 추후 QR, 트레스 두 개 찍음
 			// barcode값으로 가져올 수 있는 값 - 품번, 품목구분 가져올 수 있다.
-
+			console.debug(barcode);
+			OT2025032400011
 
 			if(barcode.substring(0,3) == '3N1') {
 				

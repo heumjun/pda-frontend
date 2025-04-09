@@ -430,6 +430,11 @@
 	height : 100%;	
 }
 
+
+.navbar .nav-link-text {
+    font-size: 1.2rem;
+}
+
 .navbar-vertical.navbar-vibrant .navbar-collapse {
 	background-image : linear-gradient(-45deg, rgb(93 97 99 / 86%), #010a14c4), url(../img/generic/bg-navbar.png);
 }
