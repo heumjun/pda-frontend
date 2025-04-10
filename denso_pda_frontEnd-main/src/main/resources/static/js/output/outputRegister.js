@@ -310,6 +310,12 @@ const outputRegister = function(){
 					
 					let inputInfo = data["inputInfo"];
 
+					// 선입선출 에러
+					if(inputInfo == "fifoError"){
+						alertWarning("선입선출 오류", "먼저 입고된 품번의 LOT를 출고 후 진행해주십시오.");
+						return ;
+					}
+
 					if(inputInfo != null) {
 						grid._flexGrid.rows.some((row,index,array)=>{
 							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
@@ -371,6 +377,12 @@ const outputRegister = function(){
 		ajax.getAjax(params, true).then(async (data)=>{
 			
 			let lotInfo = data["lotInfo"];
+
+			// 선입선출 에러
+			if(lotInfo == "fifoError"){
+				alertWarning("선입선출 오류", "먼저 입고된 품번의 LOT를 출고 후 진행해주십시오.");
+				return ;
+			}
 			
 			if(lotInfo != null) {
 				console.log(lotInfo);
@@ -382,7 +394,7 @@ const outputRegister = function(){
 				grid._flexGrid.setCellData(index, 'st03Moq', lotInfo.st02Moq);
 				// 값이 없는 경우 경고메시지
 			} else {
-				swal('작업 불가','리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다','warning');
+				alertWarning('작업 불가', '리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다');
 				return ;
 			}
         }).catch((e)=>{
