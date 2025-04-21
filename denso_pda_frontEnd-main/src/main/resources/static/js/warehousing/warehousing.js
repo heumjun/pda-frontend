@@ -35,6 +35,8 @@ const warehousing = function(){
             {binding:'cm08Code'		,header:'품번'	,width:120	,dataType:'String'	,align:'center', isReadOnly:true},
             {binding:'cm08Name'		,header:'품목명'	,width:150	,dataType:'String'	,align:'center', isReadOnly:true	,visible:false},
             {binding:'st02Qrcode'	,header:'QR 코드'	,width:150	,dataType:'String'	,align:'center'},
+			{binding: 'st02Moq', header: 'MOQ', width: 80, align: 'center', dataType: 'Number', isRequired:false,isReadOnly:true},
+			{binding: 'st02QrcodeTemp', header: 'QRCode', width: 80, align: 'center', dataType: 'String', isRequired:false,isReadOnly:true,visible:false},
 			{binding:'st02Ipqty'	,header:'수량'	,width:100	,dataType:'Number'	,align:'center'	,editor:numberInput	,isRequired:true},
             {binding:'st02Status'	,header:'상태'	,width:130	,dataType:'Number'	,align:'center', isReadOnly:true},
             {binding:'st02Stok'		,header:'창고'	,width:150	,dataType:'String'	,align:'center'	},
@@ -210,6 +212,13 @@ const warehousing = function(){
 						var newRowLength = Math.ceil(qty/sboxsu);
 		
 						for( var i = 0; i < newRowLength; i++ ) {
+							// 개수 - 박스수량이 양수인 경우 moq는 sboxsu 넣어줌.
+							if(qty - sboxsu > 0){
+								qty = qty - sboxsu;
+								// 개수 - 박스수량이 음수인 경우 moq는 남은 qty를 넣어줘야함.
+							} else {
+								sboxsu = qty;
+							}
 							 let addRow = grid._flexCv.addNew();
 							 addRow.st02Pno = $('#data-params').data('params').pu01No;
 							 addRow.cm08Code = item.cm08Code;
@@ -225,7 +234,8 @@ const warehousing = function(){
 							 addRow.st02Dist = '0001';
 							 addRow.st02Status = item.st02Status;
 							 addRow.qa05Available = item.qa05Available;
-							 addRow.st02Moq = item.pu02Sboxsu;
+							 addRow.st02Moq = sboxsu;
+							 addRow.st02QrcodeTemp = item.pu02Lot + '-' + (i+1).toString().padStart(3,'0');
 		
 							grid._flexCv.commitNew();
 						}
@@ -329,7 +339,12 @@ const warehousing = function(){
 						// 납품확인서의 LOT번호와 다른 LOT번호를 찍은 경우에 경고메시지 및 입력이 안되도록 막아줘야함
 						if(row.dataItem.st02Lot == barcode.substring(0, 13)){
 							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
-								
+
+								if(row.dataItem.st02QrcodeTemp !== barcode ) {
+									alertWarning('작업 불가','해당 납품 지시서의 QR 코드가 아닙니다.');
+									return;
+								}
+
 								matchBar = true;
 								
 								// 중복체크가 되어야한다.
