@@ -341,7 +341,7 @@ const warehousing = function(){
 							if(wijmo.isNullOrWhiteSpace(row.dataItem.st02Qrcode) || wijmo.isUndefined(row.dataItem.st02Qrcode)){
 
 								if(row.dataItem.st02QrcodeTemp !== barcode ) {
-									alertWarning('작업 불가','해당 납품 지시서의 QR 코드가 아닙니다.');
+									// alertWarning('작업 불가','해당 납품 지시서의 QR 코드가 아닙니다.');
 									return;
 								}
 
