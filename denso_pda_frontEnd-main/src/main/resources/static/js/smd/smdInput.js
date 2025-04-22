@@ -340,7 +340,7 @@ const smdInput = function(){
 					// TODO
 					let outputInfo = data["outputInfo"];
 
-					if(inputInfo != null) {
+					if(outputInfo != null) {
 						grid._flexGrid.rows.some((row,index,array)=>{
 							if(!wijmo.isUndefined(row.dataItem) && !wijmo.isNullOrWhiteSpace(row.dataItem)){
 								if(row.dataItem.st02Code == outputInfo.st03Code && barcode == outputInfo.st03Qr){
@@ -387,7 +387,7 @@ const smdInput = function(){
 		}
 	});
 	
-	// TODO
+
 	const getLotInfo = (index, code, lot, lotSeq, barcode)=>{
 		let params = {
 			uri : 'smdInput/smdInput/getLotInfo',
@@ -395,9 +395,9 @@ const smdInput = function(){
 			st03Lot : lot,
 			st03LotSeq : lotSeq
 		};
-		
+
 		ajax.getAjax(params, true).then(async (data)=>{
-			
+
 			let lotInfo = data["lotInfo"];
 			
 			if(lotInfo != null) {
@@ -410,7 +410,8 @@ const smdInput = function(){
 				grid._flexGrid.setCellData(index, 'st02Qrcode', barcode);
 				// 값이 없는 경우 경고메시지
 			} else {
-				swal('작업 불가','리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다','warning');
+				alertWarning('작업 불가', '리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다');
+				// swal('작업 불가','리딩한 바코드와 일치하는 품목이 출고내역에 존재하지 않습니다','warning');
 				return ;
 			}
         }).catch((e)=>{
