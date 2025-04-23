@@ -34,12 +34,24 @@ const partsInput = function(){
 	    if(list === undefined) return null;
 	    return list["comboLineList"];
 	};
+	const getComboEquipCodeList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboEquipCodeList",
+			smdFlag : "Y"
+	    };
+
+	    let list = ajax.getAjaxSync(params);
+
+	    if(list === undefined) return null;
+	    return list["comboEquipCodeList"];
+	};
 
     let grid  = new GridFactory('#grid');
 	//let compMf = input.comboBox('#compMf', getCompMfList(), 'cm08Code','mfDisp');
 	let compMf = input.text('#compMf', false);
 	let compMfQty = input.number('#compMfQty',1,0,999999,'G10');
 	let compMfLine = input.comboBox('#compMfLine', getCompLineList(), 'lineCode','lineNm');
+	let compMfEquipCode = input.comboBox('#compMfEquipCode', getComboEquipCodeList(), 'cm07Code','cm07Name');
 	
 
     /**
@@ -181,6 +193,7 @@ const partsInput = function(){
 			}
 
 			compMf.selectedValue = partsInputRequestInfo.st02Code;
+			compMfQty.value = partsInputRequestInfo.st02Moq;
 
 			let addRow = grid._flexCv.addNew();
 			addRow.st02Code = partsInputRequestInfo.st02Code;
@@ -247,6 +260,7 @@ const partsInput = function(){
 				compMfCode: compMf.selectedValue,
 				compMfQty: compMfQty.value,
 				compMfLine: compMfLine.selectedValue,
+				compMfEquipCode: compMfEquipCode.selectedValue,
                 insertList: insertList
             };
 
@@ -266,7 +280,7 @@ const partsInput = function(){
      * 버튼,input박스 등 모든 이벤트관리
      */
     const handleEvent = () => {
-		compMfQty.value = 24;
+		compMfQty.value = 0;
         gridInit();
 		
 		//bacodeSearch("3N110301-00180 1000 000000000278 G1000120250316");

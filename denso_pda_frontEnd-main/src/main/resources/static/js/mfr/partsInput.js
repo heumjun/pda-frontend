@@ -22,9 +22,21 @@ const partsInput = function(){
 	    return list["compMfList"];
 	};
 
+	const getCompLineList = () => {
+		let params = {
+	        uri : "lotFault/lotFault/getComboLineList"
+	    };
+	
+	    let list = ajax.getAjaxSync(params);
+	
+	    if(list === undefined) return null;
+	    return list["comboLineList"];
+	};
+	
     let grid  = new GridFactory('#grid');
 	let compMf = input.comboBox('#compMf', getCompMfList(), 'cm08Code','mfDisp');
 	let compMfQty = input.number('#compMfQty',1,0,999999,'G10');
+	let compMfLine = input.comboBox('#compMfLine', getCompLineList(), 'lineCode','lineNm');
 
     /**
      * 그리드 초기화
@@ -218,6 +230,7 @@ const partsInput = function(){
                 uri: `mfr/partsInput`,
 				compMfCode: compMf.selectedValue,
 				compMfQty: compMfQty.value,
+				compMfLine: compMfLine.selectedValue,
                 insertList: insertList
             };
 
