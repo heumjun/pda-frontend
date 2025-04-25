@@ -30,9 +30,20 @@ const fault = function(){
 	};
 	
 	let selectableValues = [];
-	for(let index = 1; index <= 5; index++) {
+	let params = {
+        uri : "lotFault/lotFault/getArrayList"
+    };
+    let list = ajax.getAjaxSync(params);
+    if(list === undefined) return null;
+    let arrayList = list["arrayList"];
+
+	arrayList.forEach(item => {
+        selectableValues.push({key:item.value, name:item.name});
+    });
+	
+	/*for(let index = 1; index <= 16; index++) {
 	   selectableValues.push({key:index, name:index});
-	}
+	}*/
 
 	let levelDataMap = new wijmo.grid.DataMap(selectableValues, 'key', 'name');
 	
@@ -41,11 +52,24 @@ const fault = function(){
 	let st08EquipCode = input.comboBox('#st08EquipCode', getComboEquipCodeList(), 'cm07Code','cm07Name');
 		
 	const getDynamicDataMap = (rowValue) => {
-	   let selectableValues = [];
-	        for(let index = 1; index <= rowValue; index++) {
-	                selectableValues.push({key:index,name:index});
-	        }
-	        return new wijmo.grid.DataMap(selectableValues,'key','name');
+		let selectableValues = [];
+		
+		let params = {
+	        uri : "lotFault/lotFault/getArrayList",
+			arrayCnt : rowValue
+	    };
+	    let list = ajax.getAjaxSync(params);
+	    if(list === undefined) return null;
+	    let arrayList = list["arrayList"];
+		
+		arrayList.forEach(item => {
+	        selectableValues.push({key:item.value, name:item.name});
+	    });
+		
+		/*for(let index = 1; index <= rowValue; index++) {
+        	selectableValues.push({key:index, name:index});
+        }*/
+		return new wijmo.grid.DataMap(selectableValues, 'key', 'name');
 	}
 
 
@@ -153,7 +177,7 @@ const fault = function(){
 		//④ 언로더 Pitch (1차면:2칸, 2차면:4칸)
 		//⑤ 기판폭 : 3자리
 		//⑥ SEQ No : 4자리
-		//var barcode = "1117614520025032309020201680000000041580004";
+		//var barcode = "1117614520025032307140201680000000041580001";
 		
 		let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st08Qrcode === barcode ));
 		if(temp.length != 0){
