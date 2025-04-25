@@ -10,7 +10,9 @@ const recycle = function(){
 
 	const getComboLineList = () => {
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			mfLine : "Y",
+			smdLine : "Y"
 	    };
 
 	    let list = ajax.getAjaxSync(params);

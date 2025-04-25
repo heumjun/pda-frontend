@@ -9,8 +9,10 @@ import { menuLoad } from "../common/commonMenu.js";
 const materialsRelease = function() {
 	// 라인
 	const getComboLineList = () => {
+
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			viewYn : "Y" // 불출
 	    };
 
 	    let list = ajax.getAjaxSync(params);

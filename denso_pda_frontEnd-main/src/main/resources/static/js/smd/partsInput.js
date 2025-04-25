@@ -26,7 +26,8 @@ const partsInput = function(){
 	
 	const getCompLineList = () => {
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			smdLine : "Y"
 	    };
 
 	    let list = ajax.getAjaxSync(params);

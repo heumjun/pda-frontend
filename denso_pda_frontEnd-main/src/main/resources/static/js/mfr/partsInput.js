@@ -24,7 +24,8 @@ const partsInput = function(){
 
 	const getCompLineList = () => {
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			mfLine : "Y"
 	    };
 	
 	    let list = ajax.getAjaxSync(params);
@@ -145,54 +146,111 @@ const partsInput = function(){
 
         grid.disableAutoRows();
 
-		var beforeBar = barcode;
-        // 트레스 라벨 앞부분 짜르기
-        barcode = barcode.replaceAll("3N1", "");
-        // 트레스 라벨을 공백으로 자름
-        barcode = barcode.split(" ");
-        // 품번 가져오기
-        var code = barcode[0];
-		var lot = barcode[3];
-		var lotSeq = barcode[2];
+		// var beforeBar = barcode;
+        // // 트레스 라벨 앞부분 짜르기
+        // barcode = barcode.replaceAll("3N1", "");
+        // // 트레스 라벨을 공백으로 자름
+        // barcode = barcode.split(" ");
+        // // 품번 가져오기
+        // var code = barcode[0];
+		// var lot = barcode[3];
+		// var lotSeq = barcode[2];
 
-        let params = {
-            uri: `mfr/partsInput/getPartsInputRequestInfo`,
-			st01Code : code,
-			st01Lot : lot,
-			st01LotSeq : lotSeq,
-			st01Qrcode : beforeBar
-        }
-        params = {...params,...ajax.getParams('searchForm')}
+        // let params = {
+        //     uri: `mfr/partsInput/getPartsInputRequestInfo`,
+		// 	st01Code : code,
+		// 	st01Lot : lot,
+		// 	st01LotSeq : lotSeq,
+		// 	st01Qrcode : beforeBar
+        // }
+        // params = {...params,...ajax.getParams('searchForm')}
+		//
+        // try {
+        //     let {partsInputRequestInfo} = await ajax.getAjax(params, true);
+		//
+		// 	let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st01Qrcode === partsInputRequestInfo.st01Qrcode ));
+		// 	if(temp.length != 0){
+		// 		alertWarning('중복 항목',`중복된 항목입니다.`);
+		// 		return;
+		// 	}
+		//
+		// 	let addRow = grid._flexCv.addNew();
+		// 	addRow.st01Code = partsInputRequestInfo.st01Code;
+		// 	addRow.cm08Name = partsInputRequestInfo.cm08Name;
+		// 	addRow.st01Qrcode = partsInputRequestInfo.st01Qrcode;
+		// 	addRow.st01Qty = partsInputRequestInfo.st01Qty;
+		// 	addRow.st01Stok = partsInputRequestInfo.st01Stok;
+		// 	addRow.st01District = partsInputRequestInfo.st01District;
+		// 	addRow.st01Lot = partsInputRequestInfo.st01Lot;
+		// 	addRow.st01LotSeq = partsInputRequestInfo.st01LotSeq;
+		// 	addRow.st01Code = partsInputRequestInfo.st01Code;
+		// 	addRow.st01Unt = partsInputRequestInfo.st01Unt;
+		// 	addRow.cm08Cus = partsInputRequestInfo.cm08Cus;
+		// 	addRow.cm08Moq = partsInputRequestInfo.cm08Moq;
+		//
+		// 	grid._flexCv.commitNew();
+		//
+        // } catch(error) {
+        //     console.debug(error);
+        //     return;
+        // }
 
-        try {
-            let {partsInputRequestInfo} = await ajax.getAjax(params, true);
+		var st02LotSeq = "";
+		var qrCode = "";
 
-			let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st01Qrcode === partsInputRequestInfo.st01Qrcode ));
-			if(temp.length != 0){
-				alertWarning('중복 항목',`중복된 항목입니다.`);
-				return;
+		if(barcode.substring(0,3) == '3N1') {
+			qrCode = "";
+			st02LotSeq = barcode.split(" ")[2];
+			// return false;
+		} else {
+			qrCode = barcode;
+			st02LotSeq = "";
+		}
+
+		let params = {
+			uri: `materialsRelease/materialsRelease/getMaterialsRelease`,
+			st02Qrcode : qrCode,
+			st02LotSeq : st02LotSeq
+		}
+
+		params = {...params,...ajax.getParams('searchForm')}
+
+		var matchBar = false;
+
+		ajax.postAjax(params, true).then(async (data) => {
+
+			if ( data != null ) {
+
+				// 중복체크 기능 필요
+					let temp = grid._flexCv.sourceCollection.filter((c) => ( c.st01Qrcode === data.st01Qrcode ));
+					if(temp.length != 0){
+						alertWarning('중복 항목',`중복된 항목입니다.`);
+						return;
+					}
+
+					let addRow = grid._flexCv.addNew();
+
+					addRow.st01Code = data.st02Code;
+					addRow.cm08Name = data.st02Name;
+					addRow.st01Qrcode = barcode;
+					addRow.st01Qty = data.st02Qty;
+					addRow.st01Stok = data.st02CurStok;
+					addRow.st01District = data.st02CurDist;
+					addRow.st01Lot = data.st02Lot;
+					addRow.st01LotSeq = data.st02LotSeq;
+					addRow.st01Code = data.st02Code;
+					addRow.st01Unt = 'BOX';
+					// addRow.cm08Cus = data.cm08Cus;
+					addRow.cm08Moq = data.st02Moq;
+
+					grid._flexCv.commitNew();
+
+			} else {
+				alertWarning('등록불가','품목이 없습니다.');
 			}
 
-			let addRow = grid._flexCv.addNew();
-			addRow.st01Code = partsInputRequestInfo.st01Code;
-			addRow.cm08Name = partsInputRequestInfo.cm08Name;
-			addRow.st01Qrcode = partsInputRequestInfo.st01Qrcode;
-			addRow.st01Qty = partsInputRequestInfo.st01Qty;
-			addRow.st01Stok = partsInputRequestInfo.st01Stok;
-			addRow.st01District = partsInputRequestInfo.st01District;
-			addRow.st01Lot = partsInputRequestInfo.st01Lot;
-			addRow.st01LotSeq = partsInputRequestInfo.st01LotSeq;
-			addRow.st01Code = partsInputRequestInfo.st01Code;
-			addRow.st01Unt = partsInputRequestInfo.st01Unt;
-			addRow.cm08Cus = partsInputRequestInfo.cm08Cus;
-			addRow.cm08Moq = partsInputRequestInfo.cm08Moq;
+		}).catch((e)=>{});
 
-			grid._flexCv.commitNew();
-
-        } catch(error) {
-            console.debug(error);
-            return;
-        }
 
     }
 

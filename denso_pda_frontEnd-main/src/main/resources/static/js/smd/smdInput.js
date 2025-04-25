@@ -13,7 +13,8 @@ const smdInput = function(){
 	
 	const getComboLineList = () => {
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			smdLine : "Y"
 	    };
 
 	    let list = ajax.getAjaxSync(params);

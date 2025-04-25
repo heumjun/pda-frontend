@@ -10,7 +10,8 @@ const anomaly = function(){
 
 	const getComboLineList = () => {
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			mfLine : "Y"
 	    };
 
 	    let list = ajax.getAjaxSync(params);

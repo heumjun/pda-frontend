@@ -10,7 +10,8 @@ const fault = function(){
 
 	const getComboLineList = () => {
 		let params = {
-	        uri : "lotFault/lotFault/getComboLineList"
+	        uri : "lotFault/lotFault/getComboLineList",
+			smdLine : "Y" // SMD 불량
 	    };
 
 	    let list = ajax.getAjaxSync(params);
