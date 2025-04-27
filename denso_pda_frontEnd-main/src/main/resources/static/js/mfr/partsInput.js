@@ -202,6 +202,11 @@ const partsInput = function(){
 			qrCode = "";
 			st02LotSeq = barcode.split(" ")[2];
 			// return false;
+		} else if(barcode.substring(0,4) == 'DISC') {
+			qrCode = "";
+			st02LotSeq = Number(barcode.substring(103).replaceAll(" ", "")).toString();
+			console.log(st02LotSeq);
+			// return false;
 		} else {
 			qrCode = barcode;
 			st02LotSeq = "";
@@ -234,8 +239,8 @@ const partsInput = function(){
 					addRow.cm08Name = data.st02Name;
 					addRow.st01Qrcode = barcode;
 					addRow.st01Qty = data.st02Qty;
-					addRow.st01Stok = data.st02CurStok;
-					addRow.st01District = data.st02CurDist;
+					addRow.st01Stok = '04';
+					addRow.st01District = compMfLine.selectedValue;
 					addRow.st01Lot = data.st02Lot;
 					addRow.st01LotSeq = data.st02LotSeq;
 					addRow.st01Code = data.st02Code;
