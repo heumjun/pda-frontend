@@ -96,7 +96,7 @@ const fault = function(){
             {binding:'st08Code'		,header:'품번'		,width:120	,dataType:'String'	,align:'center'	,isReadOnly: true},
             {binding:'st08Name'		,header:'품목명'		,width:200	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st08Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true},
-			{binding:'st08Array'	,header:'Level'		,width:80	,dataType:'Number'	,align:'center'	,dataMap:levelDataMap},
+			{binding:'st08Array'	,header:'어레이'		,width:80	,dataType:'Number'	,align:'center'	,dataMap:levelDataMap},
 			{binding:'st08Qty'		,header:'수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
 			{binding:'st08Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st08LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},

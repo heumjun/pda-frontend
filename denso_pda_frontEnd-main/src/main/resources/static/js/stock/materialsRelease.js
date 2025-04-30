@@ -84,8 +84,8 @@ const materialsRelease = function() {
             {binding:'st02Name'		,header:'품목명'		,width:150	,dataType:'String'	,align:'center'	,isReadOnly: true	,visible:false},
             {binding:'st02Qrcode'	,header:'QR코드'		,width:150	,dataType:'String'	,align:'left'	,isReadOnly: true 	,visible:true},
 			{binding:'st02Qty'		,header:'박스수량'		,width:100	,dataType:'Number'	,editor:numberInput	,isRequired:true	,isReadOnly: true},
-			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
-			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true	},
+			{binding:'st02Stok'		,header:'창고'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true ,visible:false	},
+			{binding:'st02Dist'		,header:'구역'		,width:150	,dataType:'String'	,align:'center'		,isReadOnly: true ,visible:false	},
 			{binding:'st02Lot'		,header:'LOT번호'		,width:180	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02LotSeq'	,header:'LOT SEQ'	,width:90	,align:'center'		,dataType:'String'	,visible:false},
 			{binding:'st02Dat'		,header:'날짜'		,width:90	,align:'center'		,dataType:'String'	,visible:false},
@@ -244,7 +244,14 @@ const materialsRelease = function() {
 				
 				grid._flexCv.commitNew();
 			} else {
-				alertWarning('등록불가','품목이 없습니다.');	
+
+
+				let addRow = grid._flexCv.addNew();
+				addRow.st02Qrcode = barcode;
+				grid._flexCv.commitNew();
+
+				// alertWarning('등록불가','품목이 없습니다.');
+
 			}
 			
         }).catch((e)=>{});

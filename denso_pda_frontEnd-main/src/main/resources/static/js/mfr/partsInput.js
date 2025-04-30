@@ -213,7 +213,8 @@ const partsInput = function(){
 		}
 
 		let params = {
-			uri: `materialsRelease/materialsRelease/getMaterialsRelease`,
+			// uri: `materialsRelease/materialsRelease/getMaterialsRelease`,
+			uri: `mfr/partsInput/getMfrPartsInputInfo`,
 			st02Qrcode : qrCode,
 			st02LotSeq : st02LotSeq
 		}
