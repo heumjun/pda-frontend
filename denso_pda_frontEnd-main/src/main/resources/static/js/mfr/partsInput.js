@@ -252,7 +252,17 @@ const partsInput = function(){
 					grid._flexCv.commitNew();
 
 			} else {
-				alertWarning('등록불가','품목이 없습니다.');
+
+						// DISC일 경우
+						let addRow = grid._flexCv.addNew();
+						addRow.st01Code = barcode.substr(61,15).replaceAll(" ", "").toString();
+						addRow.st01Qrcode = barcode;
+						addRow.st01Qty = 1;
+						addRow.st01Stok = '04';
+						addRow.st01District = compMfLine.selectedValue;
+						grid._flexCv.commitNew();
+
+				// alertWarning('등록불가','품목이 없습니다.');
 			}
 
 		}).catch((e)=>{});

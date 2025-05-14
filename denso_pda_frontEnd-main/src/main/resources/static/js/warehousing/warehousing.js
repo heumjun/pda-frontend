@@ -327,6 +327,8 @@ const warehousing = function(){
 		timeBeforeScanTest: 200, // 다음스캔까지 딜레이
 		onComplete: function(barcode, qty){
 
+			swal.close();
+
 			let matchBar = false;
 			barcode = barcode.toUpperCase();
 			

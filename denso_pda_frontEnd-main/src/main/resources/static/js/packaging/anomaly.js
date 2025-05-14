@@ -11,7 +11,7 @@ const anomaly = function(){
 	const getComboLineList = () => {
 		let params = {
 	        uri : "lotFault/lotFault/getComboLineList",
-			mfLine : "Y"
+			pkLine : "Y"
 	    };
 
 	    let list = ajax.getAjaxSync(params);
@@ -139,6 +139,22 @@ const anomaly = function(){
 			alertWarning('중복 항목', `중복된 항목입니다.`);
 			return;
 		}
+
+		// 이상처리에 제품/부품이 들어가야 함?
+		// if(barcode.substring(0,3) == '3N1') {
+		// 	qrCode = "";
+		// 	st02LotSeq = barcode.split(" ")[2];
+		// 	// return false;
+		// } else if(barcode.substring(0,4) == 'DISC') {
+		// 	qrCode = "";
+		// 	st02LotSeq = Number(barcode.substring(103).replaceAll(" ", "")).toString();
+		// 	console.log(st02LotSeq);
+		// 	// return false;
+		// } else {
+		// 	qrCode = barcode;
+		// 	st02LotSeq = "";
+		// }
+
 
 		let params = {
 	        uri: `anomaly/anomaly`,

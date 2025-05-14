@@ -250,7 +250,7 @@
 
 
  /* wijmo그리드, wijmo input 폰트 사이즈 (falcon 제공 form input은 제외시킴 */
-.wj-flexgrid, .wj-control:not(.form-check-input) {
+.wj-flexgrid, .wj-control:not(.form-check-input):not(.wj-combobox) {
      font-size: 0.81rem !important;
 }
 
@@ -433,6 +433,18 @@
 
 .navbar .nav-link-text {
     font-size: 1.2rem;
+}
+
+label{
+    font-size : 1.2rem!important;
+}
+
+.wj-control .wj-content .wj-dropdown .wj-state-collapsed .wj-combobox{
+    font-size : 1.2rem!important;
+}
+
+.wj-listbox-item{
+    font-size : 1.2rem!important;
 }
 
 .navbar-vertical.navbar-vibrant .navbar-collapse {
